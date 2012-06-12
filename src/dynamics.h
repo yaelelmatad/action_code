@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#define MAXSIZE 10000
+#define MAXSIZE 10001
 enum OccState
 {
 	OCCUPIED,
