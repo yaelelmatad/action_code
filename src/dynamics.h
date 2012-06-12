@@ -2,14 +2,14 @@
  *  slice.h
  *  Action
  *
- *  Created by Yael Elmatad on 8/16/10.
+ *  Created by Yael Elmatad on 6/11/12.
  *  Copyright 2010 __MyCompanyName__. All rights reserved.
  *
  */
 
 
-#ifndef _SLICE_H
-#define	_SLICE_H
+#ifndef _DYNAMICS_H
+#define	_DYNAMICS_H
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
@@ -31,11 +31,11 @@
 
 using namespace std;
 
-class slice{
+class dynamics{
 public:
     //slice(); //overloaded const
-    slice(config(), double, double, bool, double ); //overloaded constructor
-    virtual ~slice(); //destructor
+    dynamics( config &, double, double, double, double ); //overloaded constructor
+    virtual ~dynamics(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
 	//public variables
@@ -45,12 +45,22 @@ private:
 	//functions
 	//float ran2;
 	//member variables
+	
+	config& m_config() { return *p_curr_config; }
 	double m_temp;
-	double m_deltaT;
-	config m_config(); //this is the first config of the slice, in the case of back shooting, make sure to overwrite this with the final config.  
-	double m_J ;
-	double m_dir; 
-	//config array, starts and 0 and goes to length^2
+	double m_cprob; //exp(-1/T)
+	double m_epsilon;
+	double m_leftRate;
+	double m_rightRate;
+	double m_totalRate;
+	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
+	config* p_curr_config; 	
+	int m_pickAndFlipSpin();
+	double m_pickATime();
+	void m_setTotalRate();
+	double m_updateTransRate();
+
+	friend class config;
 };
 
 #endif /*_SLICE_H*/

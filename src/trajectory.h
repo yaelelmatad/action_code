@@ -22,9 +22,10 @@
 #include <string>
 #include <sstream>
 
-#define MAXSIZE 1000000
+#define MAXSIZE 10000
 #define UP 1
-#define DOWN -1
+#define DOWN 0
+
 
 using namespace std;
 

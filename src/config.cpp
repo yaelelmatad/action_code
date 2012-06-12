@@ -19,6 +19,21 @@ config::config(){
 config::config(config currentConfig()) //constructor if you already have a config and just want to make a new instace
 {
 	m_length = currentConfig().m_length;
+
+	for (int j=0; j<m_length; j++)
+	{
+		m_config[j] = currentConfig().m_config[j];
+		m_locationOfSpinOnLists[j][0]=currentConfig().m_locationOfSpinOnLists[j][0];
+		m_locationOfSpinOnLists[j][1]=currentConfig().m_locationOfSpinOnLists[j][1];
+	}
+	for (int i = 0; i < NUM_LISTS; i++)
+	{
+		for (int j = 0; j<= currentConfig().m_lists[i][0]; j++)
+		{
+			m_lists[i][j]=currentConfig().m_lists[i][j];
+		}
+	}
+	
 	//COPY an old config to a new one? including the lists. 
 }
 
@@ -26,41 +41,198 @@ config::config(double density, int length)
 {
 	m_density = density;
 	m_length = length;
-	int size = length*length;
+	//int size = length*length;
+	int size = length; //lets just stick to one d, K?
 	for (int i=0; i< size; i++)
 	{
-		m_config[i]=-1;
+		m_config[i]=DOWN;
 	//	cout << i << m_config[i] << "\n";
 	}
+
+	m_clearLists();
 	
-	int totalUp = (int)(density*(double)m_length*(double)m_length);
+	int totalUp = (int)(density*(double)m_length);
 	
-	int spinToFlip = rand()%(m_length*m_length);
-	m_config[spinToFlip] = 1;
+	int spinToFlip = rand()%(m_length);
+	m_config[spinToFlip] = UP;
 	
-	spinToFlip = rand()%(m_length*m_length);
+	spinToFlip = rand()%(m_length);
 	for (int j = 1; j<totalUp; j++)
 	{
-		while(m_config[spinToFlip] == 1)
+		while(m_config[spinToFlip] == UP)
 		{
-			spinToFlip = rand()%(m_length*m_length);
+			spinToFlip = rand()%(m_length);
 		}
-		m_config[spinToFlip] = 1;
+		m_config[spinToFlip] = UP;
 	}
 	
-	//just a silly check
-	for (int i=0; i< length; i++)
+	for (int i = 0; i < m_length; i++)
+		m_addToList(i, m_typeOfSpin(i));
+	
+	//just some silly checks
+
+	/*
+	for (int j=0; j<length; j++)
 	{
-		for (int j=0; j<length; j++)
-		{
-			cout << (m_config[i*length+j]+1)/2 << " ";
-		}
-		cout << endl;
+		cout << m_config[j] << " " << m_typeOfSpin(j) <<endl;
 	}
+	 */
+	
+	m_checkListIntegrity();
 	
 	//make a constructor here that sets up a random config and makes the lists  1D arrays are best. a number of lists feature would be nice too
 	//don't forget to put trapped sites on a 0th list
 }
+
+void config::m_clearLists()
+{
+	for (int i = 0; i<=NUM_LISTS; i++)
+	{
+		m_lists[i][0]=0;
+	}
+	return;
+}
+
+void config::m_checkListIntegrity()
+{ 
+	//first check back indexes
+	for (int i = 0; i< m_length; i++)
+	{
+		if (m_lists[m_locationOfSpinOnLists[i][0]][m_locationOfSpinOnLists[i][1]]!=i)
+		{
+			cout << "list broken for spin " << i << endl;
+			cout << "m_locationOfSpinOnLists["<<i<<"][0] = " << m_locationOfSpinOnLists[i][0] << endl;
+			cout << "m_locationOfSpinOnLists["<<i<<"][1] = " << m_locationOfSpinOnLists[i][1] << endl;
+			cout << "m_lists in that location = " << m_lists[m_locationOfSpinOnLists[i][0]][m_locationOfSpinOnLists[i][1]] << endl;
+			cout << "Type of Spin is " << m_typeOfSpin(i) << endl;
+		}
+		
+		if (m_typeOfSpin(i) != m_locationOfSpinOnLists[i][0])
+		{
+			cout << "spin on wrong list!" << endl;
+			cout << "spin " << i << "should be on list " << m_typeOfSpin(i) << endl;
+			cout << "actually on list " << m_locationOfSpinOnLists[i][0] << endl;
+		}
+	}
+	
+	//second check forward indexing
+	for (int i = 0; i< NUM_LISTS; i++)
+	{
+		for (int j = 1; j <= m_lists[i][0]; j++)
+		{
+			if (m_locationOfSpinOnLists[m_lists[i][j]][0]!= i || m_locationOfSpinOnLists[m_lists[i][j]][1] != j)
+			{
+				cout << "list broken for site on m_lists " << i <<"," << j << endl;
+				cout << "m_lists["<<i<<"]["<<j<<"] = " << m_lists[i][j] << endl;
+				cout << "m_locationOfSpinOnLists["<<i<<"][1] = " << m_locationOfSpinOnLists[i][1] << endl;
+				cout << "m_locationOfSpinOnLists["<<i<<"][0] = " << m_locationOfSpinOnLists[i][0] << endl;
+				cout << "Type of Spin is " << m_typeOfSpin(i) << endl;
+				
+			}
+		}
+	}
+
+}
+
+int config::m_neighbor(int spin, int dir)
+{
+	if (dir == LEFT && spin == 0)
+		return m_length-1;
+	else if (dir == RIGHT && spin == m_length-1)
+		return 0;
+	else 
+		return (spin + dir);
+	//fix this!
+}
+
+void config::m_addToList(int spin, int type)
+{
+	m_lists[type][0]++; //the length of the list grows by one
+	m_lists[type][m_lists[type][0]] = spin; //add the spin to that list
+	m_locationOfSpinOnLists[spin][0]=type;//which list is spin on
+	m_locationOfSpinOnLists[spin][1]=m_lists[type][0]; //location on list.
+	
+	/*
+	 cout << " spin = " << spin << " of type " << type << endl;
+	cout << "m_lists[type][0] now " << m_lists[type][0] << endl;; 
+	cout << "m_lists[type][m_lists[type][0]] = " << m_lists[type][m_lists[type][0]] << endl;
+	cout << "m_locationOfSpinOnLists[spin][0] = " << type << endl;
+	cout << "m_locationOfSpinOnLIsts[spin][1]= " << m_lists[type][0] << endl;
+	*/
+	 return;
+}
+
+void config::m_moveToList(int spin, int type)
+{
+	//routine that takes a spin and moves it to the list "type"
+	
+	//first remove then add to list
+	int oldList = m_locationOfSpinOnLists[spin][0];
+	int oldLocation = m_locationOfSpinOnLists[spin][1];
+	
+	//move last element of old list to spot where this spin was
+	int lastSpin = m_lists[oldList][m_lists[oldList][0]];
+	m_lists[oldList][oldLocation] = lastSpin;
+	m_lists[oldList][0]--; //one less spin on this list
+	
+	//change the backindex (stays on same list but switches location)
+	m_locationOfSpinOnLists[lastSpin][1]=oldLocation; 
+	
+	//finally add the original spin to it's new list.
+	m_addToList(spin, type);
+	return;
+}
+
+int config::m_typeOfSpin(int spin)
+{
+	//returns the "type" of spin for listing
+	//here is very MODEL specific.
+	
+	int leftNeigh = m_config[m_neighbor(spin, LEFT)];
+	int rightNeigh = m_config[m_neighbor(spin, RIGHT)];
+	
+	if (m_config[spin]==DOWN)
+	{												
+		if (leftNeigh == UP && rightNeigh == UP)
+		{
+			return FACBOTHDOWN;
+		}				  
+		else if (leftNeigh == UP)
+		{
+			return FACLEFTDOWN;
+		}		
+		else if (rightNeigh == UP)
+		{
+			return FACRIGHTDOWN;			  
+		}
+		else
+		{
+			return NOTFACDOWN;
+		}
+	}							  
+	else
+	{												
+		if (leftNeigh == UP && rightNeigh == UP)
+		{
+			return FACBOTHUP;
+		}				  
+		else if (leftNeigh == UP)
+		{
+			return FACLEFTUP;
+		}		
+		else if (rightNeigh == UP)
+		{
+			return FACRIGHTUP;			  
+		}
+		else
+		{
+			return NOTFACUP;
+		}
+	}						  
+						  
+}
+						  
+
 
 config::~config(){
 }
