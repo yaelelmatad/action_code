@@ -23,9 +23,12 @@
 #include <sstream>
 
 #define MAXSIZE 10000
-#define UP 1
-#define DOWN 0
 
+enum OccState
+{
+	OCCUPIED,
+	UNOCCUPIED,
+};
 
 using namespace std;
 
