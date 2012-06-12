@@ -24,18 +24,31 @@
 #define MAXSIZE 10000
 #define NUM_LISTS 8 
 //hardcoded for now
-#define UP 1
-#define DOWN 0
-#define LEFT -1
-#define RIGHT 1
-#define NOTFACDOWN 0
-#define NOTFACUP 1
-#define FACLEFTDOWN 2
-#define FACLEFTUP 3
-#define FACRIGHTDOWN 4
-#define FACRIGHTUP 5
-#define FACBOTHDOWN 6
-#define FACBOTHUP 7
+
+enum OccState
+{
+	OCCUPIED,
+	UNOCCUPIED,
+};
+
+enum Lateral
+{
+	LEFT = -1,
+	RIGHT = 1
+};
+
+enum SpinCategories
+{
+	NOTFACDOWN,
+	NOTFACUP,
+	FACLEFTDOWN,
+	FACLEFTUP,
+	FACRIGHTDOWN,
+	FACRIGHTUP,
+	FACBOTHDOWN,
+	FACBOTHUP
+};
+
 using namespace std;
 
 class config {

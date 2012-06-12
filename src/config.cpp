@@ -45,7 +45,7 @@ config::config(double density, int length)
 	int size = length; //lets just stick to one d, K?
 	for (int i=0; i< size; i++)
 	{
-		m_config[i]=DOWN;
+		m_config[i]=UNOCCUPIED;
 	//	cout << i << m_config[i] << "\n";
 	}
 
@@ -54,16 +54,16 @@ config::config(double density, int length)
 	int totalUp = (int)(density*(double)m_length);
 	
 	int spinToFlip = rand()%(m_length);
-	m_config[spinToFlip] = UP;
+	m_config[spinToFlip] = OCCUPIED;
 	
 	spinToFlip = rand()%(m_length);
 	for (int j = 1; j<totalUp; j++)
 	{
-		while(m_config[spinToFlip] == UP)
+		while(m_config[spinToFlip] == OCCUPIED)
 		{
 			spinToFlip = rand()%(m_length);
 		}
-		m_config[spinToFlip] = UP;
+		m_config[spinToFlip] = OCCUPIED;
 	}
 	
 	for (int i = 0; i < m_length; i++)
@@ -202,17 +202,17 @@ int config::m_typeOfSpin(int spin)
 	int leftNeigh = m_config[m_neighbor(spin, LEFT)];
 	int rightNeigh = m_config[m_neighbor(spin, RIGHT)];
 	
-	if (m_config[spin]==DOWN)
+	if (m_config[spin]==UNOCCUPIED)
 	{												
-		if (leftNeigh == UP && rightNeigh == UP)
+		if (leftNeigh == OCCUPIED && rightNeigh == OCCUPIED)
 		{
 			return FACBOTHDOWN;
 		}				  
-		else if (leftNeigh == UP)
+		else if (leftNeigh == OCCUPIED)
 		{
 			return FACLEFTDOWN;
 		}		
-		else if (rightNeigh == UP)
+		else if (rightNeigh == OCCUPIED)
 		{
 			return FACRIGHTDOWN;			  
 		}
@@ -223,15 +223,15 @@ int config::m_typeOfSpin(int spin)
 	}							  
 	else
 	{												
-		if (leftNeigh == UP && rightNeigh == UP)
+		if (leftNeigh == OCCUPIED && rightNeigh == OCCUPIED)
 		{
 			return FACBOTHUP;
 		}				  
-		else if (leftNeigh == UP)
+		else if (leftNeigh == OCCUPIED)
 		{
 			return FACLEFTUP;
 		}		
-		else if (rightNeigh == UP)
+		else if (rightNeigh == OCCUPIED)
 		{
 			return FACRIGHTUP;			  
 		}
