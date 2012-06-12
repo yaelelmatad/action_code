@@ -1,1 +1,4 @@
 build
+Debug/
+Release/
+*.DS_Store
