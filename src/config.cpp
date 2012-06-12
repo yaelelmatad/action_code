@@ -23,6 +23,7 @@ config::config(config currentConfig()) //constructor if you already have a confi
 	for (int j=0; j<m_length; j++)
 	{
 		m_config[j] = currentConfig().m_config[j];
+		cout << m_config[j] << endl;
 		m_locationOfSpinOnLists[j][0]=currentConfig().m_locationOfSpinOnLists[j][0];
 		m_locationOfSpinOnLists[j][1]=currentConfig().m_locationOfSpinOnLists[j][1];
 	}

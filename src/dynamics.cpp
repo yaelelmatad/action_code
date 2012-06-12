@@ -39,6 +39,7 @@ dynamics::dynamics( config &currentConfig, double temp, double u, double rate_le
 		cout << endl;
 		time += m_pickATime();
 		m_pickAndFlipSpin();
+		m_config().m_checkListIntegrity();
 		m_updateTransRate();
 	}
 

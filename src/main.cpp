@@ -17,7 +17,8 @@ float pi = 3.14159265;
 int main (int argc, char * const argv[]) {
     // insert code here...
 	config test(0.5,5);
-	dynamics test2 (test, 1.0, 1.0, 1.0, 1.0);
+	//dynamics test2 (test, 1.0, 1.0, 1.0, 1.0);
+	config test3(test());
     return 0;
 
 
