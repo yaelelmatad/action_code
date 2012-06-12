@@ -145,6 +145,17 @@ int config::m_neighbor(int spin, int dir)
 	//fix this!
 }
 
+void config::m_flipSpin(int spin)
+{
+	m_config[spin] = abs(m_config[spin]-1); //0->1 and 1->0
+	m_moveToList(spin,m_typeOfSpin(spin));
+	m_moveToList(spin,m_neighbor(spin, LEFT));
+	m_moveToList(spin,m_neighbor(spin, RIGHT));
+	
+	return;
+}
+
+
 void config::m_addToList(int spin, int type)
 {
 	m_lists[type][0]++; //the length of the list grows by one

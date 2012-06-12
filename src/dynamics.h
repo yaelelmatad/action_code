@@ -46,7 +46,8 @@ private:
 	//float ran2;
 	//member variables
 	
-	config& m_config() { return *p_curr_config; }
+	inline config& m_config() { return *p_curr_config; }
+	
 	double m_temp;
 	double m_cprob; //exp(-1/T)
 	double m_epsilon;
@@ -55,7 +56,7 @@ private:
 	double m_totalRate;
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
 	config* p_curr_config; 	
-	int m_pickAndFlipSpin();
+	void m_pickAndFlipSpin();
 	double m_pickATime();
 	void m_setTotalRate();
 	double m_updateTransRate();

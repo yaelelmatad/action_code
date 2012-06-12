@@ -22,6 +22,25 @@ dynamics::dynamics( config &currentConfig, double temp, double u, double rate_le
 	m_rightRate = rate_right;
 	m_cprob = (exp(-1.0/m_temp));
 	m_setTotalRate();
+	
+	
+	//just to test
+	
+	double time = 0;
+	
+	while (time < 10)
+	{
+		cout << " Current Time = " << time << endl;
+		cout << " Current m_config().m_config[] Array Is: ";
+		
+		for (int i = 0; i<m_config().m_length; i++)
+			cout << m_config().m_config[i] << " ";
+		
+		cout << endl;
+		time += m_pickATime();
+		m_pickAndFlipSpin();
+		m_updateTransRate();
+	}
 
 }
 
@@ -58,7 +77,7 @@ void dynamics::m_setTotalRate()
 }
 
 
-int dynamics::m_pickAndFlipSpin()
+void dynamics::m_pickAndFlipSpin()
 {
 	//based on rate lists pick a spin to flip from the lists.  doesn't flip the spin!
 	
@@ -87,13 +106,19 @@ int dynamics::m_pickAndFlipSpin()
 	
 	//cout << "picked a spin random number " << m_config().m_lists[i][random_int] << endl;
 
+	int spinToFlip = m_config().m_lists[i][random_int];
+
+	m_config().m_flipSpin(spinToFlip);
+
+	return;
 	
-	return random_int;
+
 	
 }
 
 double dynamics::m_updateTransRate()
 {
+	m_setTotalRate(); //for now, later can make more efficient.
 	//not yet finished, updates the transition rates locally given a 
 	return 1.0;
 	

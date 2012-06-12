@@ -87,6 +87,8 @@ private:
 	void m_addToList(int spin, int type);
 	//adds spin to list type at the end of the list.  adds +1 to the number of members of the list.
 
+	void m_flipSpin(int spin);
+	//flips spin as well as moves it to proper list (also for neighbors)
 
 	friend class dynamics;
 
