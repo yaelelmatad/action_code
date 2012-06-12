@@ -25,9 +25,11 @@
 #include "config.h"
 
 #define MAXSIZE 10000
-#define UP 1
-#define I_AM_FANTASTIC 1992
-#define DOWN 0
+enum OccState
+{
+	OCCUPIED,
+	UNOCCUPIED,
+};
 
 
 using namespace std;
