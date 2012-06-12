@@ -9,32 +9,8 @@
 
 #include "config.h"
 
-/*config::config(){
-}*/
-
 config::config(){
 
-}
-
-config::config(config currentConfig()) //constructor if you already have a config and just want to make a new instace
-{
-	m_length = currentConfig().m_length;
-
-	for (int j=0; j<m_length; j++)
-	{
-		m_config[j] = currentConfig().m_config[j];
-		m_locationOfSpinOnLists[j][0]=currentConfig().m_locationOfSpinOnLists[j][0];
-		m_locationOfSpinOnLists[j][1]=currentConfig().m_locationOfSpinOnLists[j][1];
-	}
-	for (int i = 0; i < NUM_LISTS; i++)
-	{
-		for (int j = 0; j<= currentConfig().m_lists[i][0]; j++)
-		{
-			m_lists[i][j]=currentConfig().m_lists[i][j];
-		}
-	}
-	
-	//COPY an old config to a new one? including the lists. 
 }
 
 config::config(double density, int length)
@@ -241,11 +217,6 @@ int config::m_typeOfSpin(int spin)
 		}
 	}						  
 						  
-}
-						  
-
-
-config::~config(){
 }
 
 /*
