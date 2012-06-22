@@ -16,9 +16,10 @@ float pi = 3.14159265;
 
 int main (int argc, char * const argv[]) {
     // insert code here...
-	config test(0.5,5);
-	//dynamics test2 (test, 1.0, 1.0, 1.0, 1.0);
-	config test3(test());
+	config test(0.5,20);
+	dynamics test2 (test, 1.0, 1.0, true, 1.0, 1.0);
+	//dynamics test2(a config, T, U, if hard = true, rate left, rate right)
+	//config test3(test());
     return 0;
 
 

@@ -24,20 +24,20 @@
 
 #include "config.h"
 
-#define MAXSIZE 10002
-enum OccState
+#define MAXSIZE 10000
+/*enum OccState
 {
 	OCCUPIED,
 	UNOCCUPIED,
 };
-
+*/
 
 using namespace std;
 
 class dynamics{
 public:
     //slice(); //overloaded const
-    dynamics( config &, double, double, double, double ); //overloaded constructor
+    dynamics( config &, double, double, bool, double, double ); //overloaded constructor
     virtual ~dynamics(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);

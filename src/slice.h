@@ -25,11 +25,11 @@
 #include "config.h"
 
 #define MAXSIZE 10000
-enum OccState
+/*enum OccState
 {
 	OCCUPIED,
 	UNOCCUPIED,
-};
+};*/
 
 using namespace std;
 

@@ -86,8 +86,11 @@ void config::m_checkListIntegrity()
 		if (m_typeOfSpin(i) != m_locationOfSpinOnLists[i][0])
 		{
 			cout << "spin on wrong list!" << endl;
-			cout << "spin " << i << "should be on list " << m_typeOfSpin(i) << endl;
+			cout << "spin " << i << " should be on list " << m_typeOfSpin(i) << endl;
 			cout << "actually on list " << m_locationOfSpinOnLists[i][0] << endl;
+			cout << "Left Neighbor " << m_config[m_neighbor(i, -1)] << endl;
+			cout << "i State " << m_config[i] << endl;
+			cout << "Right Neighbor " << m_config[m_neighbor(i, 1)] << endl;
 		}
 	}
 
@@ -123,10 +126,13 @@ int config::m_neighbor(int spin, int dir)
 
 void config::m_flipSpin(int spin)
 {
+	int leftNeighbor =m_neighbor(spin, LEFT);
+	int rightNeighbor = m_neighbor(spin, RIGHT);
 	m_config[spin] = abs(m_config[spin]-1); //0->1 and 1->0
 	m_moveToList(spin,m_typeOfSpin(spin));
-	m_moveToList(spin,m_neighbor(spin, LEFT));
-	m_moveToList(spin,m_neighbor(spin, RIGHT));
+	m_moveToList(leftNeighbor,m_typeOfSpin(leftNeighbor));
+	m_moveToList(rightNeighbor,m_typeOfSpin(rightNeighbor));
+
 
 	return;
 }

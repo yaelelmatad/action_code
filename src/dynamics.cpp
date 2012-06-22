@@ -13,11 +13,18 @@
 //}
 
 
-dynamics::dynamics( config &currentConfig, double temp, double u, double rate_left, double rate_right)
+dynamics::dynamics( config &currentConfig, double temp, double u, bool hard, double rate_left, double rate_right)
 :	p_curr_config( &currentConfig )
 {
 	m_temp = temp;
-	m_epsilon = exp(-u/temp);
+	if (hard)
+	{
+		m_epsilon = 0;
+	}
+	else 
+	{
+		m_epsilon = exp(-u/temp);
+	}
 	m_leftRate = rate_left;
 	m_rightRate = rate_right;
 	m_cprob = (exp(-1.0/m_temp));
@@ -28,7 +35,7 @@ dynamics::dynamics( config &currentConfig, double temp, double u, double rate_le
 	
 	double time = 0;
 	
-	while (time < 10)
+	while (time < 20)
 	{
 		cout << " Current Time = " << time << endl;
 		cout << " Current m_config().m_config[] Array Is: ";

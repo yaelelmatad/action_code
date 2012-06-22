@@ -27,8 +27,8 @@
 
 enum OccState
 {
-	OCCUPIED,
-	UNOCCUPIED,
+	UNOCCUPIED = 0,
+	OCCUPIED = 1
 };
 
 enum Lateral
@@ -39,14 +39,14 @@ enum Lateral
 
 enum SpinCategories
 {
-	NOTFACDOWN,
-	NOTFACUP,
-	FACLEFTDOWN,
-	FACLEFTUP,
-	FACRIGHTDOWN,
-	FACRIGHTUP,
-	FACBOTHDOWN,
-	FACBOTHUP
+	NOTFACDOWN, //0
+	NOTFACUP,  //1
+	FACLEFTDOWN, //2
+	FACLEFTUP, //3
+	FACRIGHTDOWN, //4 
+	FACRIGHTUP, //5 
+	FACBOTHDOWN, //6
+	FACBOTHUP //7
 };
 
 using namespace std;
