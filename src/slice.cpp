@@ -14,13 +14,29 @@
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-slice::slice(config m_config(), double deltaT, double temp, bool direction, double J)
+slice::slice(dynamics &currentDynamics, bool first, double timeInterval)
+:	p_curr_dynamics( &currentDynamics )
 {
-	m_temp = temp;
-	m_deltaT = deltaT;
+	//if first = true then we are going "forward" otherwise going backwards. 
+//	m_temp = temp;
+	m_timeInterval = timeInterval;
 //	m_config = currrentConfig; //this is the first config of the slice, in the case of back shooting, make sure to overwrite this with the final config.  
-	m_J = J;
-	m_dir = direction;  //1 = forward, //0 = backward
+	
+	if (first)
+	{
+		//DOES THIS WORK??
+		m_firstConfig = m_dynamics().m_getCurrConfig();
+		m_dynamics().m_advanceDynamics(m_timeInterval);
+		//LIST STUFF GOES HERE
+		m_lastConfig = m_dynamics().m_getCurrConfig();
+	}
+	else 
+	{
+		m_lastConfig = m_dynamics().m_getCurrConfig();
+		m_dynamics().m_advanceDynamics(m_timeInterval);
+		//LIST STUFF GOES HERE
+		m_firstConfig = m_dynamics().m_getCurrConfig();
+	}
 }
 
 slice::~slice(){

@@ -31,14 +31,21 @@ dynamics::dynamics( config &currentConfig, double temp, double u, bool hard, dou
 	m_setTotalRate();
 	
 	
-	//just to test
-	
+}
+
+config& dynamics::m_getCurrConfig()
+{
+	return m_config();
+}
+
+void dynamics::m_advanceDynamics(double interval)
+{
 	double time = 0;
 	
-	while (time < 20)
+	while (time < interval)
 	{
-		cout << " Current Time = " << time << endl;
-		cout << " Current m_config().m_config[] Array Is: ";
+		//cout << " Current Time = " << time << endl;
+		//cout << " Current m_config().m_config[] Array Is: ";
 		
 		for (int i = 0; i<m_config().m_length; i++)
 			cout << m_config().m_config[i] << " ";
@@ -49,7 +56,8 @@ dynamics::dynamics( config &currentConfig, double temp, double u, bool hard, dou
 		m_config().m_checkListIntegrity();
 		m_updateTransRate();
 	}
-
+	
+	return;
 }
 
 void dynamics::m_setTotalRate()

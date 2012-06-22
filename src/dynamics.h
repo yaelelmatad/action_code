@@ -60,10 +60,16 @@ private:
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
 	config* p_curr_config; 	
 	void m_pickAndFlipSpin();
+	void m_advanceDynamics(double);
+	// to be called by other classes (slice?) to advance dynamics
 	double m_pickATime();
 	void m_setTotalRate();
 	double m_updateTransRate();
+	
+	config& m_getCurrConfig();
 
+	
+	friend class slice;
 	friend class config;
 };
 
