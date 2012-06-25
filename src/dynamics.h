@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include "config.h"
+#include "input.h"
 
 #define MAXSIZE 10000
 /*enum OccState
@@ -37,7 +38,7 @@ using namespace std;
 class dynamics{
 public:
     //slice(); //overloaded const
-    dynamics( config &, double, double, bool, double, double ); //overloaded constructor
+    dynamics( input &, config & ); //overloaded constructor
     virtual ~dynamics(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
@@ -66,7 +67,7 @@ private:
 	void m_setTotalRate();
 	double m_updateTransRate();
 	
-	config& m_getCurrConfig();
+	config m_getCurrConfig();
 
 	
 	friend class slice;

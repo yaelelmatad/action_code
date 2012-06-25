@@ -13,27 +13,32 @@
 //}
 
 
-dynamics::dynamics( config &currentConfig, double temp, double u, bool hard, double rate_left, double rate_right)
+dynamics::dynamics( input &myInput, config &currentConfig)
 :	p_curr_config( &currentConfig )
 {
-	m_temp = temp;
-	if (hard)
+	m_temp =myInput.getDoubleInput(D_TEMP);
+	if (myInput.getIntInput(N_HARD)==0)
 	{
 		m_epsilon = 0;
 	}
 	else 
 	{
-		m_epsilon = exp(-u/temp);
+		m_epsilon = exp(-myInput.getDoubleInput(D_U)/m_temp);
 	}
-	m_leftRate = rate_left;
-	m_rightRate = rate_right;
+	m_leftRate = myInput.getDoubleInput(D_RATE_LEFT);
+	m_rightRate = myInput.getDoubleInput(D_RATE_RIGHT);
 	m_cprob = (exp(-1.0/m_temp));
 	m_setTotalRate();
+	
+	cout << m_epsilon << endl;
+	cout << m_leftRate << endl;
+	cout << m_rightRate << endl;
+	cout << m_cprob << endl;
 	
 	
 }
 
-config& dynamics::m_getCurrConfig()
+config dynamics::m_getCurrConfig()
 {
 	return m_config();
 }

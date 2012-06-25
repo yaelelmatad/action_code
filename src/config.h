@@ -25,6 +25,9 @@
 #define NUM_LISTS 8 
 //hardcoded for now
 
+
+#include "input.h"
+
 enum OccState
 {
 	UNOCCUPIED = 0,
@@ -54,7 +57,7 @@ using namespace std;
 class config {
 public:
 	config(); //default constr.
-    config( double density, int length ); //overloaded constructor
+    config( input &); //overloaded constructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
 

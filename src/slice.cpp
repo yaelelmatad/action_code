@@ -9,33 +9,35 @@
 
 #include "slice.h"
 
-//slice::slice(){
-//}
+slice::slice(){
+}
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-slice::slice(dynamics &currentDynamics, bool first, double timeInterval)
+slice::slice(input& myInput, dynamics &currentDynamics, bool first)
 :	p_curr_dynamics( &currentDynamics )
 {
 	//if first = true then we are going "forward" otherwise going backwards. 
 //	m_temp = temp;
-	m_timeInterval = timeInterval;
+	double slicesDouble = (double)myInput.getIntInput(N_SLICES);
+	double tOBS = myInput.getDoubleInput(D_TOBS);
+	m_timeInterval = tOBS/slicesDouble;
 //	m_config = currrentConfig; //this is the first config of the slice, in the case of back shooting, make sure to overwrite this with the final config.  
 	
 	if (first)
 	{
-		//DOES THIS WORK??
-		m_firstConfig = m_dynamics().m_getCurrConfig();
+		//DOES THIS WORK?? DOESN"T WORK FIX THIS!!
+	//	&m_firstConfig = m_dynamics().m_getCurrConfig();
 		m_dynamics().m_advanceDynamics(m_timeInterval);
 		//LIST STUFF GOES HERE
-		m_lastConfig = m_dynamics().m_getCurrConfig();
+	//	m_lastConfig = m_dynamics().m_getCurrConfig();
 	}
 	else 
 	{
-		m_lastConfig = m_dynamics().m_getCurrConfig();
+	//	m_lastConfig = m_dynamics().m_getCurrConfig();
 		m_dynamics().m_advanceDynamics(m_timeInterval);
 		//LIST STUFF GOES HERE
-		m_firstConfig = m_dynamics().m_getCurrConfig();
+	//	m_firstConfig = m_dynamics().m_getCurrConfig();
 	}
 }
 

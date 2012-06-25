@@ -12,12 +12,17 @@
 trajectory::trajectory(){
 }
 
-trajectory::trajectory(double temp, double density, int length, double J)
+trajectory::trajectory(input &myInput)
 {
-	m_temp = temp;
-	m_density = density;
-	m_length = length;
-	m_J = J;
+	m_n_slices = myInput.getIntInput(N_SLICES);
+	//cout << m_n_slices << endl;
+	//slice testSlice(test2, true, 10);
+	m_traj.resize(m_n_slices);
+	//m_traj[0]=testSlice;
+	//cout << m_traj.size() << endl;
+	m_traj.clear();
+	m_length = myInput.getDoubleInput(D_TOBS);
+	//m_J = J;
 }
 
 

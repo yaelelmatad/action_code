@@ -13,12 +13,12 @@ config::config(){
 
 }
 
-config::config(double density, int length)
+config::config(input &myInput)
 {
-	m_density = density;
-	m_length = length;
+	m_density = myInput.getDoubleInput(D_DENSITY);
+	m_length = myInput.getIntInput(N_SITES_FULL);
 	//int size = length*length;
-	int size = length; //lets just stick to one d, K?
+	int size = m_length; //lets just stick to one d, K?
 	for (int i=0; i< size; i++)
 	{
 		m_config[i]=UNOCCUPIED;
@@ -27,7 +27,7 @@ config::config(double density, int length)
 
 	m_clearLists();
 
-	int totalUp = (int)(density*(double)m_length);
+	int totalUp = (int)(m_density*(double)m_length);
 
 	int spinToFlip = rand()%(m_length);
 	m_config[spinToFlip] = OCCUPIED;

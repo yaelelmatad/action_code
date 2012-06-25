@@ -13,13 +13,19 @@ float pi = 3.14159265;
 #include "slice.h"
 #include "config.h"
 #include "dynamics.h"
+#include "input.h"
 
 int main (int argc, char * const argv[]) {
     // insert code here...
-	config test(0.5,20);
-	dynamics test2 (test, 1.0, 1.0, true, 1.0, 1.0);
-	//dynamics test2(a config, T, U, if hard = true, rate left, rate right)
-	//config test3(test());
+	//dynamics test2 (test, 1.0, 1.0, true, 1.0, 1.0);
+	//trajectory test3(2.0, 1.0, 10, 3, 3);
+
+	
+	
+	input runInput("inputFile");
+	config test(runInput);
+	trajectory trajectory(runInput);
+	dynamics test2(runInput, test);	//config test3(test());
     return 0;
 
 

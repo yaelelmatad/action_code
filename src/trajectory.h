@@ -22,7 +22,11 @@
 #include <string>
 #include <sstream>
 
+#define NSLICESMAX 5000
 #define MAXSIZE 10000
+
+#include "slice.h"
+#include "input.h"
 
 /*enum OccState
 {
@@ -35,7 +39,7 @@ using namespace std;
 class trajectory {
 public:
     trajectory(); //overloaded const
-    trajectory(double, double, int, double); //overloaded constructor
+    trajectory(input &myInput); //overloaded constructor
     virtual ~trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
@@ -47,11 +51,16 @@ private:
 	//functions
 	//float ran2;
 	//member variables
+	//slice m_trajectory[NSLICESMAX];
+	vector<slice> m_traj;
 	double m_density;
 	int m_length;
-	double m_J;
-	double m_temp;
+	double m_n_slices;
+	//double m_J;
+	//double m_temp;
 	//config array, starts and 0 and goes to length^2
+	
+	friend class slice; 
 };
 
-#endif /*_CONFIG_H*/
+#endif /*_TRAJECTORY_H*/
