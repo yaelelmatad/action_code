@@ -37,38 +37,35 @@ using namespace std;
 
 class dynamics{
 public:
-    //slice(); //overloaded const
+
     dynamics( input &, config & ); //overloaded constructor
     virtual ~dynamics(); //destructor
-	//some getters and setters
-    //void setInfo(int _old, int _new,long currStep);
-	//public variables
-	//long int idum=-1; 
+	
+	const config& GetCurrConfig() const { return *p_curr_config; }
+	
+	void	UpdateConfig( config*, double interval ) const;
 	
 private:
-	//functions
-	//float ran2;
-	//member variables
 	
 	inline config& m_config() { return *p_curr_config; }
+	
+	void m_pickAndFlipSpin( config& toUpdate, double totalRate ) const;
+	
+	void InitializeRates();
+	
+	double GetTotalRate( const config& localConfig ) const;
 	
 	double m_temp;
 	double m_cprob; //exp(-1/T)
 	double m_epsilon;
 	double m_leftRate;
 	double m_rightRate;
-	double m_totalRate;
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
 	config* p_curr_config; 	
 	void m_pickAndFlipSpin();
-	void m_advanceDynamics(double);
+	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics
-	double m_pickATime();
-	void m_setTotalRate();
-	double m_updateTransRate();
-	
-	config m_getCurrConfig();
-
+	double m_pickATime( double totalRate ) const;
 	
 	friend class slice;
 	friend class config;

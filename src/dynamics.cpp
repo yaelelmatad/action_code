@@ -15,7 +15,7 @@
 
 dynamics::dynamics( input &myInput, config &currentConfig)
 :	p_curr_config( &currentConfig )
-{
+{	
 	m_temp =myInput.getDoubleInput(D_TEMP);
 	if (myInput.getIntInput(N_HARD)==0)
 	{
@@ -28,7 +28,8 @@ dynamics::dynamics( input &myInput, config &currentConfig)
 	m_leftRate = myInput.getDoubleInput(D_RATE_LEFT);
 	m_rightRate = myInput.getDoubleInput(D_RATE_RIGHT);
 	m_cprob = (exp(-1.0/m_temp));
-	m_setTotalRate();
+	
+	InitializeRates();
 	
 	cout << m_epsilon << endl;
 	cout << m_leftRate << endl;
@@ -38,34 +39,38 @@ dynamics::dynamics( input &myInput, config &currentConfig)
 	
 }
 
-config dynamics::m_getCurrConfig()
+void dynamics::UpdateConfig( config* pConfig, double interval ) const
 {
-	return m_config();
-}
-
-void dynamics::m_advanceDynamics(double interval)
-{
+	config& toUpdate = *pConfig;
+	
 	double time = 0;
+	
+	double totalRate = GetTotalRate( toUpdate );
 	
 	while (time < interval)
 	{
 		//cout << " Current Time = " << time << endl;
 		//cout << " Current m_config().m_config[] Array Is: ";
 		
-		for (int i = 0; i<m_config().m_length; i++)
-			cout << m_config().m_config[i] << " ";
+		for (int i = 0; i< toUpdate.m_length; i++)
+			cout << toUpdate.m_config[i] << " ";
 		
 		cout << endl;
-		time += m_pickATime();
-		m_pickAndFlipSpin();
-		m_config().m_checkListIntegrity();
-		m_updateTransRate();
+		time += m_pickATime( totalRate );
+		m_pickAndFlipSpin( toUpdate, totalRate );
+		toUpdate.m_checkListIntegrity();
+		totalRate = GetTotalRate( toUpdate );
 	}
-	
-	return;
 }
 
-void dynamics::m_setTotalRate()
+//void dynamics::m_advanceDynamics(double interval)
+//{
+//	UpdateConfig( p_curr_config, interval );
+//}
+
+/////////////////
+
+void dynamics::InitializeRates()
 {
 	//MODEL DEPENDANT!  
 	//initializes the total rate of hte system. //in the future only need to do "local" changes.
@@ -77,44 +82,43 @@ void dynamics::m_setTotalRate()
 	m_rates[FACRIGHTUP]=(m_rightRate+ m_epsilon);	
 	m_rates[FACBOTHDOWN]=m_cprob*(m_rightRate + m_leftRate + m_epsilon);
 	m_rates[FACBOTHUP]=(m_rightRate + m_leftRate + m_epsilon);
-
-	m_totalRate = 0;
-	for (int i = 0; i < NUM_LISTS; i++)
-	{
-		m_totalRate += m_rates[i]*((double)m_config().m_lists[i][0]);;
-	}
-	
-	
-	/*
-	m_totalRate = m_cprob*m_epsilon*((double)m_config().m_lists[NOTFACDOWN][0]);
-	m_totalRate += m_epsilon*((double)m_config().m_lists[NOTFACUP][0]);
-	m_totalRate += m_cprob*(m_leftRate+ m_epsilon)*((double)m_config().m_lists[FACLEFTDOWN][0]);
-	m_totalRate += (m_leftRate+ m_epsilon)*((double)m_config().m_lists[FACLEFTUP][0]);
-	m_totalRate += m_cprob*(m_rightRate+ m_epsilon)*((double)m_config().m_lists[FACRIGHTDOWN][0]);
-	m_totalRate += (m_rightRate+ m_epsilon)*((double)m_config().m_lists[FACRIGHTUP][0]);	
-	m_totalRate += m_cprob*(m_rightRate + m_leftRate + m_epsilon)*((double)m_config().m_lists[FACBOTHDOWN][0]);
-	m_totalRate += (m_rightRate + m_leftRate + m_epsilon)*((double)m_config().m_lists[FACBOTHUP][0]);
-	*/
 }
 
 
-void dynamics::m_pickAndFlipSpin()
+/////////////////
+
+double dynamics::GetTotalRate( const config& localConfig ) const
+{
+	double result = 0.0;
+	
+	for (int i = 0; i < NUM_LISTS; i++)
+	{
+		result += m_rates[i]*((double)localConfig.m_lists[i][0]);
+	}
+	
+	return result;
+}
+
+/////////////////
+
+
+void dynamics::m_pickAndFlipSpin( config& toUpdate, double totalRate ) const
 {
 	//based on rate lists pick a spin to flip from the lists.  doesn't flip the spin!
 	
-	double random = ((double)rand()/(double)RAND_MAX)*m_totalRate; //picks a random number from 0->m_totalRate
+	double random = ((double)rand()/(double)RAND_MAX)* totalRate; //picks a random number from 0->m_totalRate
 	int i = -1;
 	bool notYetFoundList = true;
 	double nextRateCeiling = 0;
 	while(notYetFoundList && i < NUM_LISTS)
 	{
 		i++;
-		nextRateCeiling += m_rates[i]*((double)m_config().m_lists[i][0]);
+		nextRateCeiling += m_rates[i]*((double)toUpdate.m_lists[i][0]);
 		if (random < nextRateCeiling)
 		{
 			notYetFoundList = false;
 		}
-
+		
 	}
 	
 	if (notYetFoundList)
@@ -123,33 +127,20 @@ void dynamics::m_pickAndFlipSpin()
 	//cout << "picked a list random number was " << random << " picked list " << i << endl;
 	
 	//now pick a random spin on that list
-	int random_int = rand()%(m_config().m_lists[i][0])+1; //first pick rand num from 0->(num on list -1) then add 1 to go from 1->num on list
+	int random_int = rand()%(toUpdate.m_lists[i][0])+1; //first pick rand num from 0->(num on list -1) then add 1 to go from 1->num on list
 	
 	//cout << "picked a spin random number " << m_config().m_lists[i][random_int] << endl;
-
-	int spinToFlip = m_config().m_lists[i][random_int];
-
-	m_config().m_flipSpin(spinToFlip);
-
-	return;
 	
-
+	int spinToFlip = toUpdate.m_lists[i][random_int];
 	
+	toUpdate.m_flipSpin(spinToFlip);
 }
 
-double dynamics::m_updateTransRate()
-{
-	m_setTotalRate(); //for now, later can make more efficient.
-	//not yet finished, updates the transition rates locally given a 
-	return 1.0;
-	
-}
-
-double dynamics::m_pickATime()
+double dynamics::m_pickATime( double totalRate ) const
 {
 	
 	double random = ((double)rand()/(double)RAND_MAX); //random number 0->1
-	double deltaTime = (-log(random)/m_totalRate);
+	double deltaTime = (-log(random)/totalRate);
 	return deltaTime;
 }
 

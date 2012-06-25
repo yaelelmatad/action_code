@@ -38,7 +38,8 @@ using namespace std;
 class slice{
 public:
     slice(); //overloaded const
-    slice( input &, dynamics &, bool first); //overloaded constructor
+	// slice( const config& );
+    slice( input &, dynamics &, bool first ); //overloaded constructor
     virtual ~slice(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
@@ -53,8 +54,8 @@ private:
 	bool m_first;
 	inline dynamics& m_dynamics() { return *p_curr_dynamics; }
 	dynamics* p_curr_dynamics;	
-	const config m_firstConfig(); //first is the one that is the last config in that slice TIME WISE (with earlier time)
-	const config m_lastConfig(); //last is the last one in that slice TIME WISE
+	config m_firstConfig; //first is the one that is the last config in that slice TIME WISE (with earlier time)
+	config m_lastConfig; //last is the last one in that slice TIME WISE
 
 	friend class dynamics;
 

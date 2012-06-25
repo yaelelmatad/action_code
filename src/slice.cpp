@@ -12,6 +12,14 @@
 slice::slice(){
 }
 
+/*
+slice::slice( const config& xRef )
+:	m_firstConfig( xRef )
+{
+	
+}
+ */
+
 //make a class called config, config should know it's size TODO, configs should have the list.
 
 slice::slice(input& myInput, dynamics &currentDynamics, bool first)
@@ -24,13 +32,16 @@ slice::slice(input& myInput, dynamics &currentDynamics, bool first)
 	m_timeInterval = tOBS/slicesDouble;
 //	m_config = currrentConfig; //this is the first config of the slice, in the case of back shooting, make sure to overwrite this with the final config.  
 	
+	dynamics& localDynamics = m_dynamics();
+	
 	if (first)
 	{
 		//DOES THIS WORK?? DOESN"T WORK FIX THIS!!
-	//	&m_firstConfig = m_dynamics().m_getCurrConfig();
-		m_dynamics().m_advanceDynamics(m_timeInterval);
+		const config& configRef = localDynamics.GetCurrConfig();
+		m_firstConfig = configRef;
+		localDynamics.m_advanceDynamics(m_timeInterval);
 		//LIST STUFF GOES HERE
-	//	m_lastConfig = m_dynamics().m_getCurrConfig();
+		m_lastConfig = localDynamics.GetCurrConfig();
 	}
 	else 
 	{
