@@ -59,8 +59,9 @@ public:
 	config(); //default constr.
     config( input &); //overloaded constructor
 	//some getters and setters
-    //void setInfo(int _old, int _new,long currStep);
-
+	int getConfig(int spin);
+	
+	
 private:
 	//functions
 	//float ran2;

@@ -38,7 +38,7 @@ using namespace std;
 class dynamics{
 public:
 
-    dynamics( input &, config & ); //overloaded constructor
+    dynamics( input &); //overloaded constructor
     virtual ~dynamics(); //destructor
 	
 	const config& GetCurrConfig() const { return *p_curr_config; }

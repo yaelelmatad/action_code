@@ -12,44 +12,48 @@
 slice::slice(){
 }
 
-/*
-slice::slice( const config& xRef )
-:	m_firstConfig( xRef )
-{
-	
-}
- */
-
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-slice::slice(input& myInput, dynamics &currentDynamics, bool first)
-:	p_curr_dynamics( &currentDynamics )
+slice::slice(input& myInput, config &currentConfig, bool first)
 {
 	//if first = true then we are going "forward" otherwise going backwards. 
-//	m_temp = temp;
+	
+	dynamics currentDynamics(myInput);
 	double slicesDouble = (double)myInput.getIntInput(N_SLICES);
 	double tOBS = myInput.getDoubleInput(D_TOBS);
 	m_timeInterval = tOBS/slicesDouble;
-//	m_config = currrentConfig; //this is the first config of the slice, in the case of back shooting, make sure to overwrite this with the final config.  
 	
-	dynamics& localDynamics = m_dynamics();
 	
 	if (first)
 	{
-		//DOES THIS WORK?? DOESN"T WORK FIX THIS!!
-		const config& configRef = localDynamics.GetCurrConfig();
-		m_firstConfig = configRef;
-		localDynamics.m_advanceDynamics(m_timeInterval);
+		m_firstConfig = currentConfig;
+		currentDynamics.UpdateConfig(&currentConfig, m_timeInterval );
 		//LIST STUFF GOES HERE
-		m_lastConfig = localDynamics.GetCurrConfig();
+		m_lastConfig = currentConfig;
 	}
 	else 
 	{
-	//	m_lastConfig = m_dynamics().m_getCurrConfig();
-		m_dynamics().m_advanceDynamics(m_timeInterval);
+		m_lastConfig = currentConfig;
+		currentDynamics.UpdateConfig(&currentConfig, m_timeInterval );
 		//LIST STUFF GOES HERE
-	//	m_firstConfig = m_dynamics().m_getCurrConfig();
+		m_firstConfig = currentConfig;
 	}
+
+	cout << "firstConfig \n";
+	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
+	{
+		cout << m_firstConfig.getConfig(i) << " ";
+	}
+	cout << endl;
+	cout << endl;
+	cout << "lastConfig \n";
+	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
+	{
+		cout << m_lastConfig.getConfig(i) << " ";
+	}
+	cout << endl;
+	cout << endl;
+	
 }
 
 slice::~slice(){

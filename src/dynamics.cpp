@@ -13,8 +13,7 @@
 //}
 
 
-dynamics::dynamics( input &myInput, config &currentConfig)
-:	p_curr_config( &currentConfig )
+dynamics::dynamics( input &myInput)
 {	
 	m_temp =myInput.getDoubleInput(D_TEMP);
 	if (myInput.getIntInput(N_HARD)==0)
@@ -47,21 +46,30 @@ void dynamics::UpdateConfig( config* pConfig, double interval ) const
 	
 	double totalRate = GetTotalRate( toUpdate );
 	
+	for (int i = 0; i< toUpdate.m_length; i++)
+		cout << toUpdate.m_config[i] << " ";
+	
 	while (time < interval)
 	{
 		//cout << " Current Time = " << time << endl;
 		//cout << " Current m_config().m_config[] Array Is: ";
 		
-		for (int i = 0; i< toUpdate.m_length; i++)
-			cout << toUpdate.m_config[i] << " ";
+
 		
 		cout << endl;
 		time += m_pickATime( totalRate );
 		m_pickAndFlipSpin( toUpdate, totalRate );
 		toUpdate.m_checkListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
+		
+		for (int i = 0; i< toUpdate.m_length; i++)
+			cout << toUpdate.m_config[i] << " ";
 	}
+	
+	cout << endl;
+	
 }
+
 
 //void dynamics::m_advanceDynamics(double interval)
 //{

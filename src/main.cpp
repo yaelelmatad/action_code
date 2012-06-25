@@ -24,8 +24,9 @@ int main (int argc, char * const argv[]) {
 	
 	input runInput("inputFile");
 	config test(runInput);
-	trajectory trajectory(runInput);
-	dynamics test2(runInput, test);	//config test3(test());
+	//trajectory trajectory(runInput);
+	slice testSlice(runInput, test, true);
+	dynamics test2(runInput);	//config test3(test());
     return 0;
 
 

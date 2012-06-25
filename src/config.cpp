@@ -138,6 +138,11 @@ void config::m_flipSpin(int spin)
 }
 
 
+int config::getConfig(int spin)
+{
+	return m_config[spin];
+}
+
 void config::m_addToList(int spin, int type)
 {
 	m_lists[type][0]++; //the length of the list grows by one
