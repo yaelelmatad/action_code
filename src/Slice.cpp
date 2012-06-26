@@ -8,13 +8,14 @@
  */
 
 #include "Slice.h"
+#include <assert.h>
 
 Slice::Slice(){
 }
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-Slice::Slice( const Input& myInput, const Config &currentConfig, bool first)
+Slice::Slice( const Input& myInput, const Config &currentConfig, Direction direction )
 {
 	//if first = true then we are going "forward" otherwise going backwards. 
 	
@@ -23,7 +24,7 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, bool first)
 	double tOBS = myInput.GetDoubleInput(D_TOBS);
 	m_timeInterval = tOBS/slicesDouble;
 	
-	if (first)
+	if ( direction == EDirection_FORWARD )
 	{
 		m_firstConfig = currentConfig;
 		m_lastConfig = currentConfig;
@@ -32,6 +33,8 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, bool first)
 	}
 	else 
 	{
+		// std::assert( direction == EDirection_BACKWARD );
+		
 		m_lastConfig = currentConfig;
 		m_firstConfig = currentConfig;
 		currentDynamics.UpdateConfig(&m_firstConfig, m_timeInterval );
@@ -39,14 +42,14 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, bool first)
 	}
 	/*
 	cout << "firstConfig \n";
-	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
+	for (int i = 0; i < myInput.GetIntInput(N_SITES_FULL); i++)
 	{
 		cout << m_firstConfig.getConfig(i) << " ";
 	}
 	cout << endl;
 	cout << endl;
 	cout << "lastConfig \n";
-	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
+	for (int i = 0; i < myInput.GetIntInput(N_SITES_FULL); i++)
 	{
 		cout << m_lastConfig.getConfig(i) << " ";
 	}
@@ -64,6 +67,11 @@ void Slice::printFirstConfig(ofstream &outputFile, double time) const
 void Slice::printLastConfig(ofstream &outputFile, double time) const
 {
 	m_lastConfig.printConfig(outputFile, time);
+}
+
+const Config& Slice::GetSeedConfig(Direction direction) const
+{
+	return ( direction == EDirection_BACKWARD ) ? GetFirstConfig() : GetLastConfig();
 }
 
 const Config& Slice::GetFirstConfig() const

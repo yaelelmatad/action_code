@@ -39,7 +39,9 @@ using namespace std;
 class Trajectory {
 public:
     Trajectory(); //overloaded const
-    Trajectory( const Input &myInput, const Config &myConfig); //overloaded constructor
+    Trajectory( const Input &myInput, Direction direction); //overloaded constructor (makes first traj)
+	Trajectory( const Input &myInput, const Config &myConfig, Direction direction, int m_n_slices);
+	//makes trajectory snippets.
 	void printTrajectory(int indicator) const;
     virtual ~Trajectory(); //destructor
 	//some getters and setters
@@ -57,6 +59,7 @@ private:
 	double m_density;
 	int m_length;
 	double m_n_slices;
+	double m_n_slices_full;
 	double m_tObs;
 	int m_sizeOfSystem;
 	//double m_J;

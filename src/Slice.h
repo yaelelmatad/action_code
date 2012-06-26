@@ -35,12 +35,19 @@
 
 using namespace std;
 
+enum Direction
+{
+	EDirection_FORWARD = 1,
+	EDirection_BACKWARD = -1
+};
+
 class Slice{
 public:
     Slice(); //overloaded const
-    Slice( const Input &, const Config &, bool first ); //overloaded constructor
+    Slice( const Input &, const Config &, Direction ); //overloaded constructor
 	const Config& GetFirstConfig() const;
 	const Config& GetLastConfig() const;
+	const Config& GetSeedConfig(Direction) const;
 	void printLastConfig(ofstream &outputFile, double time) const;
 	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor

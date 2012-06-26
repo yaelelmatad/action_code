@@ -104,97 +104,37 @@ int Input::StringToInt(string a)
 {
 
 	string sN_SITES_SUB ("N_SITES_SUB");
-	string sN_SITES_FULL("N_SITES_FULL");
-	string sN_TRAJS ("N_TRAJS");
-	string sN_SLICES ("N_SLICES");
-	string sN_SLICES_SHIFT ("N_SLICES_SHIFT");
-	string sN_STORAGEFREQ ("N_STORAGEFREQ");
-	string sN_DIMENSION ("N_DIMENSION");
-	string sN_HARD ("N_HARD");
 	
-	string sD_TEMP ("D_TEMP");
-	string sD_DENSITY ("D_DENSITY");
-	string sD_TOBS ("D_TOBS");
-	string sD_START_S ("D_START_S");
-	string sD_END_S ("D_END_S");
-	string sD_S_INC ("D_S_INC");
-	string sD_RATE_LEFT ("D_RATE_LEFT");
-	string sD_RATE_RIGHT ("D_RATE_RIGHT");
-	string sD_U ("D_U");
-	string sD_DIFF_RATE ("D_DIFF_RATE");
+	/////////////////////////
+
+	//this is a macro, passing it a string returns the enum
+	#define MATCH_STRING_TO_ENUM( __StringName__ ) \
+	else if( a.compare( #__StringName__ )==0){ return __StringName__; }
 	
+	//first one has the if statement (no macro)
 	if (a.compare(sN_SITES_SUB)==0)
 	{
 		return N_SITES_SUB;
 	
 	}
-	else if (a.compare(sN_SITES_FULL)==0)
-	{
-		return N_SITES_FULL;
-	}
-	else if (a.compare(sN_TRAJS)==0)
-	{
-		return N_TRAJS;
-	}
-	else if (a.compare(sN_SLICES)==0)
-	{
-		return N_SLICES;
-	}
-	else if (a.compare(sN_SLICES_SHIFT)==0)
-	{	
-		return N_SLICES_SHIFT;
-	}
-	else if (a.compare(sN_STORAGEFREQ)==0)
-	{
-		return N_STORAGEFREQ;
-	}
-	else if (a.compare(sN_DIMENSION)==0)
-	{	
-		return N_DIMENSION;
-	}
-	else if (a.compare(sN_HARD)==0)
-	{	
-		return N_HARD;
-	}
-	else if (a.compare(sD_TEMP)==0)
-	{	
-		return D_TEMP;
-	}
-	else if(a.compare(sD_DENSITY)==0)
-	{	
-		return D_DENSITY;
-	}
-	else if(a.compare(sD_TEMP)==0)
-	{	
-		return D_TEMP;
-	}
-	else if(a.compare(sD_TOBS)==0)
-	{	
-		return D_TOBS;
-	}
-	else if (a.compare(sD_START_S)==0)
-	{	
-		return D_START_S;
-	}
-	else if (a.compare(sD_END_S)==0)
-	{	
-		return D_END_S;}
-	else if (a.compare(sD_S_INC)==0)
-	{	
-		return D_S_INC;}
-	else if (a.compare(sD_RATE_LEFT)==0)
-	{	
-		return D_RATE_LEFT;}
-	else if (a.compare(sD_RATE_RIGHT)==0)
-	{	
-		return D_RATE_RIGHT;}
-	else if (a.compare(sD_U)==0)
-	{	
-		return D_U;}
-	else if (a.compare(sD_DIFF_RATE)==0)
-	{	
-		return D_DIFF_RATE;
-	}
+	MATCH_STRING_TO_ENUM( N_SITES_FULL )
+	MATCH_STRING_TO_ENUM( N_TRAJS )
+	MATCH_STRING_TO_ENUM( N_SLICES )
+	MATCH_STRING_TO_ENUM( N_SLICES_SHIFT )
+	MATCH_STRING_TO_ENUM( N_STORAGEFREQ )
+	MATCH_STRING_TO_ENUM( N_DIMENSION )
+	MATCH_STRING_TO_ENUM( N_HARD )
+	
+	MATCH_STRING_TO_ENUM( D_TEMP )
+	MATCH_STRING_TO_ENUM( D_DENSITY )
+	MATCH_STRING_TO_ENUM( D_TOBS )
+	MATCH_STRING_TO_ENUM( D_START_S )
+	MATCH_STRING_TO_ENUM( D_END_S )
+	MATCH_STRING_TO_ENUM( D_S_INC )
+	MATCH_STRING_TO_ENUM( D_RATE_LEFT )
+	MATCH_STRING_TO_ENUM( D_RATE_RIGHT )
+	MATCH_STRING_TO_ENUM( D_U )
+	MATCH_STRING_TO_ENUM( D_DIFF_RATE )
 	else 
 	{
 		cout << "INVALID INPUT" << endl;
