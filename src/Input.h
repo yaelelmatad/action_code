@@ -58,7 +58,7 @@ using namespace std;
 class Input{
 public:
    // input(); //overloaded const
-    Input(char* inputFile); //overloaded constructor
+    Input(char* inputFile, int myRank); //overloaded constructor
 
 	int 	GetIntInput(int indicator) const; //you'll need to change this if you add parameters!
 	double 	GetDoubleInput(int indicator) const;

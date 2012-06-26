@@ -64,12 +64,10 @@ void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
 		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
-		/*
-		for (int i = 0; i< toUpdate.m_length; i++)
+		/*for (int i = 0; i< toUpdate.m_length; i++)
 		{
 			cout << toUpdate.m_cell[i] << " ";
-		}
-		*/
+		}*/
 	}
 	
 	//cout << endl;

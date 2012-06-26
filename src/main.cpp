@@ -21,19 +21,25 @@ int main (int argc, char * const argv[]) {
 	//dynamics test2 (test, 1.0, 1.0, true, 1.0, 1.0);
 	//trajectory test3(2.0, 1.0, 10, 3, 3);
 
-/*	int comm_sz;
-	int my_rank;
+	int comm_sz;
+	int my_rank = 0;
 
+	/*
 	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
-*/	
-	Input runInput("inputFile");
+	*/
+	
+	srand(my_rank);
+	Input runInput("inputFile", my_rank);
 	Config test(runInput);
 	Trajectory trajectory(runInput, test);
-	//int fileIndicator = my_rank;
-	int fileIndicator = 1;
+	int fileIndicator = my_rank;
+	//int fileIndicator = 1;
 	trajectory.printTrajectory(fileIndicator);
+	
+	// MPI_Finalize();
+
     return 0;
 
 
