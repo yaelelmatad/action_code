@@ -77,9 +77,9 @@ void Trajectory::printTrajectory(int indicator) const
 	filename += oss.str();
 	filename += ".dat";
 	
-	cout << "m_n_slices = " << m_n_slices << endl;
+	//cout << "m_n_slices = " << m_n_slices << endl;
 
-	cout << filename << endl;
+	//cout << filename << endl;
 	
 	ofstream outputFile;
 	outputFile.open(filename.c_str());
