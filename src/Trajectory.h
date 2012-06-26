@@ -39,7 +39,8 @@ using namespace std;
 class Trajectory {
 public:
     Trajectory(); //overloaded const
-    Trajectory(Input &myInput); //overloaded constructor
+    Trajectory(Input &myInput, Config &myConfig); //overloaded constructor
+	void printTrajectory(int indicator) const;
     virtual ~Trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
@@ -56,6 +57,8 @@ private:
 	double m_density;
 	int m_length;
 	double m_n_slices;
+	double m_tObs;
+	int m_sizeOfSystem;
 	//double m_J;
 	//double m_temp;
 	//config array, starts and 0 and goes to length^2

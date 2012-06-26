@@ -1,9 +1,9 @@
 /*
- *  slice.cpp
+ *  Slice.cpp
  *  Action
  *
- *  Created by Yael Elmatad on 8/16/10.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Created by Yael Elmatad on 6/12.
+ *  Copyright 2012. All rights reserved.
  *
  */
 
@@ -38,7 +38,7 @@ Slice::Slice(Input& myInput, Config &currentConfig, bool first)
 		//LIST STUFF GOES HERE
 		m_firstConfig = currentConfig;
 	}
-	
+	/*
 	cout << "firstConfig \n";
 	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
 	{
@@ -53,7 +53,28 @@ Slice::Slice(Input& myInput, Config &currentConfig, bool first)
 	}
 	cout << endl;
 	cout << endl;
+	 */
 	
+}
+
+void Slice::printFirstConfig(ofstream &outputFile, double time) const
+{
+	m_firstConfig.printConfig(outputFile, time);
+}
+
+void Slice::printLastConfig(ofstream &outputFile, double time) const
+{
+	m_lastConfig.printConfig(outputFile, time);
+}
+
+Config Slice::getFirstConfig() const
+{
+	return m_firstConfig;
+}
+
+Config Slice::getLastConfig() const
+{
+	return m_lastConfig;
 }
 
 Slice::~Slice(){
