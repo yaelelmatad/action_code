@@ -22,8 +22,8 @@
 #include <string>
 #include <sstream>
 
-//#include "config.h"
-//#include "dynamics.h"
+//#include "Config.h"
+//#include "Dynamics.h"
 
 #define MAXARGS 100
 
@@ -55,15 +55,15 @@ enum DoubleParameters
 
 using namespace std;
 
-class input{
+class Input{
 public:
    // input(); //overloaded const
-    input(char* inputFile); //overloaded constructor
+    Input(char* inputFile); //overloaded constructor
 	int getIntInput(int indicator); //you'll need to change this if you add parameters!
 	double getDoubleInput(int indicator);
 	int stringToInt(string a);
 
-    virtual ~input(); //destructor
+    virtual ~Input(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
 	//public variables

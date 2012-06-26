@@ -9,11 +9,11 @@
 using namespace std;
 float pi = 3.14159265;
 
-#include "trajectory.h"
-#include "slice.h"
-#include "config.h"
-#include "dynamics.h"
-#include "input.h"
+#include "Trajectory.h"
+#include "Slice.h"
+#include "Config.h"
+#include "Dynamics.h"
+#include "Input.h"
 
 int main (int argc, char * const argv[]) {
     // insert code here...
@@ -22,11 +22,11 @@ int main (int argc, char * const argv[]) {
 
 	
 	
-	input runInput("inputFile");
-	config test(runInput);
-	//trajectory trajectory(runInput);
-	slice testSlice(runInput, test, true);
-	dynamics test2(runInput);	//config test3(test());
+	Input runInput("inputFile");
+	Config test(runInput);
+	//Trajectory trajectory(runInput);
+	Slice testSlice(runInput, test, true);
+	Dynamics test2(runInput);	//Config test3(test());
     return 0;
 
 

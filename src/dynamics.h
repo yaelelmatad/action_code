@@ -1,5 +1,5 @@
 /*
- *  slice.h
+ *  dynamics.h
  *  Action
  *
  *  Created by Yael Elmatad on 6/11/12.
@@ -22,8 +22,8 @@
 #include <string>
 #include <sstream>
 
-#include "config.h"
-#include "input.h"
+#include "Config.h"
+#include "Input.h"
 
 #define MAXSIZE 10000
 /*enum OccState
@@ -35,25 +35,25 @@
 
 using namespace std;
 
-class dynamics{
+class Dynamics{
 public:
 
-    dynamics( input &); //overloaded constructor
-    virtual ~dynamics(); //destructor
+    Dynamics( Input &); //overloaded constructor
+    virtual ~Dynamics(); //destructor
 	
-	const config& GetCurrConfig() const { return *p_curr_config; }
+	const Config& GetCurrConfig() const { return *p_curr_config; }
 	
-	void	UpdateConfig( config*, double interval ) const;
+	void	UpdateConfig( Config*, double interval ) const;
 	
 private:
 	
-	inline config& m_config() { return *p_curr_config; }
+	inline Config& m_config() { return *p_curr_config; }
 	
-	void m_pickAndFlipSpin( config& toUpdate, double totalRate ) const;
+	void m_pickAndFlipSpin( Config& toUpdate, double totalRate ) const;
 	
 	void InitializeRates();
 	
-	double GetTotalRate( const config& localConfig ) const;
+	double GetTotalRate( const Config& localConfig ) const;
 	
 	double m_temp;
 	double m_cprob; //exp(-1/T)
@@ -61,14 +61,14 @@ private:
 	double m_leftRate;
 	double m_rightRate;
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
-	config* p_curr_config; 	
+	Config* p_curr_config; 	
 	void m_pickAndFlipSpin();
 	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics
 	double m_pickATime( double totalRate ) const;
 	
-	friend class slice;
-	friend class config;
+	friend class Slice;
+	friend class Config;
 };
 
 #endif /*_SLICE_H*/

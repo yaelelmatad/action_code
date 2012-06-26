@@ -25,8 +25,8 @@
 #define NSLICESMAX 5000
 #define MAXSIZE 10000
 
-#include "slice.h"
-#include "input.h"
+#include "Slice.h"
+#include "Input.h"
 
 /*enum OccState
 {
@@ -36,11 +36,11 @@
 
 using namespace std;
 
-class trajectory {
+class Trajectory {
 public:
-    trajectory(); //overloaded const
-    trajectory(input &myInput); //overloaded constructor
-    virtual ~trajectory(); //destructor
+    Trajectory(); //overloaded const
+    Trajectory(Input &myInput); //overloaded constructor
+    virtual ~Trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
 
@@ -52,7 +52,7 @@ private:
 	//float ran2;
 	//member variables
 	//slice m_trajectory[NSLICESMAX];
-	vector<slice> m_traj;
+	vector<Slice> m_traj;
 	double m_density;
 	int m_length;
 	double m_n_slices;
@@ -60,7 +60,7 @@ private:
 	//double m_temp;
 	//config array, starts and 0 and goes to length^2
 	
-	friend class slice; 
+	friend class Slice; 
 };
 
 #endif /*_TRAJECTORY_H*/

@@ -7,13 +7,13 @@
  *
  */
 
-#include "config.h"
+#include "Config.h"
 
-config::config(){
+Config::Config(){
 
 }
 
-config::config(input &myInput)
+Config::Config(Input &myInput)
 {
 	m_density = myInput.getDoubleInput(D_DENSITY);
 	m_length = myInput.getIntInput(N_SITES_FULL);
@@ -60,7 +60,7 @@ config::config(input &myInput)
 	//don't forget to put trapped sites on a 0th list
 }
 
-void config::m_clearLists()
+void Config::m_clearLists()
 {
 	for (int i = 0; i<=NUM_LISTS; i++)
 	{
@@ -69,7 +69,7 @@ void config::m_clearLists()
 	return;
 }
 
-void config::m_checkListIntegrity()
+void Config::m_checkListIntegrity()
 { 
 	//first check back indexes
 	for (int i = 0; i< m_length; i++)
@@ -113,7 +113,7 @@ void config::m_checkListIntegrity()
 
 }
 
-int config::m_neighbor(int spin, int dir)
+int Config::m_neighbor(int spin, int dir)
 {
 	if (dir == LEFT && spin == 0)
 		return m_length-1;
@@ -124,7 +124,7 @@ int config::m_neighbor(int spin, int dir)
 	//fix this!
 }
 
-void config::m_flipSpin(int spin)
+void Config::m_flipSpin(int spin)
 {
 	int leftNeighbor =m_neighbor(spin, LEFT);
 	int rightNeighbor = m_neighbor(spin, RIGHT);
@@ -138,12 +138,12 @@ void config::m_flipSpin(int spin)
 }
 
 
-int config::getConfig(int spin)
+int Config::getConfig(int spin)
 {
 	return m_config[spin];
 }
 
-void config::m_addToList(int spin, int type)
+void Config::m_addToList(int spin, int type)
 {
 	m_lists[type][0]++; //the length of the list grows by one
 	m_lists[type][m_lists[type][0]] = spin; //add the spin to that list
@@ -160,7 +160,7 @@ void config::m_addToList(int spin, int type)
 	 return;
 }
 
-void config::m_moveToList(int spin, int type)
+void Config::m_moveToList(int spin, int type)
 {
 	//routine that takes a spin and moves it to the list "type"
 
@@ -181,7 +181,7 @@ void config::m_moveToList(int spin, int type)
 	return;
 }
 
-int config::m_typeOfSpin(int spin)
+int Config::m_typeOfSpin(int spin)
 {
 	//returns the "type" of spin for listing
 	//here is very MODEL specific.

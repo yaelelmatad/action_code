@@ -26,7 +26,7 @@
 //hardcoded for now
 
 
-#include "input.h"
+#include "Input.h"
 
 enum OccState
 {
@@ -54,10 +54,10 @@ enum SpinCategories
 
 using namespace std;
 
-class config {
+class Config {
 public:
-	config(); //default constr.
-    config( input &); //overloaded constructor
+	Config(); //default constr.
+    Config( Input &); //overloaded constructor
 	//some getters and setters
 	int getConfig(int spin);
 	
@@ -101,7 +101,7 @@ private:
 	void m_flipSpin(int spin);
 	//flips spin as well as moves it to proper list (also for neighbors)
 
-	friend class dynamics;
+	friend class Dynamics;
 
 };
 

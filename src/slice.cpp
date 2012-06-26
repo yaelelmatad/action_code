@@ -7,18 +7,18 @@
  *
  */
 
-#include "slice.h"
+#include "Slice.h"
 
-slice::slice(){
+Slice::Slice(){
 }
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-slice::slice(input& myInput, config &currentConfig, bool first)
+Slice::Slice(Input& myInput, Config &currentConfig, bool first)
 {
 	//if first = true then we are going "forward" otherwise going backwards. 
 	
-	dynamics currentDynamics(myInput);
+	Dynamics currentDynamics(myInput);
 	double slicesDouble = (double)myInput.getIntInput(N_SLICES);
 	double tOBS = myInput.getDoubleInput(D_TOBS);
 	m_timeInterval = tOBS/slicesDouble;
@@ -38,7 +38,7 @@ slice::slice(input& myInput, config &currentConfig, bool first)
 		//LIST STUFF GOES HERE
 		m_firstConfig = currentConfig;
 	}
-
+	
 	cout << "firstConfig \n";
 	for (int i = 0; i < myInput.getIntInput(N_SITES_FULL); i++)
 	{
@@ -56,6 +56,6 @@ slice::slice(input& myInput, config &currentConfig, bool first)
 	
 }
 
-slice::~slice(){
+Slice::~Slice(){
 }
 

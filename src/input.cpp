@@ -7,14 +7,14 @@
  *
  */
 
-#include "input.h"
+#include "Input.h"
 
-//input::input(){
+//Input::Input(){
 //}
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-input::input(char* in)
+Input::Input(char* in)
 {
 	//reads the input file
 	string line;
@@ -89,23 +89,23 @@ input::input(char* in)
 	
 }
 
-input::~input(){
+Input::~Input(){
 }
 
 
-int input::getIntInput(int indicator) 
+int Input::getIntInput(int indicator) 
 {
 	return intParams[indicator];
 }
 
-double input::getDoubleInput(int indicator) 
+double Input::getDoubleInput(int indicator) 
 {
 	return doubleParams[indicator];
 }
 
 
 
-int input::stringToInt(string a) 
+int Input::stringToInt(string a) 
 {
 
 	string sN_SITES_SUB ("N_SITES_SUB");

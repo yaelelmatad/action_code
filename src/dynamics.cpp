@@ -2,18 +2,18 @@
  *  dynamics.cpp
  *  Action
  *
- *  Created by Yael Elmatad on 8/16/10.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Created by Yael Elmatad on 06/12
+ *  Copyright 2012 __MyCompanyName__. All rights reserved.
  *
  */
 
-#include "dynamics.h"
+#include "Dynamics.h"
 
 //dynamics::dynamics(){
 //}
 
 
-dynamics::dynamics( input &myInput)
+Dynamics::Dynamics( Input &myInput)
 {	
 	m_temp =myInput.getDoubleInput(D_TEMP);
 	if (myInput.getIntInput(N_HARD)==0)
@@ -38,9 +38,9 @@ dynamics::dynamics( input &myInput)
 	
 }
 
-void dynamics::UpdateConfig( config* pConfig, double interval ) const
+void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
 {
-	config& toUpdate = *pConfig;
+	Config& toUpdate = *pConfig;
 	
 	double time = 0;
 	
@@ -71,14 +71,8 @@ void dynamics::UpdateConfig( config* pConfig, double interval ) const
 }
 
 
-//void dynamics::m_advanceDynamics(double interval)
-//{
-//	UpdateConfig( p_curr_config, interval );
-//}
 
-/////////////////
-
-void dynamics::InitializeRates()
+void Dynamics::InitializeRates()
 {
 	//MODEL DEPENDANT!  
 	//initializes the total rate of hte system. //in the future only need to do "local" changes.
@@ -93,9 +87,7 @@ void dynamics::InitializeRates()
 }
 
 
-/////////////////
-
-double dynamics::GetTotalRate( const config& localConfig ) const
+double Dynamics::GetTotalRate( const Config& localConfig ) const
 {
 	double result = 0.0;
 	
@@ -107,10 +99,7 @@ double dynamics::GetTotalRate( const config& localConfig ) const
 	return result;
 }
 
-/////////////////
-
-
-void dynamics::m_pickAndFlipSpin( config& toUpdate, double totalRate ) const
+void Dynamics::m_pickAndFlipSpin( Config& toUpdate, double totalRate ) const
 {
 	//based on rate lists pick a spin to flip from the lists.  doesn't flip the spin!
 	
@@ -144,7 +133,7 @@ void dynamics::m_pickAndFlipSpin( config& toUpdate, double totalRate ) const
 	toUpdate.m_flipSpin(spinToFlip);
 }
 
-double dynamics::m_pickATime( double totalRate ) const
+double Dynamics::m_pickATime( double totalRate ) const
 {
 	
 	double random = ((double)rand()/(double)RAND_MAX); //random number 0->1
@@ -152,6 +141,6 @@ double dynamics::m_pickATime( double totalRate ) const
 	return deltaTime;
 }
 
-dynamics::~dynamics(){
+Dynamics::~Dynamics(){
 }
 
