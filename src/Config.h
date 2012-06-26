@@ -68,7 +68,7 @@ private:
 	//member variables
 	double m_density;
 	int m_length;
-	int m_config[MAXSIZE]; 
+	int m_cell[MAXSIZE];
 	//config array, starts and 0 and goes to length
 	int m_locationOfSpinOnLists[MAXSIZE][2];
 	//1st one tells you WHICH list 2nd one tells you which position
@@ -88,7 +88,7 @@ private:
 	//returns left neighbor if seonc variable = left
 	//returns right neighbor if second variable = right
 	
-	void m_checkListIntegrity();
+	void CheckListIntegrity();
 	//makes sure the list integrity is kept. don't use except to check list dynamcis working properly.
 	
 	void m_moveToList(int spin, int type);

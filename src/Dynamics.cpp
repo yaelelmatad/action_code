@@ -47,23 +47,23 @@ void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
 	double totalRate = GetTotalRate( toUpdate );
 	
 	for (int i = 0; i< toUpdate.m_length; i++)
-		cout << toUpdate.m_config[i] << " ";
+		cout << toUpdate.m_cell[i] << " ";
 	
 	while (time < interval)
 	{
 		//cout << " Current Time = " << time << endl;
-		//cout << " Current m_config().m_config[] Array Is: ";
+		//cout << " Current m_config().m_cell[] Array Is: ";
 		
 
 		
 		cout << endl;
 		time += m_pickATime( totalRate );
-		m_pickAndFlipSpin( toUpdate, totalRate );
-		toUpdate.m_checkListIntegrity();
+		PickAndFlipSpin( toUpdate, totalRate );
+		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
 		for (int i = 0; i< toUpdate.m_length; i++)
-			cout << toUpdate.m_config[i] << " ";
+			cout << toUpdate.m_cell[i] << " ";
 	}
 	
 	cout << endl;
@@ -99,7 +99,7 @@ double Dynamics::GetTotalRate( const Config& localConfig ) const
 	return result;
 }
 
-void Dynamics::m_pickAndFlipSpin( Config& toUpdate, double totalRate ) const
+void Dynamics::PickAndFlipSpin( Config& toUpdate, double totalRate ) const
 {
 	//based on rate lists pick a spin to flip from the lists.  doesn't flip the spin!
 	
