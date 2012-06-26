@@ -59,17 +59,16 @@ class Input{
 public:
    // input(); //overloaded const
     Input(char* inputFile); //overloaded constructor
-	int getIntInput(int indicator); //you'll need to change this if you add parameters!
-	double getDoubleInput(int indicator);
-	int stringToInt(string a);
 
-    virtual ~Input(); //destructor
-	//some getters and setters
-    //void setInfo(int _old, int _new,long currStep);
-	//public variables
-	//long int idum=-1; 
-	
+	int 	GetIntInput(int indicator) const; //you'll need to change this if you add parameters!
+	double 	GetDoubleInput(int indicator) const;
+
 private:
+
+	static int
+				StringToInt(string a);
+	
+	// data members
 	int intParams[MAXARGS];
 	double doubleParams[MAXARGS];
 	

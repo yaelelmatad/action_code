@@ -39,7 +39,7 @@ using namespace std;
 class Trajectory {
 public:
     Trajectory(); //overloaded const
-    Trajectory(Input &myInput, Config &myConfig); //overloaded constructor
+    Trajectory( const Input &myInput, const Config &myConfig); //overloaded constructor
 	void printTrajectory(int indicator) const;
     virtual ~Trajectory(); //destructor
 	//some getters and setters

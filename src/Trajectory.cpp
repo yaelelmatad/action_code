@@ -12,11 +12,11 @@
 Trajectory::Trajectory(){
 }
 
-Trajectory::Trajectory(Input &myInput, Config &myConfig)
+Trajectory::Trajectory( const Input &myInput, const Config &myConfig)
 {
-	m_n_slices = myInput.getIntInput(N_SLICES);
-	m_tObs = myInput.getDoubleInput(D_TOBS);
-	m_sizeOfSystem = myInput.getIntInput(N_SITES_FULL);
+	m_n_slices = myInput.GetIntInput(N_SLICES);
+	m_tObs = myInput.GetDoubleInput(D_TOBS);
+	m_sizeOfSystem = myInput.GetIntInput(N_SITES_FULL);
 	m_traj.resize(m_n_slices+1);
 	m_traj.clear();
 	

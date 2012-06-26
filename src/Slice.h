@@ -38,9 +38,9 @@ using namespace std;
 class Slice{
 public:
     Slice(); //overloaded const
-    Slice( Input &, Config &, bool first ); //overloaded constructor
-	Config getFirstConfig() const;
-	Config getLastConfig() const;
+    Slice( const Input &, const Config &, bool first ); //overloaded constructor
+	const Config& GetFirstConfig() const;
+	const Config& GetLastConfig() const;
 	void printLastConfig(ofstream &outputFile, double time) const;
 	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor

@@ -14,29 +14,28 @@ Slice::Slice(){
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-Slice::Slice(Input& myInput, Config &currentConfig, bool first)
+Slice::Slice( const Input& myInput, const Config &currentConfig, bool first)
 {
 	//if first = true then we are going "forward" otherwise going backwards. 
 	
 	Dynamics currentDynamics(myInput);
-	double slicesDouble = (double)myInput.getIntInput(N_SLICES);
-	double tOBS = myInput.getDoubleInput(D_TOBS);
+	double slicesDouble = static_cast<double>( myInput.GetIntInput(N_SLICES) );
+	double tOBS = myInput.GetDoubleInput(D_TOBS);
 	m_timeInterval = tOBS/slicesDouble;
-	
 	
 	if (first)
 	{
 		m_firstConfig = currentConfig;
-		currentDynamics.UpdateConfig(&currentConfig, m_timeInterval );
-		//LIST STUFF GOES HERE
 		m_lastConfig = currentConfig;
+		currentDynamics.UpdateConfig(&m_lastConfig, m_timeInterval );
+		//LIST STUFF GOES HERE
 	}
 	else 
 	{
 		m_lastConfig = currentConfig;
-		currentDynamics.UpdateConfig(&currentConfig, m_timeInterval );
-		//LIST STUFF GOES HERE
 		m_firstConfig = currentConfig;
+		currentDynamics.UpdateConfig(&m_firstConfig, m_timeInterval );
+		//LIST STUFF GOES HERE
 	}
 	/*
 	cout << "firstConfig \n";
@@ -67,12 +66,12 @@ void Slice::printLastConfig(ofstream &outputFile, double time) const
 	m_lastConfig.printConfig(outputFile, time);
 }
 
-Config Slice::getFirstConfig() const
+const Config& Slice::GetFirstConfig() const
 {
 	return m_firstConfig;
 }
 
-Config Slice::getLastConfig() const
+const Config& Slice::GetLastConfig() const
 {
 	return m_lastConfig;
 }

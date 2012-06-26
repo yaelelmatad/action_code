@@ -55,7 +55,7 @@ Input::Input(char* in)
 			if (intChar.compare(type_of_value)==0)
 			{
 				//cout << "reading an integer" << endl;
-				indicator = stringToInt(name_of_value);
+				indicator = StringToInt(name_of_value);
 				//cout << indicator << endl;
 				if (indicator>-1)
 				{
@@ -68,7 +68,7 @@ Input::Input(char* in)
 			if (doubleChar.compare(type_of_value)==0)
 			{
 				//cout << "reading a double" << endl; 
-				indicator = stringToInt(name_of_value);
+				indicator = StringToInt(name_of_value);
 				//cout << indicator << endl;			
 				if (indicator>-1)
 				{
@@ -84,28 +84,20 @@ Input::Input(char* in)
 	}
 	
 	else cout << "Unable to open file" << endl; 
-	
-	
-	
 }
 
-Input::~Input(){
-}
-
-
-int Input::getIntInput(int indicator) 
+int Input::GetIntInput(int indicator) const
 {
 	return intParams[indicator];
 }
 
-double Input::getDoubleInput(int indicator) 
+double Input::GetDoubleInput(int indicator) const
 {
 	return doubleParams[indicator];
 }
 
-
-
-int Input::stringToInt(string a) 
+// static
+int Input::StringToInt(string a)
 {
 
 	string sN_SITES_SUB ("N_SITES_SUB");

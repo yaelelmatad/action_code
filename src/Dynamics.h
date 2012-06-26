@@ -38,10 +38,7 @@ using namespace std;
 class Dynamics{
 public:
 
-    Dynamics( Input &); //overloaded constructor
-    virtual ~Dynamics(); //destructor
-	
-	const Config& GetCurrConfig() const { return *p_curr_config; }
+    Dynamics( const Input &); //overloaded constructor
 	
 	void	UpdateConfig( Config*, double interval ) const;
 	
@@ -61,7 +58,6 @@ private:
 	double m_leftRate;
 	double m_rightRate;
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
-	Config* p_curr_config; 	
 
 	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics

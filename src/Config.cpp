@@ -13,10 +13,10 @@ Config::Config(){
 
 }
 
-Config::Config(Input &myInput)
+Config::Config( const Input &myInput)
 {
-	m_density = myInput.getDoubleInput(D_DENSITY);
-	m_length = myInput.getIntInput(N_SITES_FULL);
+	m_density = myInput.GetDoubleInput(D_DENSITY);
+	m_length = myInput.GetIntInput(N_SITES_FULL);
 	//int size = length*length;
 	int size = m_length; //lets just stick to one d, K?
 	for (int i=0; i< size; i++)

@@ -13,19 +13,20 @@
 //}
 
 
-Dynamics::Dynamics( Input &myInput)
+Dynamics::Dynamics( const Input &myInput)
 {	
-	m_temp =myInput.getDoubleInput(D_TEMP);
-	if (myInput.getIntInput(N_HARD)==0)
+	m_temp = myInput.GetDoubleInput(D_TEMP);
+
+	if (myInput.GetIntInput(N_HARD)==0)
 	{
 		m_epsilon = 0;
 	}
 	else 
 	{
-		m_epsilon = exp(-myInput.getDoubleInput(D_U)/m_temp);
+		m_epsilon = exp(-myInput.GetDoubleInput(D_U)/m_temp);
 	}
-	m_leftRate = myInput.getDoubleInput(D_RATE_LEFT);
-	m_rightRate = myInput.getDoubleInput(D_RATE_RIGHT);
+	m_leftRate = myInput.GetDoubleInput(D_RATE_LEFT);
+	m_rightRate = myInput.GetDoubleInput(D_RATE_RIGHT);
 	m_cprob = (exp(-1.0/m_temp));
 	
 	InitializeRates();
@@ -63,10 +64,12 @@ void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
 		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
+		/*
 		for (int i = 0; i< toUpdate.m_length; i++)
 		{
 			cout << toUpdate.m_cell[i] << " ";
 		}
+		*/
 	}
 	
 	//cout << endl;
@@ -140,8 +143,5 @@ double Dynamics::m_pickATime( double totalRate ) const
 	double random = ((double)rand()/(double)RAND_MAX); //random number 0->1
 	double deltaTime = (-log(random)/totalRate);
 	return deltaTime;
-}
-
-Dynamics::~Dynamics(){
 }
 
