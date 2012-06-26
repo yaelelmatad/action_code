@@ -47,13 +47,13 @@ public:
 	
 private:
 	
-	inline Config& m_config() { return *p_curr_config; }
+	void 	PickAndFlipSpin( Config& toUpdate, double totalRate ) const;
+
+	void 	InitializeRates();
+
+	double 	GetTotalRate( const Config& localConfig ) const;
 	
-	void m_pickAndFlipSpin( Config& toUpdate, double totalRate ) const;
 	
-	void InitializeRates();
-	
-	double GetTotalRate( const Config& localConfig ) const;
 	
 	double m_temp;
 	double m_cprob; //exp(-1/T)
@@ -62,7 +62,7 @@ private:
 	double m_rightRate;
 	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
 	Config* p_curr_config; 	
-	void m_pickAndFlipSpin();
+
 	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics
 	double m_pickATime( double totalRate ) const;

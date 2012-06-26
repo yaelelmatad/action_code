@@ -21,8 +21,8 @@ Config::Config(Input &myInput)
 	int size = m_length; //lets just stick to one d, K?
 	for (int i=0; i< size; i++)
 	{
-		m_config[i]=UNOCCUPIED;
-	//	cout << i << m_config[i] << "\n";
+		m_cell[i]=UNOCCUPIED;
+	//	cout << i << m_cell[i] << "\n";
 	}
 
 	m_clearLists();
@@ -30,16 +30,16 @@ Config::Config(Input &myInput)
 	int totalUp = (int)(m_density*(double)m_length);
 
 	int spinToFlip = rand()%(m_length);
-	m_config[spinToFlip] = OCCUPIED;
+	m_cell[spinToFlip] = OCCUPIED;
 
 	spinToFlip = rand()%(m_length);
 	for (int j = 1; j<totalUp; j++)
 	{
-		while(m_config[spinToFlip] == OCCUPIED)
+		while(m_cell[spinToFlip] == OCCUPIED)
 		{
 			spinToFlip = rand()%(m_length);
 		}
-		m_config[spinToFlip] = OCCUPIED;
+		m_cell[spinToFlip] = OCCUPIED;
 	}
 
 	for (int i = 0; i < m_length; i++)
@@ -50,11 +50,11 @@ Config::Config(Input &myInput)
 	/*
 	for (int j=0; j<length; j++)
 	{
-		cout << m_config[j] << " " << m_typeOfSpin(j) <<endl;
+		cout << m_cell[j] << " " << m_typeOfSpin(j) <<endl;
 	}
 	 */
 
-	m_checkListIntegrity();
+	CheckListIntegrity();
 
 	//make a constructor here that sets up a random config and makes the lists  1D arrays are best. a number of lists feature would be nice too
 	//don't forget to put trapped sites on a 0th list
@@ -69,7 +69,7 @@ void Config::m_clearLists()
 	return;
 }
 
-void Config::m_checkListIntegrity()
+void Config::CheckListIntegrity()
 { 
 	//first check back indexes
 	for (int i = 0; i< m_length; i++)
@@ -88,9 +88,9 @@ void Config::m_checkListIntegrity()
 			cout << "spin on wrong list!" << endl;
 			cout << "spin " << i << " should be on list " << m_typeOfSpin(i) << endl;
 			cout << "actually on list " << m_locationOfSpinOnLists[i][0] << endl;
-			cout << "Left Neighbor " << m_config[m_neighbor(i, -1)] << endl;
-			cout << "i State " << m_config[i] << endl;
-			cout << "Right Neighbor " << m_config[m_neighbor(i, 1)] << endl;
+			cout << "Left Neighbor " << m_cell[m_neighbor(i, -1)] << endl;
+			cout << "i State " << m_cell[i] << endl;
+			cout << "Right Neighbor " << m_cell[m_neighbor(i, 1)] << endl;
 		}
 	}
 
@@ -128,7 +128,7 @@ void Config::m_flipSpin(int spin)
 {
 	int leftNeighbor =m_neighbor(spin, LEFT);
 	int rightNeighbor = m_neighbor(spin, RIGHT);
-	m_config[spin] = abs(m_config[spin]-1); //0->1 and 1->0
+	m_cell[spin] = abs(m_cell[spin]-1); //0->1 and 1->0
 	m_moveToList(spin,m_typeOfSpin(spin));
 	m_moveToList(leftNeighbor,m_typeOfSpin(leftNeighbor));
 	m_moveToList(rightNeighbor,m_typeOfSpin(rightNeighbor));
@@ -141,15 +141,17 @@ void Config::printConfig(ofstream &outputFile, double time) const
 {
 	for (int j = 0; j<m_length; j++)
 	{	
-		if (m_config[j] == 1)
+		if (m_cell[j] == 1)
+		{
 			outputFile<< time << " " << j << endl;
+		}
 	}
 	return;
 }
 
 int Config::getConfig(int spin)
 {
-	return m_config[spin];
+	return m_cell[spin];
 }
 
 void Config::m_addToList(int spin, int type)
@@ -195,10 +197,10 @@ int Config::m_typeOfSpin(int spin)
 	//returns the "type" of spin for listing
 	//here is very MODEL specific.
 
-	int leftNeigh = m_config[m_neighbor(spin, LEFT)];
-	int rightNeigh = m_config[m_neighbor(spin, RIGHT)];
+	int leftNeigh = m_cell[m_neighbor(spin, LEFT)];
+	int rightNeigh = m_cell[m_neighbor(spin, RIGHT)];
 
-	if (m_config[spin]==UNOCCUPIED)
+	if (m_cell[spin]==UNOCCUPIED)
 	{												
 		if (leftNeigh == OCCUPIED && rightNeigh == OCCUPIED)
 		{
