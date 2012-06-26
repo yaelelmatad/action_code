@@ -29,7 +29,7 @@ int main (int argc, char * const argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
 	
 	srand(my_rank);
-	Input runInput("inputFile");
+	Input runInput("inputFile", my_rank);
 	Config test(runInput);
 	Trajectory trajectory(runInput, test);
 	int fileIndicator = my_rank;

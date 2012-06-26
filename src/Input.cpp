@@ -14,7 +14,7 @@
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
-Input::Input(char* in)
+Input::Input(char* in, int myRank)
 {
 	//reads the input file
 	string line;
@@ -30,9 +30,10 @@ Input::Input(char* in)
 		intParams[i]=-1;
 		doubleParams[i]=-1;
 	}
-	
-	cout << "Input read with the following parameters;" <<endl;
-	
+	if (myRank == 0)
+	{
+		cout << "Input read with the following parameters;" <<endl;
+	}
 	
 	ifstream inputFile (in); //opens file
 	if (inputFile.is_open()) //reads until eof
@@ -61,7 +62,8 @@ Input::Input(char* in)
 				{
 					istringstream (value) >> intParams[indicator]; 
 					//cout << intParams[indicator] << endl;
-					cout << intParams[indicator] << " N " << name_of_value << endl;
+					if (myRank == 0)
+						cout << intParams[indicator] << " N " << name_of_value << endl;
 				}
 			}
 			
@@ -74,7 +76,8 @@ Input::Input(char* in)
 				{
 					istringstream (value) >> doubleParams[indicator]; 
 					//cout << doubleParams[indicator] << endl;
-					cout << doubleParams[indicator] << " D "<< name_of_value << endl;
+					if (myRank == 0)
+						cout << doubleParams[indicator] << " D "<< name_of_value << endl;
 
 				}
 			}
