@@ -137,6 +137,17 @@ void Config::m_flipSpin(int spin)
 	return;
 }
 
+void Config::printConfig(ofstream &outputFile, double time) const
+{
+	for (int j = 0; j<m_length; j++)
+	{	
+		if (m_cell[j] == 1)
+		{
+			outputFile<< time << " " << j << endl;
+		}
+	}
+	return;
+}
 
 int Config::getConfig(int spin)
 {

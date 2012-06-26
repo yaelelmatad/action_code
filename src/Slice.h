@@ -39,6 +39,10 @@ class Slice{
 public:
     Slice(); //overloaded const
     Slice( Input &, Config &, bool first ); //overloaded constructor
+	Config getFirstConfig() const;
+	Config getLastConfig() const;
+	void printLastConfig(ofstream &outputFile, double time) const;
+	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor
 	
 private:

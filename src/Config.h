@@ -58,6 +58,7 @@ class Config {
 public:
 	Config(); //default constr.
     Config( Input &); //overloaded constructor
+	void printConfig(ofstream &outputFile, double time) const;
 	//some getters and setters
 	int getConfig(int spin);
 	

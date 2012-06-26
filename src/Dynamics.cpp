@@ -29,12 +29,12 @@ Dynamics::Dynamics( Input &myInput)
 	m_cprob = (exp(-1.0/m_temp));
 	
 	InitializeRates();
-	
+	/*
 	cout << m_epsilon << endl;
 	cout << m_leftRate << endl;
 	cout << m_rightRate << endl;
 	cout << m_cprob << endl;
-	
+	*/
 	
 }
 
@@ -46,31 +46,32 @@ void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
 	
 	double totalRate = GetTotalRate( toUpdate );
 	
+	/*
 	for (int i = 0; i< toUpdate.m_length; i++)
+	{
 		cout << toUpdate.m_cell[i] << " ";
+	}
+	*/
 	
 	while (time < interval)
 	{
 		//cout << " Current Time = " << time << endl;
 		//cout << " Current m_config().m_cell[] Array Is: ";
-		
-
-		
-		cout << endl;
+		//cout << endl;
 		time += m_pickATime( totalRate );
 		PickAndFlipSpin( toUpdate, totalRate );
 		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
 		for (int i = 0; i< toUpdate.m_length; i++)
+		{
 			cout << toUpdate.m_cell[i] << " ";
+		}
 	}
 	
-	cout << endl;
+	//cout << endl;
 	
 }
-
-
 
 void Dynamics::InitializeRates()
 {

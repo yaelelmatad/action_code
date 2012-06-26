@@ -47,8 +47,6 @@ public:
 	
 private:
 	
-	inline Config& m_config() { return *p_curr_config; }
-	
 	void 	PickAndFlipSpin( Config& toUpdate, double totalRate ) const;
 
 	void 	InitializeRates();
