@@ -6,7 +6,7 @@
 1	N	N_STORAGEFREQ
 1	N	N_DIMENSION
 0	N	N_HARD //if this is 0 then the system is hard irrespective of what you put in U
-0.25	D	D_TEMP
+1	D	D_TEMP
 0.25	D	D_DENSITY
 100.0	D	D_TOBS
 0.0	D	D_START_S

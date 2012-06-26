@@ -28,6 +28,7 @@ int main (int argc, char * const argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
 	
+	srand(my_rank);
 	Input runInput("inputFile");
 	Config test(runInput);
 	Trajectory trajectory(runInput, test);
