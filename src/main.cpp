@@ -15,6 +15,7 @@ float pi = 3.14159265;
 #include "Config.h"
 #include "Dynamics.h"
 #include "Input.h"
+#include "TPS.h"
 
 int main (int argc, char * const argv[]) {
     // insert code here...

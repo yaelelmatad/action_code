@@ -50,7 +50,8 @@ enum DoubleParameters
 	D_RATE_LEFT,
 	D_RATE_RIGHT,
 	D_U,
-	D_DIFF_RATE
+	D_DIFF_RATE,
+	D_SHOOT_FRACTION
 };
 
 using namespace std;
