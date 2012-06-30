@@ -41,7 +41,12 @@ public:
     Trajectory(); //overloaded const
     Trajectory( const Input &myInput, Direction direction); //overloaded constructor (makes first traj)
 	Trajectory( const Input &myInput, const Config &myConfig, Direction direction, int m_n_slices);
+	
+	
 	//makes trajectory snippets.
+	
+	const Slice& GetSlice(int indicator) const;
+	int GetOrderParameter(int firstSlice, int lastSlice) const;
 	void printTrajectory(int indicator) const;
     virtual ~Trajectory(); //destructor
 	//some getters and setters

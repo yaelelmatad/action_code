@@ -24,7 +24,7 @@
 
 #define MAXSIZE 10000
 
-//#include "Slice.h"
+#include "Slice.h"
 #include "Trajectory.h"
 #include "Input.h"
 
@@ -35,8 +35,8 @@ enum ShootOrShift{
 };
 
 enum Dir{
-	FORW,
-	BACK
+	FORW = 1,
+	BACK = -1
 };
 
 /*enum OccState
@@ -49,8 +49,9 @@ using namespace std;
 
 class TPS {
 public:
-    TPS(const Input &); //overloaded const
+    TPS(const Input &, double s); //overloaded const
 	void TPS_move(const Trajectory &);
+	void SetS(double S);
 	//makes trajectory snippets.
 //	void printTrajectory(int indicator) const;
 	//some getters and setters
@@ -62,15 +63,25 @@ public:
 private:
 	int m_n_slices;
 	int m_n_slices_shift;
+	double m_s;
 	double m_shoot_frac;
+	
+	Input m_input;
+	Slice tempSlice;
+	
+	
+	
 	int SlicesToRegenerate() const;	
 	int ShootOrShift() const;
 	int ForwardsOrBackwards() const;
 	
-	void ShootBackward(const Trajectory &myTraj, int nSlices);
-	void ShootForward(const Trajectory &myTraj, int nslices);
-	void ShiftBackward(const Trajectory &myTraj, int nslices);
-	void ShiftForward(const Trajectory &myTraj, int nslices);
+	
+	bool AcceptOrReject(double newOP, double oldOP) const;
+	
+	void ShootBackward(const Trajectory &myTraj, int nSlices) const;
+	void ShootForward(const Trajectory &myTraj, int regenSlices) const;
+	void ShiftBackward(const Trajectory &myTraj, int nslices) const;
+	void ShiftForward(const Trajectory &myTraj, int nslices) const;
 
 	//friend class Trajectory; 
 };

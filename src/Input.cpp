@@ -14,6 +14,10 @@
 
 //make a class called config, config should know it's size TODO, configs should have the list.
 
+Input::Input()
+{
+}
+
 Input::Input(char* in, int myRank)
 {
 	//reads the input file

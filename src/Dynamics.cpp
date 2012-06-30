@@ -39,7 +39,26 @@ Dynamics::Dynamics( const Input &myInput)
 	
 }
 
-void Dynamics::UpdateConfig( Config* pConfig, double interval ) const
+
+double Dynamics::UpdateConfigOneStep( Config* pConfig ) const
+{
+	Config& toUpdate = *pConfig;
+	
+	double time ;
+	
+	double totalRate = GetTotalRate( toUpdate );
+
+
+	time = m_pickATime( totalRate );
+	PickAndFlipSpin( toUpdate, totalRate );
+	toUpdate.CheckListIntegrity();
+	
+	return time;
+		
+}
+
+
+void Dynamics::UpdateConfigBlock( Config* pConfig, double interval ) const
 {
 	Config& toUpdate = *pConfig;
 	

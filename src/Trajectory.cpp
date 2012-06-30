@@ -66,6 +66,24 @@ Trajectory::Trajectory( const Input &myInput, const Config &myConfig, Direction 
 }
 
 
+int Trajectory::GetOrderParameter(int firstSlice, int lastSlice) const
+{
+	int orderParam = 0;
+	for (int i = firstSlice; i<=lastSlice; i++)
+	{
+		orderParam+=m_traj[i].GetOrderParam();
+	}
+	
+	return orderParam;
+}
+
+
+const Slice& Trajectory::GetSlice(int indicator) const
+{
+	return m_traj[indicator];
+
+}
+
 void Trajectory::printTrajectory(int indicator) const
 {
 	double interval = m_tObs/m_n_slices_full;

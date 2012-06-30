@@ -51,12 +51,17 @@ public:
 	void printLastConfig(ofstream &outputFile, double time) const;
 	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor
+	int GetOrderParam() const;
 	
 private:
 	//functions
 	//member variables
 	double m_timeInterval;
 	bool m_first;
+	int m_K; //Kinks
+	
+	void UpdateConfig(const Dynamics& currDynamics, Config& confToUpdate, double interval);
+	void UpdateActionParameters();
 	
 	Config m_firstConfig; //first is the one that is the last config in that slice TIME WISE (with earlier time)
 	Config m_lastConfig; //last is the last one in that slice TIME WISE

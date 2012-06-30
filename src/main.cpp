@@ -35,9 +35,19 @@ int main (int argc, char * const argv[]) {
 	srand(my_rank);
 	Input runInput("inputFile", my_rank);
 	Config test(runInput);
-	Trajectory trajectory(runInput, test, direction, 10);
+	Trajectory trajectory(runInput, direction);
 	int fileIndicator = my_rank;
+	
 	trajectory.printTrajectory(fileIndicator);
+	/*
+	TPS myTPS(runInput, 0.1);
+	for (int i = 0; i<= 20; i++)
+	{
+		myTPS.TPS_move(trajectory);
+		cout << endl;
+	}
+	 
+	 */
 	
 	MPI_Finalize();
 

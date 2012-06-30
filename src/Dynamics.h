@@ -40,7 +40,10 @@ public:
 
     Dynamics( const Input &); //overloaded constructor
 	
-	void	UpdateConfig( Config*, double interval ) const;
+	void	UpdateConfigBlock( Config*, double interval ) const;
+	//advances a config by an amount "interval"
+	double	UpdateConfigOneStep( Config* ) const;
+	//does just one stepl returns the time increment.
 	
 private:
 	
