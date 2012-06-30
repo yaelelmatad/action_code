@@ -18,9 +18,6 @@ float pi = 3.14159265;
 #include "TPS.h"
 
 int main (int argc, char * const argv[]) {
-    // insert code here...
-	//dynamics test2 (test, 1.0, 1.0, true, 1.0, 1.0);
-	//trajectory test3(2.0, 1.0, 10, 3, 3);
 
 	int comm_sz;
 	int my_rank;
