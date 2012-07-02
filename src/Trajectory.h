@@ -19,6 +19,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <deque>
+#include <iterator>
 #include <string>
 #include <sstream>
 
@@ -34,6 +36,11 @@
 	UNOCCUPIED,
 };*/
 
+enum Side{
+	ESide_BEGIN = -1,
+	ESide_END = 1
+};
+
 using namespace std;
 
 class Trajectory {
@@ -44,7 +51,8 @@ public:
 	
 	
 	//makes trajectory snippets.
-	
+	void MergeTrajectories(const Trajectory &snippet, int firstSliceToErase, int lastSliceToErase, Side currSide, Direction currDir);
+	int getLengthOfTraj() const;
 	const Slice& GetSlice(int indicator) const;
 	int GetOrderParameter(int firstSlice, int lastSlice) const;
 	void printTrajectory(int indicator) const;
@@ -60,13 +68,14 @@ private:
 	//float ran2;
 	//member variables
 	//slice m_trajectory[NSLICESMAX];
-	vector<Slice> m_traj;
+	deque<Slice> m_traj;
 	double m_density;
 	int m_length;
 	double m_n_slices;
 	double m_n_slices_full;
 	double m_tObs;
 	int m_sizeOfSystem;
+	
 	//double m_J;
 	//double m_temp;
 	//config array, starts and 0 and goes to length^2

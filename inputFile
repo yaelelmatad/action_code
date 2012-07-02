@@ -1,8 +1,8 @@
 100	N	N_SITES_SUB
 100	N	N_SITES_FULL
-10	N	N_TRAJS
-100	N	N_SLICES
-100	N	N_SLICES_SHIFT
+100	N	N_TRAJS
+200	N	N_SLICES
+200	N	N_SLICES_SHIFT
 1	N	N_STORAGEFREQ
 1	N	N_DIMENSION
 0	N	N_HARD //if this is 0 then the system is hard irrespective of what you put in U

@@ -14,13 +14,15 @@ Trajectory::Trajectory(){
 
 Trajectory::Trajectory( const Input &myInput, Direction direction)
 {
+	
+	
+
 	//constructor that makes a FULL trajectory
 	//must be submitted via input!
 	m_n_slices = myInput.GetIntInput(N_SLICES);
 	m_n_slices_full = m_n_slices;
 	m_tObs = myInput.GetDoubleInput(D_TOBS);
-	m_traj.resize(m_n_slices+1);
-	m_traj.clear();
+	m_traj.resize(m_n_slices);
 	Config myConfig(myInput);
 	int i;
 	
@@ -32,10 +34,13 @@ Trajectory::Trajectory( const Input &myInput, Direction direction)
 		i=m_n_slices-1;
 	
 	m_traj[i] = Slice(myInput, myConfig, direction );
+
 	for (i+=direction; i < m_n_slices && i >= 0; i+=direction)
 	{
 		m_traj[i] = Slice(myInput, m_traj[i-direction].GetSeedConfig( direction ), direction );
 	}
+	
+	//printTrajectory(11);
 	
 }
 
@@ -45,8 +50,7 @@ Trajectory::Trajectory( const Input &myInput, const Config &myConfig, Direction 
 	m_n_slices = n_slicesSnip;
 	m_n_slices_full = myInput.GetIntInput(N_SLICES);
 	m_tObs = myInput.GetDoubleInput(D_TOBS);
-	m_traj.resize(m_n_slices+1);
-	m_traj.clear();
+	m_traj.resize(m_n_slices);
 	//Config myConfig(myInput);
 	int i;
 	
@@ -77,12 +81,67 @@ int Trajectory::GetOrderParameter(int firstSlice, int lastSlice) const
 	return orderParam;
 }
 
+void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToErase, int lastSliceToErase, Side currSide, Direction currDir)
+{
+	//currDir might be unnecessary?
+	//suspect that when currSide = back then currDir always  = forwards
+	//and when currSide = front then currDir = backwards
+	//think about this?
+	deque<Slice>::iterator iter1 = m_traj.begin() + firstSliceToErase;
+	deque<Slice>::iterator iter2 = m_traj.begin() + lastSliceToErase + 1;
+	m_traj.erase(iter1, iter2);
+	//erases [first,last) (so need to +1 to truly erase "last")
+	
+	int sizeOfRemainingTraj = m_traj.size();
+	int sizeOfSnippet = snippet.getLengthOfTraj();
+	int currDirBinary = -1*(currDir-1)/2; //backwards now equals 1 and forwards 0
+	
+	if (currSide == ESide_END)
+	{//add to end
+		
+		//int i = 0;
+		//int i = currDirBinary*(sizeOfSnippet-1);
+
+		//for (;i < sizeOfSnippet && i >= 0; i+=currDir)
+		for (int i = 0;i < sizeOfSnippet; i++)
+		{
+			m_traj.push_back(snippet.GetSlice(i));
+		}
+		
+	}
+	else //adding to beginning
+	{
+		//int i = -1*(currDirBinary-1)*(sizeOfSnippet-1);
+		//int i = -1*(currDirBinary-1)*(sizeOfSnippet-1);
+
+//		for (;i < sizeOfSnippet && i >=0; i-= currDir)
+		for (int i=sizeOfSnippet-1;i >=0; i--)
+		{
+			m_traj.push_front(snippet.GetSlice(i));
+		}
+	//add to beginning
+		
+		
+	}
+
+	cout << "Size of new deque " << m_traj.size() << endl;
+	cout << endl;
+	
+}
+
+
 
 const Slice& Trajectory::GetSlice(int indicator) const
 {
 	return m_traj[indicator];
 
 }
+
+int Trajectory::getLengthOfTraj() const
+{
+	return m_traj.size();
+}
+
 
 void Trajectory::printTrajectory(int indicator) const
 {

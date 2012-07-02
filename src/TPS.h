@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <deque>
 #include <string>
 #include <sstream>
 
@@ -39,6 +40,7 @@ enum Dir{
 	BACK = -1
 };
 
+
 /*enum OccState
  {
  OCCUPIED,
@@ -50,7 +52,7 @@ using namespace std;
 class TPS {
 public:
     TPS(const Input &, double s); //overloaded const
-	void TPS_move(const Trajectory &);
+	void TPS_move( Trajectory &);
 	void SetS(double S);
 	//makes trajectory snippets.
 //	void printTrajectory(int indicator) const;
@@ -78,10 +80,10 @@ private:
 	
 	bool AcceptOrReject(double newOP, double oldOP) const;
 	
-	void ShootBackward(const Trajectory &myTraj, int nSlices) const;
-	void ShootForward(const Trajectory &myTraj, int regenSlices) const;
-	void ShiftBackward(const Trajectory &myTraj, int nslices) const;
-	void ShiftForward(const Trajectory &myTraj, int nslices) const;
+	void ShootBackward( Trajectory &myTraj, int nSlices) const;
+	void ShootForward( Trajectory &myTraj, int regenSlices) const;
+	void ShiftBackward( Trajectory &myTraj, int nslices) const;
+	void ShiftForward( Trajectory &myTraj, int nslices) const;
 
 	//friend class Trajectory; 
 };
