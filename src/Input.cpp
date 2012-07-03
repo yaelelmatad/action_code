@@ -93,6 +93,83 @@ Input::Input(char* in, int myRank)
 	else cout << "Unable to open file" << endl; 
 }
 
+void Input::ReadInput(char* in, int myRank)
+{
+	//reads the input file
+	string line;
+	string value; // to get first element
+	string name_of_value;
+	string type_of_value;
+	string intChar ("N");
+	string doubleChar ("D");
+	int indicator;
+	
+	for (int i = 0 ; i < MAXARGS; i++)
+	{ //unitilizaed values get -1
+		intParams[i]=-1;
+		doubleParams[i]=-1;
+	}
+	if (myRank == 0)
+	{
+		cout << "Input read with the following parameters;" <<endl;
+	}
+	
+	ifstream inputFile (in); //opens file
+	if (inputFile.is_open()) //reads until eof
+	{
+		getline (inputFile,line);
+		do 
+		{
+			//	cout << line << endl; //gets the line 
+			
+			istringstream iss(line);
+			iss >> value;
+			//cout << "Substring: " << value << endl;
+			
+			iss >> type_of_value;
+			//cout << "Substring: " << type_of_value << endl;
+			
+			iss >> name_of_value;
+			//cout << "Substring: " << name_of_value << endl;
+			
+			if (intChar.compare(type_of_value)==0)
+			{
+				//cout << "reading an integer" << endl;
+				indicator = StringToInt(name_of_value);
+				//cout << indicator << endl;
+				if (indicator>-1)
+				{
+					istringstream (value) >> intParams[indicator]; 
+					//cout << intParams[indicator] << endl;
+					if (myRank == 0)
+						cout << intParams[indicator] << " N " << name_of_value << endl;
+				}
+			}
+			
+			if (doubleChar.compare(type_of_value)==0)
+			{
+				//cout << "reading a double" << endl; 
+				indicator = StringToInt(name_of_value);
+				//cout << indicator << endl;			
+				if (indicator>-1)
+				{
+					istringstream (value) >> doubleParams[indicator]; 
+					//cout << doubleParams[indicator] << endl;
+					if (myRank == 0)
+						cout << doubleParams[indicator] << " D "<< name_of_value << endl;
+					
+				}
+			}
+			getline (inputFile,line);
+		} while( !inputFile.eof() );
+		inputFile.close();
+	}
+	
+	else cout << "Unable to open file" << endl; 
+}
+
+
+
 int Input::GetIntInput(int indicator) const
 {
 	return intParams[indicator];
@@ -123,6 +200,7 @@ int Input::StringToInt(string a)
 	}
 	MATCH_STRING_TO_ENUM( N_SITES_FULL )
 	MATCH_STRING_TO_ENUM( N_TRAJS )
+	MATCH_STRING_TO_ENUM( N_TRAJS_EQUIL )
 	MATCH_STRING_TO_ENUM( N_SLICES )
 	MATCH_STRING_TO_ENUM( N_SLICES_SHIFT )
 	MATCH_STRING_TO_ENUM( N_STORAGEFREQ )

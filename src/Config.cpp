@@ -137,6 +137,44 @@ void Config::m_flipSpin(int spin)
 	return;
 }
 
+void Config::PrintRestartConfig(FILE* outputFile, int index) const
+{
+	fprintf(outputFile, "%i ", index);
+	for (int iLattice=0; iLattice<m_length; iLattice++)
+	{
+		fprintf(outputFile, "%i ", m_cell[iLattice]);
+	}
+	fprintf(outputFile,"\n");
+	
+	//print list numbers
+	fprintf(outputFile, "%i ", index);
+	for (int iLists=0; iLists < NUM_LISTS;iLists++)
+	{
+		fprintf(outputFile, "%i ", m_lists[iLists][0]);
+	}
+	fprintf(outputFile, "\n");
+	
+	for (int iLists = 0; iLists<NUM_LISTS; iLists++)
+	{
+		fprintf(outputFile, "%i ", index);
+		for (int iOnList = 1; iOnList <=m_lists[iLists][0]; iOnList++)
+		{
+			fprintf(outputFile, "%i ", m_lists[iLists][iOnList]);
+		}
+		fprintf(outputFile, "\n");
+	}
+	
+	//print backindexes
+	for (int iSpin = 0; iSpin< m_length; iSpin++)
+	{
+		fprintf(outputFile, "%i ", index);
+		fprintf(outputFile, "%i %i \n", m_locationOfSpinOnLists[iSpin][0], m_locationOfSpinOnLists[iSpin][1]);
+	}
+	
+}
+
+
+
 void Config::printConfig(ofstream &outputFile, double time) const
 {
 	for (int j = 0; j<m_length; j++)
@@ -170,6 +208,9 @@ void Config::m_addToList(int spin, int type)
 	*/
 	 return;
 }
+
+
+
 
 void Config::m_moveToList(int spin, int type)
 {

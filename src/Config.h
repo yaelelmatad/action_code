@@ -59,6 +59,7 @@ public:
 	Config(); //default constr.
     Config( const Input &); //overloaded constructor
 
+	void PrintRestartConfig(FILE* outputFile, int index) const;
 	void printConfig(ofstream &outputFile, double time) const;
 	//some getters and setters
 	int getConfig(int spin);

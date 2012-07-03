@@ -32,6 +32,7 @@ enum IntParameters
 	N_SITES_SUB,
 	N_SITES_FULL,
 	N_TRAJS,
+	N_TRAJS_EQUIL,
 	N_SLICES,
 	N_SLICES_SHIFT,
 	N_STORAGEFREQ,
@@ -61,6 +62,7 @@ public:
 	Input(); //overloaded const
     Input(char* inputFile, int myRank); //overloaded constructor
 
+	void    ReadInput(char* inputFile, int myRank);
 	int 	GetIntInput(int indicator) const; //you'll need to change this if you add parameters!
 	double 	GetDoubleInput(int indicator) const;
 

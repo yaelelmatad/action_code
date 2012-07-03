@@ -142,17 +142,35 @@ int Trajectory::getLengthOfTraj() const
 	return m_traj.size();
 }
 
+void Trajectory::PrintRestartTraj(FILE* outputFile) const
+{
+	for (int i = 0; i < m_n_slices; i++)
+	{
+		m_traj[i].PrintRestartSlice(outputFile, i);
+	}
+}
 
-void Trajectory::printTrajectory(int indicator) const
+
+
+void Trajectory::printTrajectory(int rank, int indicator, double param) const
 {
 	double interval = m_tObs/m_n_slices_full;
 	double time = 0;
 	//Config currConfig;
-	string filename ("traj");
+	string filename ("traj_i_");
 	std::ostringstream oss;
 	oss << indicator;
 	filename += oss.str();
+	filename += "_rank_";
+	std::ostringstream oss2;
+	oss2 << rank;
+	filename += oss2.str();
+	filename += "_param_";
+	std::ostringstream oss3;
+	oss3 << param;
+	filename += oss3.str();
 	filename += ".dat";
+
 	
 	//cout << "m_n_slices = " << m_n_slices << endl;
 

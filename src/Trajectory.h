@@ -55,8 +55,9 @@ public:
 	int getLengthOfTraj() const;
 	const Slice& GetSlice(int indicator) const;
 	int GetOrderParameter(int firstSlice, int lastSlice) const;
-	void printTrajectory(int indicator) const;
-    virtual ~Trajectory(); //destructor
+	void printTrajectory(int rank, int indicator, double S) const;
+    void PrintRestartTraj(FILE* outputFile) const;
+	virtual ~Trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
 

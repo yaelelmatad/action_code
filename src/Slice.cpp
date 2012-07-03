@@ -89,6 +89,19 @@ int Slice::GetOrderParam() const
 	return m_K;
 }
 
+
+void Slice::PrintRestartSlice(FILE* outputFile, int index) const
+{
+	m_firstConfig.PrintRestartConfig(outputFile, index);
+	m_lastConfig.PrintRestartConfig(outputFile, index);
+
+	//print K
+	fprintf(outputFile, "%i %i \n", index, m_K);
+
+	
+	
+}
+
 void Slice::printFirstConfig(ofstream &outputFile, double time) const
 {
 	m_firstConfig.printConfig(outputFile, time);

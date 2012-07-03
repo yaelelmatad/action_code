@@ -62,6 +62,8 @@ bool TPS::AcceptOrReject(double newOP, double oldOP) const
 void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 {
 	cout << "Shoot Forward" << endl;
+	cout << regenSlices  << endl;
+	cout << m_n_slices  << endl;
 
 	int firstKept = 0;
 	cout << "firstKept " << firstKept<< endl;

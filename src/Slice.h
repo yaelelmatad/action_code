@@ -48,6 +48,7 @@ public:
 	const Config& GetFirstConfig() const;
 	const Config& GetLastConfig() const;
 	const Config& GetSeedConfig(Direction) const;
+	void PrintRestartSlice(FILE* outputFile, int index) const;
 	void printLastConfig(ofstream &outputFile, double time) const;
 	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor
