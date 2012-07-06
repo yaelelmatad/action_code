@@ -102,6 +102,21 @@ void Slice::PrintRestartSlice(FILE* outputFile, int index) const
 	
 }
 
+void Slice::LoadRestartSlice(FILE* inputFile, int index)
+{
+	m_firstConfig.LoadRestartConfig(inputFile, index);
+	m_lastConfig.LoadRestartConfig(inputFile, index);
+	
+	//print K
+	fscanf(inputFile, "%i %i \n", &index, &m_K);
+	cout << "m_K " << m_K << endl;
+	
+	
+	
+}
+
+
+
 void Slice::printFirstConfig(ofstream &outputFile, double time) const
 {
 	m_firstConfig.printConfig(outputFile, time);

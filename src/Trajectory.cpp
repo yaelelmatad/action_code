@@ -151,6 +151,14 @@ void Trajectory::PrintRestartTraj(FILE* outputFile) const
 }
 
 
+void Trajectory::LoadRestartTraj(FILE* inputFile) 
+{
+	for (int i = 0; i < m_n_slices; i++)
+	{
+		m_traj[i].LoadRestartSlice(inputFile, i);
+	}
+}
+
 
 void Trajectory::printTrajectory(int rank, int indicator, double param) const
 {

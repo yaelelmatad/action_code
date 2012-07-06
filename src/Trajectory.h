@@ -2,7 +2,7 @@
  *  trajectory.h
  *  
  *
- *  Created by Yael Elmatad on 8/16/10.
+ *  Created by Yael Elmatad on 6/12
  *  Copyright 2010 __MyCompanyName__. All rights reserved.
  *
  */
@@ -57,6 +57,7 @@ public:
 	int GetOrderParameter(int firstSlice, int lastSlice) const;
 	void printTrajectory(int rank, int indicator, double S) const;
     void PrintRestartTraj(FILE* outputFile) const;
+	void LoadRestartTraj(FILE* inputFile); 
 	virtual ~Trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);

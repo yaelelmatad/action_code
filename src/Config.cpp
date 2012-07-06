@@ -174,6 +174,46 @@ void Config::PrintRestartConfig(FILE* outputFile, int index) const
 }
 
 
+void Config::LoadRestartConfig(FILE* inputFile, int index) 
+{
+	fscanf(inputFile, "%i ", &index);
+	for (int iLattice=0; iLattice<m_length; iLattice++)
+	{
+		fscanf(inputFile, "%i ", &(m_cell[iLattice]));
+		cout <<"m_cell " << iLattice << " = " << m_cell[iLattice] << endl;;
+	}
+	cout << endl;
+	fscanf(inputFile,"\n");
+	
+	//print list numbers
+	fscanf(inputFile, "%i ", &index);
+	for (int iLists=0; iLists < NUM_LISTS;iLists++)
+	{
+		fscanf(inputFile, "%i ", &(m_lists[iLists][0]));
+	}
+	fscanf(inputFile, "\n");
+	
+	for (int iLists = 0; iLists<NUM_LISTS; iLists++)
+	{
+		fscanf(inputFile, "%i ", &index);
+		for (int iOnList = 1; iOnList <=m_lists[iLists][0]; iOnList++)
+		{
+			fscanf(inputFile, "%i ", &(m_lists[iLists][iOnList]));
+		}
+		fscanf(inputFile, "\n");
+	}
+	
+	//print backindexes
+	for (int iSpin = 0; iSpin< m_length; iSpin++)
+	{
+		fscanf(inputFile, "%i ", &index);
+		fscanf(inputFile, "%i %i \n", &m_locationOfSpinOnLists[iSpin][0], &m_locationOfSpinOnLists[iSpin][1]);
+	}
+	
+}
+
+
+
 
 void Config::printConfig(ofstream &outputFile, double time) const
 {

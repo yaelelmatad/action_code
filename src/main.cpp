@@ -28,6 +28,7 @@ int main (int argc, char * const argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
 
+
 	cout << "comm_sz " << comm_sz << endl;
 
 	char* inputFile;
@@ -41,24 +42,40 @@ int main (int argc, char * const argv[]) {
 	Trajectory trajectory;
 	bool restarted;
 	Direction direction = EDirection_FORWARD;
+	TPS myTPS;
 	
 	if( argc == 3 ) {
 		inputFile = argv[1];
 		restartFile = argv[2];
 		runInput.ReadInput(inputFile, my_rank);
+		TPS tempTPS(runInput, my_rank, comm_sz);
+		myTPS=tempTPS;
 		restarted = true;
-		//Trajectory my_trajectory(runInput, direction);
-		//Trajectory trajectory = my_restart.LoadRestartFile(restartFile, my_rank);
+		if (!my_restart.properlyRestarted(restartFile, comm_sz))
+		{
+			cout << "Attempting to launch restart with wrong number of processors \n";
+			cout << "Launched with " << comm_sz << " should have been launched with " << my_restart.getOldCommSz() << endl;
+			return 1;
+		}
+		Trajectory temp_trajectory(runInput, direction);
+		my_restart.LoadRestart(runInput, temp_trajectory, myTPS, restartFile, my_rank, comm_sz);
+		temp_trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
+		trajectory = temp_trajectory;
+		
 		//restartIndex = my_restart.getRestartIndex();
 		//seed = my_restart.getSeed();
     }
-	if (argc == 2)
+	else if (argc == 2)
 	{
 		restarted = false;
 		inputFile = argv[1];
 		Input tempInput(inputFile, my_rank);
 		runInput.ReadInput(inputFile, my_rank);
+		TPS tempTPS(runInput, my_rank, comm_sz);
+		myTPS=tempTPS;
 		Trajectory seedtrajectory(runInput, direction);
+	//	seedtrajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
+		cout << "HERE???" << endl;
 		trajectory = seedtrajectory;
 	}
     else 
@@ -67,30 +84,11 @@ int main (int argc, char * const argv[]) {
 		cout << "Using (without Restart): ./action InputFile\n"; 
 		return 1;
     }
-	double start_s = runInput.GetDoubleInput(D_START_S);
-	double end_s = runInput.GetDoubleInput(D_END_S);
 	
-	double currS;
-	
-	if (end_s > start_s)
-	{	double range = end_s - start_s;
-		double increment = range/(comm_sz-1);
-		currS = start_s + increment*my_rank;
-	}
-	else {
-		double range = start_s - end_s;
-		double increment = range/(comm_sz-1);
-		currS = start_s - increment*my_rank;
-	}
-	
-	cout << "S = " << currS << " on rank " << my_rank << endl;
-
-	
+							   
 	int m_n_traj = runInput.GetIntInput(N_TRAJS);
 	int m_n_traj_equil = runInput.GetIntInput(N_TRAJS_EQUIL);
 	int m_n_storagefreq = runInput.GetIntInput(N_STORAGEFREQ);	
-	
-	TPS myTPS(runInput, currS);
 
 	if (!restarted)
 	{
@@ -107,7 +105,8 @@ int main (int argc, char * const argv[]) {
 			//my_restart.PrintRestartFile(my_rank, seed, i, currS, runInput, trajectory);
 		}
 		
-		trajectory.printTrajectory(my_rank,0,currS);
+		trajectory.printTrajectory(my_rank,0, myTPS.GetCurrS());
+		my_restart.PrintRestartFile(my_rank, comm_sz, seed, 0, myTPS.GetCurrS(), runInput, trajectory);
 		for (int i = 1; i <= m_n_traj; i++)
 		{
 			cout << "traj index = " << i << endl;
@@ -118,17 +117,21 @@ int main (int argc, char * const argv[]) {
 			if (i%m_n_storagefreq == 0)
 			{
 				cout << "Rank " << my_rank << " reached trajectory " << i << " of "<< m_n_traj<< endl;
-				trajectory.printTrajectory(my_rank,i,currS);
-				my_restart.PrintRestartFile(my_rank, seed, i, currS, runInput, trajectory);
+				trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
+				my_restart.PrintRestartFile(my_rank, comm_sz, seed, i, myTPS.GetCurrS(), runInput, trajectory);
 			}
 		}
 	}	
 	else 
+		
+		
+	/*	
 	{ //restarted
 		cout << "Restarted \n";
 		srand(seed);
-		seed = seed + m_n_storagefreq;
-		trajectory.printTrajectory(my_rank,0,currS);
+		seed = seed +  my_restart.GetIndex() ;
+		//trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
+		//my_restart.PrintRestartFile(my_rank, comm_sz, seed, 0, myTPS.GetCurrS(), runInput, trajectory);
 		for (int i = 1; i<= m_n_traj; i++)
 		{
 			cout << "traj index = " << i << endl;
@@ -139,12 +142,12 @@ int main (int argc, char * const argv[]) {
 			if (i%m_n_storagefreq == 0)
 			{
 				cout << "Rank " << my_rank << " reached trajectory " << i << " of "<< m_n_traj<< endl;
-				trajectory.printTrajectory(my_rank,i,currS);
-				my_restart.PrintRestartFile(my_rank, seed, i, currS, runInput, trajectory);
+				trajectory.printTrajectory(my_rank,i,myTPS.GetCurrS());
+				my_restart.PrintRestartFile(my_rank, comm_sz, seed, i, myTPS.GetCurrS(), runInput, trajectory);
 			}
 		}
 	} 
-	
+	*/
 	
 	MPI_Finalize();
 

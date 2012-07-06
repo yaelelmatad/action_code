@@ -51,9 +51,13 @@ using namespace std;
 
 class TPS {
 public:
-    TPS(const Input &, double s); //overloaded const
+    TPS(const Input &, int my_rank, int comm_sz); //overloaded const
+	TPS();
 	void TPS_move( Trajectory &);
 	void SetS(double S);
+	void SetCurrS(int start_s, int end_s, int my_rank, int comm_sz);
+	int GetCurrS() const;
+	
 	//makes trajectory snippets.
 //	void printTrajectory(int indicator) const;
 	//some getters and setters

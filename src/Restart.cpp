@@ -11,9 +11,69 @@
 
 Restart::Restart()
 {
+	m_restartedCommSz = -1;
 }
 
-void Restart::PrintRestartFile(int myRank, int randSeed, int index, double currS, Input &currInput, Trajectory &currTraj) const
+bool Restart::properlyRestarted(char* restartFile, int launched_comm_sz) 
+{
+	FILE* in;
+	in = fopen(restartFile, "r");
+	fscanf(in, "%i \n", &m_restartedCommSz);
+
+	fclose(in);  	
+	if (m_restartedCommSz == launched_comm_sz)
+		return true;
+	else {
+		return false;
+	}
+
+}
+
+int Restart::getOldCommSz() const
+{
+	if (m_restartedCommSz != -1)
+		return m_restartedCommSz;
+	else
+	{
+		cout << " Please call Restart::properlyRestarted(restartFile, launched_comm_sz before calling Restart::getOldCommSz!" << endl;
+		return -1;
+	}
+}
+
+
+int Restart::GetIndex() const
+{
+	return m_index;
+}
+
+void Restart::LoadRestart(Input & myInput, Trajectory &myTraj, TPS &myTPS, char* restartFile, int myRank, int comm_sz)
+{
+	sprintf( restartFile +strlen(restartFile), "_rank_%d.dat", myRank);
+	cout <<"Restart File Name "  << restartFile << endl;
+	
+	FILE* fle1;
+	fle1 = fopen(restartFile, "r");
+
+	fscanf(fle1, "%i \n", &m_index);
+	cout << "m_index " << m_index << endl;
+	fscanf(fle1, "%i \n", &m_randSeed);
+	cout << "m_randSeed " << m_randSeed << endl;
+	fscanf(fle1, "%lf \n", &m_currS);	
+	cout << "m_currS " << m_currS << endl;
+
+	
+	myTPS.SetS(m_currS);
+	
+	myTraj.LoadRestartTraj(fle1);
+	
+	fclose(fle1);
+	
+	
+	
+	return;
+}
+
+void Restart::PrintRestartFile(int myRank, int myCommSz, int randSeed, int index, double currS, Input &currInput, Trajectory &currTraj) const
 {
 		//store trajectory every StoreFrequency amount of trajecotry for restarts
 	//line 1 = index of trajectory
@@ -27,55 +87,30 @@ void Restart::PrintRestartFile(int myRank, int randSeed, int index, double currS
 	//next line is the numbers that go in plistsN[]
 	//next 4 lines is the values that go in the arrays plists[][]
 	//the next N lines are the backIndexes[][] values  
+	if (myRank == 0)
+	{
+		char filename[1024];
+		sprintf( (char*)filename, "Restart_index_%d", index );
+		EraseFile(filename);
+		//cout << filename << "\n";
+		FILE * fle1;
+		fle1 = fopen(filename, "a");
+		fprintf(fle1, "%i \n", myCommSz);
+		fclose(fle1);
+	
+	}
+	
 	char filename[1024];
-	sprintf( (char*)filename, "Restart_rank_%d_s_%8.6f_index_%d.dat",myRank, currS, index );
+	sprintf( (char*)filename, "Restart_index_%d_rank_%d.dat", index, myRank );
 	EraseFile(filename);
 	//cout << filename << "\n";
 	FILE * fle1;
 	fle1 = fopen(filename, "a");
 	fprintf(fle1, "%i \n", index);
 	fprintf(fle1, "%i \n", randSeed);
+	fprintf(fle1, "%lf \n", currS);
 	
 	currTraj.PrintRestartTraj(fle1);
-	/*for (int iSlice=0;iSlice<=nSlices;iSlice++)
-	{
-		for (int iLattice=1; iLattice<=N; iLattice++)
-		{
-			fprintf(fle1, "%i ", slices[iLattice][iSlice]);
-		}
-		fprintf(fle1,"\n");
-	}
-	for (int iSlice=0;iSlice<nSlices;iSlice++)
-		//note, omit nSlicesth slice because it is irrelevent to kink count!!
-	{
-		//	cout << "kinksUntilSlice[iSlice] " << kinksUntilSlice[iSlice] << "\n";
-		for (int iActionAccum=1; iActionAccum<=actionParam; iActionAccum++)
-		{
-			fprintf(fle1, "%i ", ((int)(actionAccum[iActionAccum][iSlice])));
-			//		cout << "actionAccum[i][j] " <<  actionAccum[iActionAccum][iSlice] << "\n";
-		}
-		fprintf(fle1,"\n");
-	}
-	//need to preserve list order so that all goes well!!
-	for (int ipN = 1; ipN <= nlists; ipN ++) //2/1/09
-	{
-		fprintf(fle1, "%i ", plistsN[ipN]);
-	}
-	fprintf(fle1,"\n");
-	
-	for (int ipN = 1; ipN <= nlists; ipN ++) //2/1/09
-	{
-		for (int jpN = 1; jpN <= plistsN[ipN]; jpN++)
-		{
-			fprintf(fle1, "%i ", plists[ipN][jpN]);
-		}
-	}
-	fprintf(fle1,"\n");
-	
-	for (int iN = 1; iN <= N; iN++)
-	{
-		fprintf(fle1, "%i %i %i \n", iN, backIndexes[iN][1], backIndexes[iN][2]);
-	}*/
 	fclose(fle1);
 	return;
 	 

@@ -9,9 +9,16 @@
 
 #include "TPS.h"
 
-TPS::TPS( const Input &myInput, double s)
+TPS::TPS()
 {
-	m_s=s;
+	return;
+}
+
+TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
+{
+	int startS = myInput.GetDoubleInput(D_START_S);
+	int endS = myInput.GetDoubleInput(D_END_S);
+	SetCurrS(startS, endS, my_rank, comm_sz);
 	m_input = myInput;
 	m_n_slices_shift = myInput.GetIntInput(N_SLICES_SHIFT);
 	m_n_slices = myInput.GetIntInput(N_SLICES);
@@ -19,10 +26,39 @@ TPS::TPS( const Input &myInput, double s)
 		
 }
 
+void TPS::SetCurrS(int start_s, int end_s, int my_rank, int comm_sz)
+{
+	
+	if (comm_sz == 1)
+	{
+		m_s = start_s;
+		return;
+	}
+	else if (end_s > start_s)
+	{	double range = end_s - start_s;
+		double increment = range/(comm_sz-1);
+		m_s = start_s + increment*my_rank;
+		return;
+	}
+	else 
+	{
+		double range = start_s - end_s;
+		double increment = range/(comm_sz-1);
+		m_s = start_s - increment*my_rank;
+		return;
+	}
+}
+
+int TPS::GetCurrS() const
+{
+	return m_s;
+}
+
 void TPS::SetS(double tempS)
 {
 	m_s = tempS;
 }
+
 
 void TPS::TPS_move(Trajectory &myTraj)
 {
