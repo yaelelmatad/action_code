@@ -124,8 +124,8 @@ void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToEr
 		
 	}
 
-	cout << "Size of new deque " << m_traj.size() << endl;
-	cout << endl;
+	//cout << "Size of new deque " << m_traj.size() << endl;
+	//cout << endl;
 	
 }
 

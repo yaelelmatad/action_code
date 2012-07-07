@@ -109,7 +109,7 @@ void Slice::LoadRestartSlice(FILE* inputFile, int index)
 	
 	//print K
 	fscanf(inputFile, "%i %i \n", &index, &m_K);
-	cout << "m_K " << m_K << endl;
+	//cout << "m_K " << m_K << endl;
 	
 	
 	

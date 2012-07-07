@@ -61,8 +61,9 @@ int main (int argc, char * const argv[]) {
 		Trajectory temp_trajectory(runInput, direction);
 		my_restart.LoadRestart(runInput, temp_trajectory, myTPS, restartFile, my_rank, comm_sz);
 		restartIndex = my_restart.GetIndex();
-		temp_trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
 		trajectory = temp_trajectory;
+		my_restart.PrintRestartFile(my_rank, comm_sz, seed, 555, myTPS.GetCurrS(), runInput, trajectory);
+		trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
 		
 		//restartIndex = my_restart.getRestartIndex();
 		//seed = my_restart.getSeed();
@@ -77,7 +78,7 @@ int main (int argc, char * const argv[]) {
 		myTPS=tempTPS;
 		Trajectory seedtrajectory(runInput, direction);
 	//	seedtrajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
-		cout << "HERE???" << endl;
+		//cout << "HERE???" << endl;
 		trajectory = seedtrajectory;
 	}
     else 
@@ -100,26 +101,27 @@ int main (int argc, char * const argv[]) {
 			//trajectory.printTrajectory(i);
 			//cout << "traj index = " << i << endl;
 			myTPS.TPS_move(trajectory);
-			cout << endl;
+			//cout << endl;
 			seed = seed + i;
 			srand(seed);
 			//my_restart.PrintRestartFile(my_rank, seed, i, currS, runInput, trajectory);
 		}
 		
-		trajectory.printTrajectory(my_rank,0, myTPS.GetCurrS());
 		my_restart.PrintRestartFile(my_rank, comm_sz, seed, 0, myTPS.GetCurrS(), runInput, trajectory);
+		trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
+
 		for (int i = 1; i <= m_n_traj; i++)
 		{
-			cout << "traj index = " << i << endl;
+			//cout << "traj index = " << i << endl;
 			myTPS.TPS_move(trajectory);
-			cout << endl;
+			//cout << endl;
 			seed = seed + i;
 			srand(seed);
 			if (i%m_n_storagefreq == 0)
 			{
 				cout << "Rank " << my_rank << " reached trajectory " << i << " of "<< m_n_traj<< endl;
-				trajectory.printTrajectory(my_rank,0,myTPS.GetCurrS());
 				my_restart.PrintRestartFile(my_rank, comm_sz, seed, i, myTPS.GetCurrS(), runInput, trajectory);
+				trajectory.printTrajectory(my_rank,i,myTPS.GetCurrS());
 			}
 		}
 	}	

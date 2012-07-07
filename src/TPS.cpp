@@ -82,9 +82,9 @@ void TPS::TPS_move(Trajectory &myTraj)
 bool TPS::AcceptOrReject(double newOP, double oldOP) const
 {
 	double boltz = exp(-(newOP-oldOP)*m_s);
-	cout << "boltz = " << boltz << endl;
+	//cout << "boltz = " << boltz << endl;
 	double randNum = ((double)rand()/(double)RAND_MAX);
-	cout << randNum << endl;
+	//cout << randNum << endl;
 	if (randNum <= boltz)
 	{
 		return true;
@@ -97,15 +97,17 @@ bool TPS::AcceptOrReject(double newOP, double oldOP) const
 
 void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 {
+
+	int firstKept = 0;
+
+	int lastKept = m_n_slices - 1 - regenSlices;
+	/*
 	cout << "Shoot Forward" << endl;
 	cout << regenSlices  << endl;
 	cout << m_n_slices  << endl;
-
-	int firstKept = 0;
 	cout << "firstKept " << firstKept<< endl;
-
-	int lastKept = m_n_slices - 1 - regenSlices;
 	cout << "lastKept " << lastKept<< endl;
+	 */
 	//last slice is m_n_slices -1.  
 
 	//slices from first and last trajectory to "keep"
@@ -117,17 +119,17 @@ void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 	
 	double oldOrderParameter = (double)(myTraj.GetOrderParameter(lastKept+1,m_n_slices-1));
 	double newOrderParameter = (double)(snippet.GetOrderParameter(0,regenSlices-1));
-	cout << oldOrderParameter << " " << newOrderParameter << endl;
+	//cout << oldOrderParameter << " " << newOrderParameter << endl;
 	
 	bool acceptance = AcceptOrReject(newOrderParameter, oldOrderParameter);
 	if (acceptance)
 	{
-		cout << "Trajectory Accepted! \n";
+		//cout << "Trajectory Accepted! \n";
 		myTraj.MergeTrajectories(snippet, lastKept+1, m_n_slices-1, ESide_END, EDirection_FORWARD);
 	
 	}
 	else {
-		cout << "Trajectory Rejected!" << endl;
+		//cout << "Trajectory Rejected!" << endl;
 	}
 
 	
@@ -138,14 +140,17 @@ void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 
 void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 {
-	cout << "Shoot Backward" << endl;
 
 	int firstKept = regenSlices;
-	cout << "firstKept " << firstKept<< endl;
 	
 	int lastKept = m_n_slices - 1;
-	cout << "lastKept " << lastKept<< endl;
 	//last slice is m_n_slices -1.  
+	
+	/*
+	cout << "Shoot Backward" << endl;
+	cout << "firstKept " << firstKept<< endl;
+	cout << "lastKept " << lastKept<< endl;
+	 */
 	
 	//slices from first and last trajectory to "keep"
 	const Slice firstKeptSlice = myTraj.GetSlice(firstKept);
@@ -155,17 +160,17 @@ void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 	
 	double oldOrderParameter = (double)(myTraj.GetOrderParameter(0,firstKept-1));
 	double newOrderParameter = (double)(snippet.GetOrderParameter(0,regenSlices-1));
-	cout << oldOrderParameter << " " << newOrderParameter << endl;
+	//cout << oldOrderParameter << " " << newOrderParameter << endl;
 	
 	bool acceptance = AcceptOrReject(newOrderParameter, oldOrderParameter);
 	if (acceptance)
 	{
-		cout << "Trajectory Accepted! \n";
+		//cout << "Trajectory Accepted! \n";
 		myTraj.MergeTrajectories(snippet, 0, firstKept-1, ESide_BEGIN, EDirection_BACKWARD);
 		
 	}
 	else {
-		cout << "Trajectory Rejected!" << endl;
+		//cout << "Trajectory Rejected!" << endl;
 	}
 	
 	
@@ -176,15 +181,17 @@ void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 
 void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
 {
-	cout << "Shift Backward" << endl;
 
 	//shift backwards moves the beginning of a traj to the end and then regenerates
 	
 	int firstKept = 0;
-	cout << "firstKept " << firstKept<< endl;
 	
 	int lastKept = m_n_slices - 1 - regenSlices;
+	/*
+	cout << "Shift Backward" << endl;
+	cout << "firstKept " << firstKept<< endl;
 	cout << "lastKept " << lastKept<< endl;
+	*/
 	//last slice is m_n_slices -1.  
 	
 	//slices from first and last trajectory to "keep"
@@ -196,17 +203,17 @@ void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
 	
 	double oldOrderParameter = (double)(myTraj.GetOrderParameter(lastKept+1,m_n_slices-1));
 	double newOrderParameter = (double)(snippet.GetOrderParameter(0,regenSlices-1));
-	cout << oldOrderParameter << " " << newOrderParameter << endl;
+	//cout << oldOrderParameter << " " << newOrderParameter << endl;
 	
 	bool acceptance = AcceptOrReject(newOrderParameter, oldOrderParameter);
 	if (acceptance)
 	{
-		cout << "Trajectory Accepted! \n";
+		//cout << "Trajectory Accepted! \n";
 		myTraj.MergeTrajectories(snippet, lastKept+1, m_n_slices-1, ESide_BEGIN, EDirection_BACKWARD);
 		
 	}
 	else {
-		cout << "Trajectory Rejected!" << endl;
+		//cout << "Trajectory Rejected!" << endl;
 	}
 	
 	
@@ -216,13 +223,14 @@ void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
 
 void TPS::ShiftForward( Trajectory &myTraj, int regenSlices) const
 {
-	cout << "Shift Forward" << endl;
 	//moves end of traj to beginning and regenerates new end
 	int firstKept = regenSlices;
+	/*
+	cout << "Shift Forward" << endl;
 	cout << "firstKept " << firstKept<< endl;
-	
-	int lastKept = m_n_slices - 1;
 	cout << "lastKept " << lastKept<< endl;
+	*/
+	int lastKept = m_n_slices - 1;
 	//last slice is m_n_slices -1.  
 	
 	//slices from first and last trajectory to "keep"
@@ -233,17 +241,17 @@ void TPS::ShiftForward( Trajectory &myTraj, int regenSlices) const
 	
 	double oldOrderParameter = (double)(myTraj.GetOrderParameter(0,firstKept-1));
 	double newOrderParameter = (double)(snippet.GetOrderParameter(0,regenSlices-1));
-	cout << oldOrderParameter << " " << newOrderParameter << endl;
+	//cout << oldOrderParameter << " " << newOrderParameter << endl;
 	
 	bool acceptance = AcceptOrReject(newOrderParameter, oldOrderParameter);
 	if (acceptance)
 	{
-		cout << "Trajectory Accepted! \n";
+	    //cout << "Trajectory Accepted! \n";
 		myTraj.MergeTrajectories(snippet, 0, firstKept-1, ESide_END, EDirection_FORWARD);
 		
 	}
 	else {
-		cout << "Trajectory Rejected!" << endl;
+		//cout << "Trajectory Rejected!" << endl;
 	}
 	
 	
@@ -271,8 +279,8 @@ int TPS::ShootOrShift() const
 {
 	
 	double randNum = ((double)rand()/(double)RAND_MAX);
-	cout << "shiftShoot Rand " << randNum << endl;
-	cout << "D_SHOOT_FRAC " << m_shoot_frac << endl;
+	//cout << "shiftShoot Rand " << randNum << endl;
+	//cout << "D_SHOOT_FRAC " << m_shoot_frac << endl;
 	if (randNum < m_shoot_frac)
 	{
 		return SHOOT;
