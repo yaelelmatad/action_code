@@ -113,7 +113,7 @@ void Input::ReadInput(char* in, int myRank)
 	{
 		cout << "Input read with the following parameters;" <<endl;
 	}
-	
+
 	ifstream inputFile (in); //opens file
 	if (inputFile.is_open()) //reads until eof
 	{

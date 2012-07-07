@@ -58,6 +58,8 @@ public:
 	void printTrajectory(int rank, int indicator, double S) const;
     void PrintRestartTraj(FILE* outputFile) const;
 	void LoadRestartTraj(FILE* inputFile); 
+	void EraseOrderParameterFile(double param) const;
+	void PrintOrderParameter(double param) const;
 	virtual ~Trajectory(); //destructor
 	//some getters and setters
     //void setInfo(int _old, int _new,long currStep);
@@ -77,6 +79,8 @@ private:
 	double m_n_slices_full;
 	double m_tObs;
 	int m_sizeOfSystem;
+	
+	void EraseFile(char* fle) const;
 	
 	//double m_J;
 	//double m_temp;

@@ -54,6 +54,8 @@ public:
 	void printFirstConfig(ofstream &outputFile, double time) const;
     virtual ~Slice(); //destructor
 	int GetOrderParam() const;
+	double GetOrderParamDouble() const;
+
 	
 private:
 	//functions

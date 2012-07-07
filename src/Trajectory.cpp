@@ -99,10 +99,6 @@ void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToEr
 	if (currSide == ESide_END)
 	{//add to end
 		
-		//int i = 0;
-		//int i = currDirBinary*(sizeOfSnippet-1);
-
-		//for (;i < sizeOfSnippet && i >= 0; i+=currDir)
 		for (int i = 0;i < sizeOfSnippet; i++)
 		{
 			m_traj.push_back(snippet.GetSlice(i));
@@ -111,22 +107,15 @@ void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToEr
 	}
 	else //adding to beginning
 	{
-		//int i = -1*(currDirBinary-1)*(sizeOfSnippet-1);
-		//int i = -1*(currDirBinary-1)*(sizeOfSnippet-1);
-
-//		for (;i < sizeOfSnippet && i >=0; i-= currDir)
+	
 		for (int i=sizeOfSnippet-1;i >=0; i--)
 		{
 			m_traj.push_front(snippet.GetSlice(i));
 		}
 	//add to beginning
-		
-		
 	}
 
-	//cout << "Size of new deque " << m_traj.size() << endl;
-	//cout << endl;
-	
+
 }
 
 
@@ -158,6 +147,43 @@ void Trajectory::LoadRestartTraj(FILE* inputFile)
 		m_traj[i].LoadRestartSlice(inputFile, i);
 	}
 }
+
+
+void Trajectory::PrintOrderParameter(double param) const
+{
+
+	char filename[1024];
+	sprintf( (char*)filename, "OrderP_param_%lf.dat", param );
+	FILE * fle1;
+	fle1 = fopen(filename, "a");
+	
+	double orderP = 0;
+	for (int i =0; i<m_n_slices;i++)
+	{
+		orderP += m_traj[i].GetOrderParamDouble();
+	}
+	
+	fprintf(fle1, "%lf \n", orderP);
+
+	fclose(fle1);
+}
+
+void Trajectory::EraseOrderParameterFile(double param) const
+{
+	char filename[1024];
+	sprintf( (char*)filename, "OrderP_param_%lf.dat", param );
+	EraseFile(filename);
+	
+}
+
+void Trajectory::EraseFile(char *fle) const
+//erases file pointed to by fle.
+{
+	FILE * fle1;
+	fle1 = fopen(fle, "w");
+	fclose(fle1);
+}
+
 
 
 void Trajectory::printTrajectory(int rank, int indicator, double param) const

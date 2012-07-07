@@ -55,8 +55,8 @@ public:
 	TPS();
 	void TPS_move( Trajectory &);
 	void SetS(double S);
-	void SetCurrS(int start_s, int end_s, int my_rank, int comm_sz);
-	int GetCurrS() const;
+	void SetCurrS(double start_s, double end_s, int my_rank, int comm_sz);
+	double GetCurrS() const;
 	
 	//makes trajectory snippets.
 //	void printTrajectory(int indicator) const;

@@ -52,6 +52,7 @@ public:
 	bool properlyRestarted(char* restartFile, int launched_comm_sz) ;
 	int getOldCommSz() const;
 	int GetIndex() const;
+	int GetRandomSeed() const;
 	void LoadRestart(Input & myInput, Trajectory &myTraj, TPS &myTPS, char* restartFile, int my_rank, int comm_sz);
 	
 	int m_restartedCommSz;

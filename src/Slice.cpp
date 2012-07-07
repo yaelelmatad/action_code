@@ -83,6 +83,10 @@ void Slice::UpdateActionParameters()
 		
 }
 
+double Slice::GetOrderParamDouble() const
+{
+	return (double)m_K;
+}
 
 int Slice::GetOrderParam() const
 {

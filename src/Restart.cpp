@@ -40,6 +40,12 @@ int Restart::getOldCommSz() const
 	}
 }
 
+int Restart::GetRandomSeed() const
+{
+	return m_randSeed;
+}
+
+
 
 int Restart::GetIndex() const
 {
@@ -109,6 +115,8 @@ void Restart::PrintRestartFile(int myRank, int myCommSz, int randSeed, int index
 	fprintf(fle1, "%i \n", index);
 	fprintf(fle1, "%i \n", randSeed);
 	fprintf(fle1, "%lf \n", currS);
+	
+	//cout << "curr S " << currS << endl;
 	
 	currTraj.PrintRestartTraj(fle1);
 	fclose(fle1);

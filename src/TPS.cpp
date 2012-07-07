@@ -16,9 +16,10 @@ TPS::TPS()
 
 TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
 {
-	int startS = myInput.GetDoubleInput(D_START_S);
-	int endS = myInput.GetDoubleInput(D_END_S);
+	double startS = myInput.GetDoubleInput(D_START_S);
+	double endS = myInput.GetDoubleInput(D_END_S);
 	SetCurrS(startS, endS, my_rank, comm_sz);
+	cout << m_s << endl;
 	m_input = myInput;
 	m_n_slices_shift = myInput.GetIntInput(N_SLICES_SHIFT);
 	m_n_slices = myInput.GetIntInput(N_SLICES);
@@ -26,7 +27,7 @@ TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
 		
 }
 
-void TPS::SetCurrS(int start_s, int end_s, int my_rank, int comm_sz)
+void TPS::SetCurrS(double start_s, double end_s, int my_rank, int comm_sz)
 {
 	
 	if (comm_sz == 1)
@@ -38,6 +39,7 @@ void TPS::SetCurrS(int start_s, int end_s, int my_rank, int comm_sz)
 	{	double range = end_s - start_s;
 		double increment = range/(comm_sz-1);
 		m_s = start_s + increment*my_rank;
+		//cout << "m_s " <<  m_s << endl;
 		return;
 	}
 	else 
@@ -45,11 +47,12 @@ void TPS::SetCurrS(int start_s, int end_s, int my_rank, int comm_sz)
 		double range = start_s - end_s;
 		double increment = range/(comm_sz-1);
 		m_s = start_s - increment*my_rank;
+		//cout << "m_s " <<  m_s << endl;
 		return;
 	}
 }
 
-int TPS::GetCurrS() const
+double TPS::GetCurrS() const
 {
 	return m_s;
 }
