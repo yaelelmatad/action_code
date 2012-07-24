@@ -10,30 +10,12 @@
 
 #ifndef _DYNAMICS_H
 #define	_DYNAMICS_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <sstream>
 
-#include "Config.h"
-#include "Input.h"
+#include "Constants.h"
 
-#define MAXSIZE 10000
-/*enum OccState
-{
-	OCCUPIED,
-	UNOCCUPIED,
-};
-*/
-
-using namespace std;
+// forward declarations
+class Config;
+class Input;
 
 class Dynamics{
 public:
@@ -48,13 +30,10 @@ public:
 private:
 	
 	void 	PickAndFlipSpin( Config& toUpdate, double totalRate ) const;
-
 	void 	InitializeRates();
-
 	double 	GetTotalRate( const Config& localConfig ) const;
 	
-	
-	
+	// Data members
 	double m_temp;
 	double m_cprob; //exp(-1/T)
 	double m_epsilon;
@@ -64,7 +43,7 @@ private:
 
 	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics
-	double m_pickATime( double totalRate ) const;
+	double PickATime( double totalRate ) const;
 	
 	friend class Slice;
 	friend class Config;

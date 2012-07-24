@@ -7,7 +7,19 @@
  *
  */
 
+// Header
 #include "Config.h"
+
+// Other includes
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+// #include <float.h>
+#include <iostream>
+#include <fstream>
+// #include <vector>
+#include <string>
+#include <sstream>
 
 Config::Config(){
 
@@ -320,6 +332,14 @@ int Config::m_typeOfSpin(int spin)
 		}
 	}						  
 
+}
+
+void Config::PrintDynamicsCells() const
+{
+	for (int i = 0; i< m_length; i++)
+	{
+		cout << m_cell[i] << " ";
+	}
 }
 
 /*

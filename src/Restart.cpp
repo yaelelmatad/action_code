@@ -7,7 +7,25 @@
  *
  */
 
+// Class header
 #include "Restart.h"
+
+// Other includes
+#include "Input.h"
+#include "Trajectory.h"
+#include "TPS.h"
+
+// Some of this is probably unnecessary
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include <float.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
 
 Restart::Restart()
 {
@@ -125,7 +143,7 @@ void Restart::PrintRestartFile(int myRank, int myCommSz, int randSeed, int index
 }
 
 
-void Restart::EraseFile(char *fle) const
+void Restart::EraseFile( const char *fle) const
 //erases file pointed to by fle.
 {
 	FILE * fle1;
@@ -152,7 +170,7 @@ double Restart::GetDoubleInput(int indicator) const
 // static
 
 /*
-int Restart::StringToInt(string a)
+int Restart::StringToInt( const string& a)
 {
 	
 	string sN_SITES_SUB ("N_SITES_SUB");

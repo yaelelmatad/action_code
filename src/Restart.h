@@ -10,39 +10,15 @@
 
 #ifndef _RESTART_H
 #define	_RESTART_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
+
 #include <string>
-#include <sstream>
+#include "Constants.h"
 
-//#include "Config.h"
-//#include "Dynamics.h"
+// forward declarations
+class Input;
+class Trajectory;
+class TPS;
 
-#include "Input.h"
-#include "Trajectory.h"
-#include "TPS.h"
-
-#define MAXARGS 100
-/*
-enum IntParameters
-{
-	N_SITES_SUB,
-	N_SITES_FULL,
-	N_TRAJS,
-	N_SLICES,
-	N_SLICES_SHIFT,
-	N_STORAGEFREQ,
-	N_DIMENSION,
-	N_HARD
-};
-*/
 using namespace std;
 
 class Restart{
@@ -60,13 +36,13 @@ public:
 private:
 	
 	static int
-	StringToInt(string a);
-	void EraseFile(char* filename) const;
+	StringToInt( const string& a);
+	void EraseFile( const char* filename) const;
+
+	// data members
 	int m_randSeed;
 	int m_index;
 	double m_currS;
-	
-	// data members
 		
 	//config array, starts and 0 and goes to length^2
 };

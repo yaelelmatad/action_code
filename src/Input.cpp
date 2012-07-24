@@ -7,7 +7,20 @@
  *
  */
 
+// Class header
 #include "Input.h"
+
+// Other includes
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include <float.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
 
 //Input::Input(){
 //}
@@ -18,7 +31,7 @@ Input::Input()
 {
 }
 
-Input::Input(char* in, int myRank)
+Input::Input(const char* in, int myRank)
 {
 	//reads the input file
 	string line;
@@ -93,7 +106,7 @@ Input::Input(char* in, int myRank)
 	else cout << "Unable to open file" << endl; 
 }
 
-void Input::ReadInput(char* in, int myRank)
+void Input::ReadInput(const char* in, int myRank)
 {
 	//reads the input file
 	string line;
@@ -181,14 +194,14 @@ double Input::GetDoubleInput(int indicator) const
 }
 
 // static
-int Input::StringToInt(string a)
+int Input::StringToInt( const string& a)
 {
-
 	string sN_SITES_SUB ("N_SITES_SUB");
 	
 	/////////////////////////
 
-	//this is a macro, passing it a string returns the enum
+	//this is a macro, which expands to a test which returns the
+	//corresponding enum to the string if a string match is found
 	#define MATCH_STRING_TO_ENUM( __StringName__ ) \
 	else if( a.compare( #__StringName__ )==0){ return __StringName__; }
 	

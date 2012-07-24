@@ -7,7 +7,24 @@
  *
  */
 
+// Class header
 #include "Dynamics.h"
+
+// Other includes
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include <float.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+
+#include "Config.h"
+#include "Input.h"
 
 //dynamics::dynamics(){
 //}
@@ -49,7 +66,7 @@ double Dynamics::UpdateConfigOneStep( Config* pConfig ) const
 	double totalRate = GetTotalRate( toUpdate );
 
 
-	time = m_pickATime( totalRate );
+	time = PickATime( totalRate );
 	PickAndFlipSpin( toUpdate, totalRate );
 	toUpdate.CheckListIntegrity();
 	
@@ -57,6 +74,7 @@ double Dynamics::UpdateConfigOneStep( Config* pConfig ) const
 		
 }
 
+// #define PRINT_DYNAMICS_OUTPUT
 
 void Dynamics::UpdateConfigBlock( Config* pConfig, double interval ) const
 {
@@ -66,37 +84,37 @@ void Dynamics::UpdateConfigBlock( Config* pConfig, double interval ) const
 	
 	double totalRate = GetTotalRate( toUpdate );
 	
-	/*
-	for (int i = 0; i< toUpdate.m_length; i++)
-	{
-		cout << toUpdate.m_cell[i] << " ";
-	}
-	*/
+#ifdef PRINT_DYNAMICS_OUTPUT
+	toUpdate.PrintDynamicsCells();
+#endif
 	
 	while (time < interval)
 	{
-		//cout << " Current Time = " << time << endl;
-		//cout << " Current m_config().m_cell[] Array Is: ";
-		//cout << endl;
-		time += m_pickATime( totalRate );
+#ifdef PRINT_DYNAMICS_OUTPUT
+		cout << " Current Time = " << time << endl;
+		cout << " Current m_config().m_cell[] Array Is: ";
+		cout << endl;
+#endif
+
+		time += PickATime( totalRate );
 		PickAndFlipSpin( toUpdate, totalRate );
 		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
-		/*for (int i = 0; i< toUpdate.m_length; i++)
-		{
-			cout << toUpdate.m_cell[i] << " ";
-		}*/
+#ifdef PRINT_DYNAMICS_OUTPUT
+		toUpdate.PrintDynamicsCells();
+#endif
 	}
 	
-	//cout << endl;
-	
+#ifdef PRINT_DYNAMICS_OUTPUT
+	cout << endl;
+#endif
 }
 
 void Dynamics::InitializeRates()
 {
 	//MODEL DEPENDANT!  
-	//initializes the total rate of hte system. //in the future only need to do "local" changes.
+	//initializes the total rate of the system. //in the future only need to do "local" changes.
 	m_rates[NOTFACDOWN] = m_cprob*m_epsilon;
 	m_rates[NOTFACUP] = m_epsilon;
 	m_rates[FACLEFTDOWN] = m_cprob*(m_leftRate+ m_epsilon);
@@ -114,7 +132,7 @@ double Dynamics::GetTotalRate( const Config& localConfig ) const
 	
 	for (int i = 0; i < NUM_LISTS; i++)
 	{
-		result += m_rates[i]*((double)localConfig.m_lists[i][0]);
+		result += m_rates[i]*(static_cast<double>(localConfig.m_lists[i][0]));
 	}
 	
 	return result;
@@ -154,9 +172,8 @@ void Dynamics::PickAndFlipSpin( Config& toUpdate, double totalRate ) const
 	toUpdate.m_flipSpin(spinToFlip);
 }
 
-double Dynamics::m_pickATime( double totalRate ) const
+double Dynamics::PickATime( double totalRate ) const
 {
-	
 	double random = ((double)rand()/(double)RAND_MAX); //random number 0->1
 	double deltaTime = (-log(random)/totalRate);
 	return deltaTime;

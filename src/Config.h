@@ -9,24 +9,13 @@
 
 #ifndef _CONFIG_H
 #define	_CONFIG_H
+
+//#include <stdio.h>
 #include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-// #include <float.h>
-#include <iostream>
-#include <fstream>
-// #include <vector>
-#include <string>
-#include <sstream>
-
-#define MAXSIZE 10000
-#define NUM_LISTS 8 
-//hardcoded for now
-
-
 #include "Input.h"
+#include "Constants.h"
+
+class Dynamics;
 
 enum OccState
 {
@@ -65,6 +54,8 @@ public:
 	//some getters and setters
 	int getConfig(int spin);
 	
+	void PrintDynamicsCells() const;
+
 private:
 	//functions
 	//float ran2;
@@ -105,7 +96,6 @@ private:
 	//flips spin as well as moves it to proper list (also for neighbors)
 
 	friend class Dynamics;
-
 };
 
 

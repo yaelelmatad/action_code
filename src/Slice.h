@@ -10,30 +10,18 @@
 
 #ifndef _SLICE_H
 #define	_SLICE_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
+
 #include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <sstream>
 
+#include "Constants.h"
 #include "Config.h"
-#include "Dynamics.h"
-#include "Input.h"
-
-#define MAXSIZE 10000
-/*enum OccState
- {
- OCCUPIED,
- UNOCCUPIED,
- };*/
 
 using namespace std;
+
+// forward decs
+class Dynamics;
+class Input;
+
 
 enum Direction
 {

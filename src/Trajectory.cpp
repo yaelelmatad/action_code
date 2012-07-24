@@ -92,9 +92,11 @@ void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToEr
 	m_traj.erase(iter1, iter2);
 	//erases [first,last) (so need to +1 to truly erase "last")
 	
-	int sizeOfRemainingTraj = m_traj.size();
 	int sizeOfSnippet = snippet.getLengthOfTraj();
+	/*
+	int sizeOfRemainingTraj = m_traj.size();
 	int currDirBinary = -1*(currDir-1)/2; //backwards now equals 1 and forwards 0
+	 */
 	
 	if (currSide == ESide_END)
 	{//add to end

@@ -10,22 +10,9 @@
 
 #ifndef _INPUT_H
 #define	_INPUT_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
+
 #include <string>
-#include <sstream>
-
-//#include "Config.h"
-//#include "Dynamics.h"
-
-#define MAXARGS 100
+#include "Constants.h"
 
 enum IntParameters
 {
@@ -60,20 +47,19 @@ using namespace std;
 class Input{
 public:
 	Input(); //overloaded const
-    Input(char* inputFile, int myRank); //overloaded constructor
+    Input(const char* inputFile, int myRank); //overloaded constructor
 
-	void    ReadInput(char* inputFile, int myRank);
+	void    ReadInput( const char* inputFile, int myRank);
 	int 	GetIntInput(int indicator) const; //you'll need to change this if you add parameters!
 	double 	GetDoubleInput(int indicator) const;
 
 private:
 
-	static int
-				StringToInt(string a);
+	static int	StringToInt( const std::string& a);
 	
 	// data members
-	int intParams[MAXARGS];
-	double doubleParams[MAXARGS];
+	int 	intParams[MAXARGS];
+	double 	doubleParams[MAXARGS];
 	
 		//friend class dynamics;
 

@@ -100,9 +100,6 @@ bool TPS::AcceptOrReject(double newOP, double oldOP) const
 
 void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 {
-
-	int firstKept = 0;
-
 	int lastKept = m_n_slices - 1 - regenSlices;
 	/*
 	cout << "Shoot Forward" << endl;
@@ -143,11 +140,7 @@ void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 
 void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 {
-
 	int firstKept = regenSlices;
-	
-	int lastKept = m_n_slices - 1;
-	//last slice is m_n_slices -1.  
 	
 	/*
 	cout << "Shoot Backward" << endl;

@@ -8,7 +8,21 @@
  */
 
 #include "Slice.h"
+
+#include "Dynamics.h"
+#include "Input.h"
+
 #include <assert.h>
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <float.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
 
 Slice::Slice(){
 }
