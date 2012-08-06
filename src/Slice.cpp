@@ -34,6 +34,7 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, Direction direc
 	//if first = true then we are going "forward" otherwise going backwards. 
 	
 	Dynamics currentDynamics(myInput);
+	
 	double slicesDouble = static_cast<double>( myInput.GetIntInput(N_SLICES) );
 	double tOBS = myInput.GetDoubleInput(D_TOBS);
 	m_timeInterval = tOBS/slicesDouble;
@@ -54,6 +55,7 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, Direction direc
 		m_lastConfig = currentConfig;
 		m_firstConfig = currentConfig;
 		UpdateConfig(currentDynamics, m_firstConfig, m_timeInterval);
+
 		//currentDynamics.UpdateConfig(&m_firstConfig, m_timeInterval );
 		//LIST STUFF GOES HERE
 	}
@@ -73,7 +75,7 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, Direction direc
 	cout << endl;
 	cout << endl;
 	 */
-	
+
 }
 
 void Slice::UpdateConfig(const Dynamics& currDynamics, Config& confToUpdate, double interval)

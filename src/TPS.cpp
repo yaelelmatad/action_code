@@ -19,7 +19,7 @@ TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
 	double startS = myInput.GetDoubleInput(D_START_S);
 	double endS = myInput.GetDoubleInput(D_END_S);
 	SetFirstS(startS, endS, my_rank, comm_sz);
-	cout << m_s << endl;
+	//cout << m_s << endl;
 	m_input = myInput;
 	m_n_slices_shift = myInput.GetIntInput(N_SLICES_SHIFT);
 	m_n_slices = myInput.GetIntInput(N_SLICES);
@@ -66,9 +66,7 @@ void TPS::TPS_move(Trajectory &myTraj)
 	int shootOrShift = ShootOrShift();
 	int direction = ForwardsOrBackwards();
 	int slicesToRegen = SlicesToRegenerate();
-	//shootOrShift = SHOOT;
-	//direction = BACK;
-	
+
 	if (shootOrShift == SHOOT && direction == FORW)
 		ShootForward(myTraj, slicesToRegen);
 	else if (shootOrShift == SHOOT && direction == BACK)
@@ -136,6 +134,8 @@ void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 	const Config firstConfig = firstKeptSlice.GetFirstConfig();
 	
 	const Trajectory snippet(m_input, firstConfig, EDirection_BACKWARD, regenSlices);
+
+
 	
 	double oldOrderParameter = (double)(myTraj.GetOrderParameter(0,firstKept-1));
 	double newOrderParameter = (double)(snippet.GetOrderParameter(0,regenSlices-1));

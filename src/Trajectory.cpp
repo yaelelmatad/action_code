@@ -25,11 +25,15 @@ Trajectory::Trajectory( const Input &myInput, Direction direction)
 
 	//constructor that makes a FULL trajectory
 	//must be submitted via input!
+	
+
 	m_n_slices = myInput.GetIntInput(N_SLICES);
 	m_n_slices_full = m_n_slices;
 	m_tObs = myInput.GetDoubleInput(D_TOBS);
 	m_traj.resize(m_n_slices);
 	Config myConfig(myInput);
+
+	
 	int i;
 	
 	if (direction == EDirection_FORWARD)
@@ -62,13 +66,17 @@ Trajectory::Trajectory( const Input &myInput, const Config &myConfig, Direction 
 	 Trajectory::Trajectory( const Input &myInput, Direction direction)
 	 */
 	
+	
+
+	
 	//constructor capable of making a snippet from a seed config.
 	m_n_slices = n_slicesSnip;
 	m_n_slices_full = myInput.GetIntInput(N_SLICES);
 	m_tObs = myInput.GetDoubleInput(D_TOBS);
-	//m_traj.resize(m_n_slices);
+	m_traj.resize(m_n_slices);
 	//Config myConfig(myInput);
 	int i;
+	
 	
 	//Direction direction = EDirection_BACKWARD;
 	if (direction == EDirection_FORWARD)
@@ -77,7 +85,10 @@ Trajectory::Trajectory( const Input &myInput, const Config &myConfig, Direction 
 	if (direction == EDirection_BACKWARD)
 		i=m_n_slices-1;
 	
+
+
 	m_traj[i] = Slice(myInput, myConfig, direction );
+
 	for (i+=direction; i < m_n_slices && i >= 0; i+=direction)
 	{
 		m_traj[i] = Slice(myInput, m_traj[i-direction].GetSeedConfig( direction ), direction );

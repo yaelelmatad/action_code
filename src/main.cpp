@@ -111,6 +111,7 @@ int main (int argc, char * const argv[]) {
 		cout << "Not Restarted \n";
 		for (int i = 0 ; i< m_n_traj_equil; i++) //equilibrate the seed trajectory if starting from scratch
 		{
+		//	cout << "Rank " << my_rank << " equilibration reached trajectory " << i << " of "<< m_n_traj_equil << endl;
 			myTPS.TPS_move(trajectory);
 			seed = seed++; //increment seed and then reseed to make sure that we can store the correct information
 			//note that this seed in some sense is the seed for the NEXT trajectory
@@ -143,8 +144,7 @@ int main (int argc, char * const argv[]) {
 		}
 	}
 	
-	//finalizes MPI
-	MPI_Finalize();
+
 
     return 0;
 
