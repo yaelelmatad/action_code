@@ -2,6 +2,8 @@
  *  dynamics.cpp
  *  Action
  *
+ *	current implement dynamics = continous time monte carlo
+ *
  *  Created by Yael Elmatad on 06/12
  *  Copyright 2012 __MyCompanyName__. All rights reserved.
  *
@@ -30,10 +32,13 @@
 //}
 
 
+
 Dynamics::Dynamics( const Input &myInput)
 {	
+	//gets relevent input paramters from input file
 	m_temp = myInput.GetDoubleInput(D_TEMP);
 
+	//if the system is hard needs to be set automatically. (because D_U cannot be infinite)
 	if (myInput.GetIntInput(N_HARD)==0)
 	{
 		m_epsilon = 0;
@@ -47,18 +52,12 @@ Dynamics::Dynamics( const Input &myInput)
 	m_cprob = (exp(-1.0/m_temp));
 	
 	InitializeRates();
-	/*
-	cout << m_epsilon << endl;
-	cout << m_leftRate << endl;
-	cout << m_rightRate << endl;
-	cout << m_cprob << endl;
-	*/
-	
 }
 
 
 double Dynamics::UpdateConfigOneStep( Config* pConfig ) const
 {
+	//does one config move, returns the time to do that one step
 	Config& toUpdate = *pConfig;
 	
 	double time ;
@@ -68,7 +67,8 @@ double Dynamics::UpdateConfigOneStep( Config* pConfig ) const
 
 	time = PickATime( totalRate );
 	PickAndFlipSpin( toUpdate, totalRate );
-	toUpdate.CheckListIntegrity();
+	//A small check, use if necessary
+	//toUpdate.CheckListIntegrity();
 	
 	return time;
 		
@@ -96,9 +96,11 @@ void Dynamics::UpdateConfigBlock( Config* pConfig, double interval ) const
 		cout << endl;
 #endif
 
+
+	while (time < interval)
+	{
 		time += PickATime( totalRate );
 		PickAndFlipSpin( toUpdate, totalRate );
-		toUpdate.CheckListIntegrity();
 		totalRate = GetTotalRate( toUpdate );
 		
 #ifdef PRINT_DYNAMICS_OUTPUT
@@ -109,12 +111,15 @@ void Dynamics::UpdateConfigBlock( Config* pConfig, double interval ) const
 #ifdef PRINT_DYNAMICS_OUTPUT
 	cout << endl;
 #endif
+		//a small check, use if necessary
+		//toUpdate.CheckListIntegrity();
+	}
 }
 
 void Dynamics::InitializeRates()
 {
 	//MODEL DEPENDANT!  
-	//initializes the total rate of the system. //in the future only need to do "local" changes.
+	//initializes the "base" rate of each type of move. 
 	m_rates[NOTFACDOWN] = m_cprob*m_epsilon;
 	m_rates[NOTFACUP] = m_epsilon;
 	m_rates[FACLEFTDOWN] = m_cprob*(m_leftRate+ m_epsilon);
@@ -128,13 +133,13 @@ void Dynamics::InitializeRates()
 
 double Dynamics::GetTotalRate( const Config& localConfig ) const
 {
+	//mutliplying base rates by number of things in that list gives the total rate (used for updating the time). returns this rate.
 	double result = 0.0;
 	
 	for (int i = 0; i < NUM_LISTS; i++)
 	{
 		result += m_rates[i]*(static_cast<double>(localConfig.m_lists[i][0]));
 	}
-	
 	return result;
 }
 
@@ -143,9 +148,11 @@ void Dynamics::PickAndFlipSpin( Config& toUpdate, double totalRate ) const
 	//based on rate lists pick a spin to flip from the lists.  doesn't flip the spin!
 	
 	double random = ((double)rand()/(double)RAND_MAX)* totalRate; //picks a random number from 0->m_totalRate
+	//since we increment i right away start it out at -1
 	int i = -1;
 	bool notYetFoundList = true;
 	double nextRateCeiling = 0;
+	//if the number is between the previous "rateCeiling" and the following one due to the next added list, pick a spin from the next added list
 	while(notYetFoundList && i < NUM_LISTS)
 	{
 		i++;
@@ -153,27 +160,25 @@ void Dynamics::PickAndFlipSpin( Config& toUpdate, double totalRate ) const
 		if (random < nextRateCeiling)
 		{
 			notYetFoundList = false;
-		}
-		
+		}		
 	}
 	
 	if (notYetFoundList)
 		cout << "Warning: m_pickASpin ended without picking a spin\n";
 	
-	//cout << "picked a list random number was " << random << " picked list " << i << endl;
-	
-	//now pick a random spin on that list
+	//now pick a random number from 1 to number of spins on that list on that list
 	int random_int = rand()%(toUpdate.m_lists[i][0])+1; //first pick rand num from 0->(num on list -1) then add 1 to go from 1->num on list
 	
-	//cout << "picked a spin random number " << m_config().m_lists[i][random_int] << endl;
-	
+	//find that spin
 	int spinToFlip = toUpdate.m_lists[i][random_int];
 	
-	toUpdate.m_flipSpin(spinToFlip);
+	//flip it
+	toUpdate.FlipSpin(spinToFlip);
 }
 
 double Dynamics::PickATime( double totalRate ) const
 {
+	//picks an update time (time interval) based on the lists 
 	double random = ((double)rand()/(double)RAND_MAX); //random number 0->1
 	double deltaTime = (-log(random)/totalRate);
 	return deltaTime;

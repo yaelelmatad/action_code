@@ -27,54 +27,53 @@ Config::Config(){
 
 Config::Config( const Input &myInput)
 {
+	//constructor routine that takes in an imput file and randomly creates a configuration
+	
+	//get input from myInput
 	m_density = myInput.GetDoubleInput(D_DENSITY);
 	m_length = myInput.GetIntInput(N_SITES_FULL);
-	//int size = length*length;
-	int size = m_length; //lets just stick to one d, K?
+	
+	//currently set up for 1d configs
+	int size = m_length; 
+	
+	//clears out the cell array
 	for (int i=0; i< size; i++)
 	{
 		m_cell[i]=UNOCCUPIED;
-	//	cout << i << m_cell[i] << "\n";
 	}
 
-	m_clearLists();
+	//clears out the rate lists
+	ClearLists();
 
+	//takes the input density to figure out how many "occupied" sites to add and "floors" this fn by casting as int
 	int totalUp = (int)(m_density*(double)m_length);
 
 	int spinToFlip = rand()%(m_length);
+	
 	m_cell[spinToFlip] = OCCUPIED;
-
 	spinToFlip = rand()%(m_length);
+
 	for (int j = 1; j<totalUp; j++)
 	{
-		while(m_cell[spinToFlip] == OCCUPIED)
+		while(m_cell[spinToFlip] == OCCUPIED) //need to make sure that currently chosen site isn't already occupied
 		{
 			spinToFlip = rand()%(m_length);
 		}
 		m_cell[spinToFlip] = OCCUPIED;
 	}
 
-	for (int i = 0; i < m_length; i++)
-		m_addToList(i, m_typeOfSpin(i));
+	for (int i = 0; i < m_length; i++)  //set up the lists
+		AddToList(i, TypeOfSpin(i));
 
-	//just some silly checks
 
-	/*
-	for (int j=0; j<length; j++)
-	{
-		cout << m_cell[j] << " " << m_typeOfSpin(j) <<endl;
-	}
-	 */
+	//CheckListIntegrity(); //commented out now but can be reinserted for checking.
 
-	CheckListIntegrity();
-
-	//make a constructor here that sets up a random config and makes the lists  1D arrays are best. a number of lists feature would be nice too
-	//don't forget to put trapped sites on a 0th list
 }
 
-void Config::m_clearLists()
+void Config::ClearLists()
 {
-	for (int i = 0; i<=NUM_LISTS; i++)
+	//routine that just clears out the neighbor lists
+	for (int i = 0; i<NUM_LISTS; i++)
 	{
 		m_lists[i][0]=0;
 	}
@@ -83,6 +82,8 @@ void Config::m_clearLists()
 
 void Config::CheckListIntegrity()
 { 
+	//this routine just checks that the spin are all on the proper list and that the backindexes point to the proper location
+	
 	//first check back indexes
 	for (int i = 0; i< m_length; i++)
 	{
@@ -92,17 +93,17 @@ void Config::CheckListIntegrity()
 			cout << "m_locationOfSpinOnLists["<<i<<"][0] = " << m_locationOfSpinOnLists[i][0] << endl;
 			cout << "m_locationOfSpinOnLists["<<i<<"][1] = " << m_locationOfSpinOnLists[i][1] << endl;
 			cout << "m_lists in that location = " << m_lists[m_locationOfSpinOnLists[i][0]][m_locationOfSpinOnLists[i][1]] << endl;
-			cout << "Type of Spin is " << m_typeOfSpin(i) << endl;
+			cout << "Type of Spin is " << TypeOfSpin(i) << endl;
 		}
 
-		if (m_typeOfSpin(i) != m_locationOfSpinOnLists[i][0])
+		if (TypeOfSpin(i) != m_locationOfSpinOnLists[i][0])
 		{
 			cout << "spin on wrong list!" << endl;
-			cout << "spin " << i << " should be on list " << m_typeOfSpin(i) << endl;
+			cout << "spin " << i << " should be on list " << TypeOfSpin(i) << endl;
 			cout << "actually on list " << m_locationOfSpinOnLists[i][0] << endl;
-			cout << "Left Neighbor " << m_cell[m_neighbor(i, -1)] << endl;
+			cout << "Left Neighbor " << m_cell[Neighbor(i, -1)] << endl;
 			cout << "i State " << m_cell[i] << endl;
-			cout << "Right Neighbor " << m_cell[m_neighbor(i, 1)] << endl;
+			cout << "Right Neighbor " << m_cell[Neighbor(i, 1)] << endl;
 		}
 	}
 
@@ -117,7 +118,7 @@ void Config::CheckListIntegrity()
 				cout << "m_lists["<<i<<"]["<<j<<"] = " << m_lists[i][j] << endl;
 				cout << "m_locationOfSpinOnLists["<<i<<"][1] = " << m_locationOfSpinOnLists[i][1] << endl;
 				cout << "m_locationOfSpinOnLists["<<i<<"][0] = " << m_locationOfSpinOnLists[i][0] << endl;
-				cout << "Type of Spin is " << m_typeOfSpin(i) << endl;
+				cout << "Type of Spin is " << TypeOfSpin(i) << endl;
 
 			}
 		}
@@ -125,25 +126,35 @@ void Config::CheckListIntegrity()
 
 }
 
-int Config::m_neighbor(int spin, int dir)
+int Config::Neighbor(int spin, int dir)
 {
+	//gets the neigbhor of a spin.  dir -1 = "left" neighbor, dir = +1 = right neighbor
+	
 	if (dir == LEFT && spin == 0)
 		return m_length-1;
 	else if (dir == RIGHT && spin == m_length-1)
 		return 0;
 	else 
 		return (spin + dir);
-	//fix this!
 }
 
-void Config::m_flipSpin(int spin)
+void Config::FlipSpin(int spin)
 {
-	int leftNeighbor =m_neighbor(spin, LEFT);
-	int rightNeighbor = m_neighbor(spin, RIGHT);
+	
+	//flips the state of the spin and deals with list
+	//need to move the left/right neighbor to their proper lists
+	
+	//get neighbors
+	int leftNeighbor =Neighbor(spin, LEFT);
+	int rightNeighbor = Neighbor(spin, RIGHT);
+	
+	//flip spin
 	m_cell[spin] = abs(m_cell[spin]-1); //0->1 and 1->0
-	m_moveToList(spin,m_typeOfSpin(spin));
-	m_moveToList(leftNeighbor,m_typeOfSpin(leftNeighbor));
-	m_moveToList(rightNeighbor,m_typeOfSpin(rightNeighbor));
+	
+	//move the spin and spin +/- 1 to proper lists
+	MoveToList(spin,TypeOfSpin(spin));
+	MoveToList(leftNeighbor,TypeOfSpin(leftNeighbor));
+	MoveToList(rightNeighbor,TypeOfSpin(rightNeighbor));
 
 
 	return;
@@ -151,6 +162,7 @@ void Config::m_flipSpin(int spin)
 
 void Config::PrintRestartConfig(FILE* outputFile, int index) const
 {
+	//prints formatted restart data to outputFile 
 	fprintf(outputFile, "%i ", index);
 	for (int iLattice=0; iLattice<m_length; iLattice++)
 	{
@@ -186,40 +198,42 @@ void Config::PrintRestartConfig(FILE* outputFile, int index) const
 }
 
 
-void Config::LoadRestartConfig(FILE* inputFile, int index) 
+void Config::LoadRestartConfig(FILE* restartFile) 
 {
-	fscanf(inputFile, "%i ", &index);
-	for (int iLattice=0; iLattice<m_length; iLattice++)
-	{
-		fscanf(inputFile, "%i ", &(m_cell[iLattice]));
-		cout <<"m_cell " << iLattice << " = " << m_cell[iLattice] << endl;;
-	}
-	cout << endl;
-	fscanf(inputFile,"\n");
+	int index; //just a temporary variable for reading in the file (lines start with slice index)
 	
-	//print list numbers
-	fscanf(inputFile, "%i ", &index);
+	fscanf(restartFile, "%i ", &index);
+	for (int iLattice=0; iLattice<m_length; iLattice++) //reads in the formatted config 
+	{
+		fscanf(restartFile, "%i ", &(m_cell[iLattice]));
+	//	cout <<"m_cell " << iLattice << " = " << m_cell[iLattice] << endl;;
+	}
+	//cout << endl;
+	fscanf(restartFile,"\n");
+	
+	//loads list numbers
+	fscanf(restartFile, "%i ", &index);
 	for (int iLists=0; iLists < NUM_LISTS;iLists++)
 	{
-		fscanf(inputFile, "%i ", &(m_lists[iLists][0]));
+		fscanf(restartFile, "%i ", &(m_lists[iLists][0]));
 	}
-	fscanf(inputFile, "\n");
+	fscanf(restartFile, "\n");
 	
 	for (int iLists = 0; iLists<NUM_LISTS; iLists++)
 	{
-		fscanf(inputFile, "%i ", &index);
+		fscanf(restartFile, "%i ", &index);
 		for (int iOnList = 1; iOnList <=m_lists[iLists][0]; iOnList++)
 		{
-			fscanf(inputFile, "%i ", &(m_lists[iLists][iOnList]));
+			fscanf(restartFile, "%i ", &(m_lists[iLists][iOnList]));
 		}
-		fscanf(inputFile, "\n");
+		fscanf(restartFile, "\n");
 	}
 	
-	//print backindexes
+	//loads backindexes
 	for (int iSpin = 0; iSpin< m_length; iSpin++)
 	{
-		fscanf(inputFile, "%i ", &index);
-		fscanf(inputFile, "%i %i \n", &m_locationOfSpinOnLists[iSpin][0], &m_locationOfSpinOnLists[iSpin][1]);
+		fscanf(restartFile, "%i ", &index);
+		fscanf(restartFile, "%i %i \n", &m_locationOfSpinOnLists[iSpin][0], &m_locationOfSpinOnLists[iSpin][1]);
 	}
 	
 }
@@ -227,8 +241,10 @@ void Config::LoadRestartConfig(FILE* inputFile, int index)
 
 
 
-void Config::printConfig(ofstream &outputFile, double time) const
+void Config::PrintConfig(ofstream &outputFile, double time) const
 {
+	//prints the config to an outputFile along with the current time
+	//formatted for gnuplot
 	for (int j = 0; j<m_length; j++)
 	{	
 		if (m_cell[j] == 1)
@@ -239,32 +255,27 @@ void Config::printConfig(ofstream &outputFile, double time) const
 	return;
 }
 
-int Config::getConfig(int spin)
+int Config::GetConfig(int spin)
 {
+	//returns the value of the m_cell at spin 
 	return m_cell[spin];
 }
 
-void Config::m_addToList(int spin, int type)
+void Config::AddToList(int spin, int type)
 {
+	//ads spin to the list indicated by type.  increments list, and takes care of backindexes
 	m_lists[type][0]++; //the length of the list grows by one
 	m_lists[type][m_lists[type][0]] = spin; //add the spin to that list
 	m_locationOfSpinOnLists[spin][0]=type;//which list is spin on
 	m_locationOfSpinOnLists[spin][1]=m_lists[type][0]; //location on list.
 
-	/*
-	 cout << " spin = " << spin << " of type " << type << endl;
-	cout << "m_lists[type][0] now " << m_lists[type][0] << endl;; 
-	cout << "m_lists[type][m_lists[type][0]] = " << m_lists[type][m_lists[type][0]] << endl;
-	cout << "m_locationOfSpinOnLists[spin][0] = " << type << endl;
-	cout << "m_locationOfSpinOnLIsts[spin][1]= " << m_lists[type][0] << endl;
-	*/
 	 return;
 }
 
 
 
 
-void Config::m_moveToList(int spin, int type)
+void Config::MoveToList(int spin, int type)
 {
 	//routine that takes a spin and moves it to the list "type"
 
@@ -281,17 +292,17 @@ void Config::m_moveToList(int spin, int type)
 	m_locationOfSpinOnLists[lastSpin][1]=oldLocation; 
 
 	//finally add the original spin to it's new list.
-	m_addToList(spin, type);
+	AddToList(spin, type);
 	return;
 }
 
-int Config::m_typeOfSpin(int spin)
+int Config::TypeOfSpin(int spin)
 {
 	//returns the "type" of spin for listing
 	//here is very MODEL specific.
 
-	int leftNeigh = m_cell[m_neighbor(spin, LEFT)];
-	int rightNeigh = m_cell[m_neighbor(spin, RIGHT)];
+	int leftNeigh = m_cell[Neighbor(spin, LEFT)];
+	int rightNeigh = m_cell[Neighbor(spin, RIGHT)];
 
 	if (m_cell[spin]==UNOCCUPIED)
 	{												

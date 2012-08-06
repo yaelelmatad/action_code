@@ -78,6 +78,11 @@ Slice::Slice( const Input& myInput, const Config &currentConfig, Direction direc
 
 void Slice::UpdateConfig(const Dynamics& currDynamics, Config& confToUpdate, double interval)
 {
+	//updates the config for a time interval.  
+	//calls the dynamics update ConfigOneStep routine (which does just ONE move at a time here
+	//could be any kind of move though, including a constant time interval move
+	//updateActionParam
+	//also updates action param (which are stored in the slice)
 	double time = 0; 
 	
 	while (time < interval)
@@ -99,17 +104,20 @@ void Slice::UpdateActionParameters()
 
 double Slice::GetOrderParamDouble() const
 {
+	//in case you need a double version of the param
 	return (double)m_K;
 }
 
 int Slice::GetOrderParam() const
 {
+	//returns the int value if needed
 	return m_K;
 }
 
 
 void Slice::PrintRestartSlice(FILE* outputFile, int index) const
 {
+	//prints the slice (first and last config) to an formatted outputFile for restarting
 	m_firstConfig.PrintRestartConfig(outputFile, index);
 	m_lastConfig.PrintRestartConfig(outputFile, index);
 
@@ -122,41 +130,44 @@ void Slice::PrintRestartSlice(FILE* outputFile, int index) const
 
 void Slice::LoadRestartSlice(FILE* inputFile, int index)
 {
-	m_firstConfig.LoadRestartConfig(inputFile, index);
-	m_lastConfig.LoadRestartConfig(inputFile, index);
+	//loads the first and last config from a formmated restart file
+	m_firstConfig.LoadRestartConfig(inputFile);
+	m_lastConfig.LoadRestartConfig(inputFile);
 	
-	//print K
+	//load K
 	fscanf(inputFile, "%i %i \n", &index, &m_K);
-	//cout << "m_K " << m_K << endl;
 	
 	
 	
 }
 
-
-
 void Slice::printFirstConfig(ofstream &outputFile, double time) const
 {
-	m_firstConfig.printConfig(outputFile, time);
+	//prints the first config (for gnuplot plotting)
+	m_firstConfig.PrintConfig(outputFile, time);
 }
 
 void Slice::printLastConfig(ofstream &outputFile, double time) const
 {
-	m_lastConfig.printConfig(outputFile, time);
+	//prints the last config (for gnuplot plotting)
+	m_lastConfig.PrintConfig(outputFile, time);
 }
 
 const Config& Slice::GetSeedConfig(Direction direction) const
 {
+	//depending on directon of dynamics returns either the first or last config (for the next slice)
 	return ( direction == EDirection_BACKWARD ) ? GetFirstConfig() : GetLastConfig();
 }
 
 const Config& Slice::GetFirstConfig() const
 {
+	//returns the first config
 	return m_firstConfig;
 }
 
 const Config& Slice::GetLastConfig() const
 {
+	//returns the last config
 	return m_lastConfig;
 }
 

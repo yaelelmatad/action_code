@@ -18,7 +18,7 @@ TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
 {
 	double startS = myInput.GetDoubleInput(D_START_S);
 	double endS = myInput.GetDoubleInput(D_END_S);
-	SetCurrS(startS, endS, my_rank, comm_sz);
+	SetFirstS(startS, endS, my_rank, comm_sz);
 	cout << m_s << endl;
 	m_input = myInput;
 	m_n_slices_shift = myInput.GetIntInput(N_SLICES_SHIFT);
@@ -27,7 +27,7 @@ TPS::TPS( const Input &myInput, int my_rank, int comm_sz)
 		
 }
 
-void TPS::SetCurrS(double start_s, double end_s, int my_rank, int comm_sz)
+void TPS::SetFirstS(double start_s, double end_s, int my_rank, int comm_sz)
 {
 	
 	if (comm_sz == 1)
@@ -39,7 +39,6 @@ void TPS::SetCurrS(double start_s, double end_s, int my_rank, int comm_sz)
 	{	double range = end_s - start_s;
 		double increment = range/(comm_sz-1);
 		m_s = start_s + increment*my_rank;
-		//cout << "m_s " <<  m_s << endl;
 		return;
 	}
 	else 
@@ -47,7 +46,6 @@ void TPS::SetCurrS(double start_s, double end_s, int my_rank, int comm_sz)
 		double range = start_s - end_s;
 		double increment = range/(comm_sz-1);
 		m_s = start_s - increment*my_rank;
-		//cout << "m_s " <<  m_s << endl;
 		return;
 	}
 }
@@ -101,13 +99,6 @@ bool TPS::AcceptOrReject(double newOP, double oldOP) const
 void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 {
 	int lastKept = m_n_slices - 1 - regenSlices;
-	/*
-	cout << "Shoot Forward" << endl;
-	cout << regenSlices  << endl;
-	cout << m_n_slices  << endl;
-	cout << "firstKept " << firstKept<< endl;
-	cout << "lastKept " << lastKept<< endl;
-	 */
 	//last slice is m_n_slices -1.  
 
 	//slices from first and last trajectory to "keep"
@@ -130,23 +121,15 @@ void TPS::ShootForward(Trajectory &myTraj, int regenSlices) const
 	}
 	else {
 		//cout << "Trajectory Rejected!" << endl;
-	}
-
-	
-	
+	}	
 }
-
-
 
 void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 {
 	int firstKept = regenSlices;
 	
-	/*
-	cout << "Shoot Backward" << endl;
-	cout << "firstKept " << firstKept<< endl;
-	cout << "lastKept " << lastKept<< endl;
-	 */
+	int lastKept = m_n_slices - 1;
+	//last slice is m_n_slices -1.  
 	
 	//slices from first and last trajectory to "keep"
 	const Slice firstKeptSlice = myTraj.GetSlice(firstKept);
@@ -168,11 +151,7 @@ void TPS::ShootBackward( Trajectory &myTraj, int regenSlices) const
 	else {
 		//cout << "Trajectory Rejected!" << endl;
 	}
-	
-	
-	
-	
-	
+		
 }
 
 void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
@@ -183,11 +162,6 @@ void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
 	int firstKept = 0;
 	
 	int lastKept = m_n_slices - 1 - regenSlices;
-	/*
-	cout << "Shift Backward" << endl;
-	cout << "firstKept " << firstKept<< endl;
-	cout << "lastKept " << lastKept<< endl;
-	*/
 	//last slice is m_n_slices -1.  
 	
 	//slices from first and last trajectory to "keep"
@@ -212,20 +186,12 @@ void TPS::ShiftBackward( Trajectory &myTraj, int regenSlices) const
 		//cout << "Trajectory Rejected!" << endl;
 	}
 	
-	
-	
-	
 }
 
 void TPS::ShiftForward( Trajectory &myTraj, int regenSlices) const
 {
 	//moves end of traj to beginning and regenerates new end
 	int firstKept = regenSlices;
-	/*
-	cout << "Shift Forward" << endl;
-	cout << "firstKept " << firstKept<< endl;
-	cout << "lastKept " << lastKept<< endl;
-	*/
 	int lastKept = m_n_slices - 1;
 	//last slice is m_n_slices -1.  
 	
@@ -249,15 +215,7 @@ void TPS::ShiftForward( Trajectory &myTraj, int regenSlices) const
 	else {
 		//cout << "Trajectory Rejected!" << endl;
 	}
-	
-	
-	
-	
-
 }
-
-
-
 
 
 int TPS::SlicesToRegenerate() const
@@ -275,8 +233,6 @@ int TPS::ShootOrShift() const
 {
 	
 	double randNum = ((double)rand()/(double)RAND_MAX);
-	//cout << "shiftShoot Rand " << randNum << endl;
-	//cout << "D_SHOOT_FRAC " << m_shoot_frac << endl;
 	if (randNum < m_shoot_frac)
 	{
 		return SHOOT;

@@ -9,37 +9,56 @@
 
 #ifndef _CONFIG_H
 #define	_CONFIG_H
+/*
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+// #include <float.h>
+#include <iostream>
+#include <fstream>
+// #include <vector>
+#include <string>
+#include <sstream>
 
-//#include <stdio.h>
+#define MAXSIZE 10000
+//#define NUM_LISTS 8 
+//hardcoded for now
+*/
+
+#include <stdio.h>
 #include <iostream>
 #include "Input.h"
 #include "Constants.h"
 
 class Dynamics;
 
-enum OccState
+enum OccState //whether or not a site is occupied
 {
 	UNOCCUPIED = 0,
 	OCCUPIED = 1
 };
 
-enum Lateral
+enum Lateral  //determines left and right (dir)
 {
 	LEFT = -1,
 	RIGHT = 1
 };
 
-enum SpinCategories
+enum SpinCategories  //what kind of rate lists exist
 {
-	NOTFACDOWN, //0
-	NOTFACUP,  //1
-	FACLEFTDOWN, //2
-	FACLEFTUP, //3
-	FACRIGHTDOWN, //4 
-	FACRIGHTUP, //5 
-	FACBOTHDOWN, //6
-	FACBOTHUP //7
+	NOTFACDOWN = 0, //0
+	NOTFACUP = 1,  //1
+	FACLEFTDOWN = 2, //2
+	FACLEFTUP = 3, //3
+	FACRIGHTDOWN = 4, //4 
+	FACRIGHTUP = 5, //5 
+	FACBOTHDOWN = 6, //6
+	FACBOTHUP = 7, //7
+	NUM_LISTS = 8  //by definition this is the last value of this enum
 };
+
 
 using namespace std;
 
@@ -47,12 +66,15 @@ class Config {
 public:
 	Config(); //default constr.
     Config( const Input &); //overloaded constructor
+	//call with an instance of hte Input class to get the input for this routine
 
-	void LoadRestartConfig(FILE* inputFile, int index);
+	void LoadRestartConfig(FILE* inputFile);
+	//given an input file 
+	
 	void PrintRestartConfig(FILE* outputFile, int index) const;
-	void printConfig(ofstream &outputFile, double time) const;
+	void PrintConfig(ofstream &outputFile, double time) const;
 	//some getters and setters
-	int getConfig(int spin);
+	int GetConfig(int spin);
 	
 	void PrintDynamicsCells() const;
 
@@ -70,13 +92,13 @@ private:
 	//m_lists[1][0] tells you size of list 1
 	//m-lists[1][1] (etc) is first object in that list
 	
-	void m_clearLists();
+	void ClearLists();
 	//sets all m_lists[i][0]=0;
 	
-	int m_typeOfSpin(int );
+	int TypeOfSpin(int );
 	//returns the type of spin o the variable passed to it.
 	
-	int m_neighbor(int, int);
+	int Neighbor(int, int);
 	//first argument is the spin to which you want ot find neighbors
 	//takes care of periodic boundaries
 	//returns left neighbor if seonc variable = left
@@ -85,14 +107,14 @@ private:
 	void CheckListIntegrity();
 	//makes sure the list integrity is kept. don't use except to check list dynamcis working properly.
 	
-	void m_moveToList(int spin, int type);
+	void MoveToList(int spin, int type);
 	//moves spin to list of type.  removes it form old list and fills its old spot with last member of that list
 	//updates the back indexes of that second spin accordingly.
 	
-	void m_addToList(int spin, int type);
+	void AddToList(int spin, int type);
 	//adds spin to list type at the end of the list.  adds +1 to the number of members of the list.
 
-	void m_flipSpin(int spin);
+	void FlipSpin(int spin);
 	//flips spin as well as moves it to proper list (also for neighbors)
 
 	friend class Dynamics;

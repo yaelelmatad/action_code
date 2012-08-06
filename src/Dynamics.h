@@ -10,8 +10,10 @@
 
 #ifndef _DYNAMICS_H
 #define	_DYNAMICS_H
+#define MAXLISTS 15
 
 #include "Constants.h"
+
 
 // forward declarations
 class Config;
@@ -39,7 +41,7 @@ private:
 	double m_epsilon;
 	double m_leftRate;
 	double m_rightRate;
-	double m_rates[NUM_LISTS]; //keeps individual rates for easy updating (for one of such process)
+	double m_rates[MAXLISTS]; //keeps individual rates for easy updating (for one of such process)
 
 	//void m_advanceDynamics(double);
 	// to be called by other classes (slice?) to advance dynamics

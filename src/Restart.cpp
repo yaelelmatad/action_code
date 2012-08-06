@@ -29,19 +29,24 @@
 
 Restart::Restart()
 {
+	//empty constructor just sets this value for -1 which we can use as an indicator
 	m_restartedCommSz = -1;
 }
 
 bool Restart::properlyRestarted(char* restartFile, int launched_comm_sz) 
 {
+	//actually stores the restartFile info
 	FILE* in;
 	in = fopen(restartFile, "r");
 	fscanf(in, "%i \n", &m_restartedCommSz);
 
 	fclose(in);  	
 	if (m_restartedCommSz == launched_comm_sz)
+	{
 		return true;
-	else {
+	}
+	else 
+	{
 		return false;
 	}
 
@@ -99,7 +104,7 @@ void Restart::LoadRestart(Input & myInput, Trajectory &myTraj, TPS &myTPS, char*
 
 void Restart::PrintRestartFile(int myRank, int myCommSz, int randSeed, int index, double currS, Input &currInput, Trajectory &currTraj) const
 {
-		//store trajectory every StoreFrequency amount of trajecotry for restarts
+	//store trajectory every StoreFrequency amount of trajecotry for restarts
 	//line 1 = index of trajectory
 	//line 2 = idum (random number genteartor seed)
 	//next nSlices+1 lines = lattice of slices with each line representing one slice

@@ -11,7 +11,7 @@
 #define	_CONSTANTS_H
 
 #define MAXSIZE 10000
-#define NUM_LISTS 8
+//#define NUM_LISTS 8
 #define MAXARGS 100
 
 #endif /*_CONSTANTS_H*/
