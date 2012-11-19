@@ -145,6 +145,7 @@ int main (int argc, char * const argv[]) {
         
         double myCurrS[1];
         *myCurrS = (double)(myTPS.GetCurrS());
+        cerr << "RANK" << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
         if (my_rank == 0 || my_rank == 1){
             int recv_rank = abs(my_rank-1);
             MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);

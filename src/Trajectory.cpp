@@ -109,6 +109,23 @@ int Trajectory::GetOrderParameter(int firstSlice, int lastSlice) const
 	return orderParam;
 }
 
+
+int Trajectory::GetOrderParameter() const
+{
+    int firstSlice = 0;
+    int lastSlice = m_n_slices;
+	//determined the orderParameter and returns it by looping over all slices
+	int orderParam = 0;
+	for (int i = firstSlice; i<lastSlice; i++)
+	{
+		orderParam+=m_traj[i].GetOrderParam();
+	}
+	
+	return orderParam;
+}
+
+
+
 void Trajectory::MergeTrajectories(const Trajectory &snippet, int firstSliceToErase, int lastSliceToErase, Side currSide, Direction currDir)
 {
 	//takes the "snippet" and merges itno "this" trajectory.  erases from firstSlicetoErase to lastSlicetoErase inclusive.

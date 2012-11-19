@@ -59,7 +59,10 @@ public:
 	
 	int GetOrderParameter(int firstSlice, int lastSlice) const;
 	//gets the trajectory order parameter (for KCMs = K = number of events)
-	
+
+    int GetOrderParameter() const; //overloaded function, does default whole trajecotry.
+	//gets the trajectory order parameter (for KCMs = K = number of events)
+    
 	void PrintTrajectory(int rank, int indicator, double S) const;
 	//prints trajectory (and makes the name of the file for it to be printed.  takes the process rank (ie which processor), indicator (ie the traj #) and the current value of S
 	//where S is some distinguishing parameter between the ranks (like Temp or the S from the s-ensemble).  
