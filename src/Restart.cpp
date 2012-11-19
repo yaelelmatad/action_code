@@ -18,6 +18,7 @@
 // Some of this is probably unnecessary
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
