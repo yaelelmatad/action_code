@@ -128,7 +128,7 @@ int main (int argc, char * const argv[]) {
 	} 
 
 	trajectory.PrintOrderParameter(myTPS.GetCurrS()); //print the 0th order paramter
-
+    double tempS;
 	//after equilibration or reloading 
 	for (int i = 1; i<= m_n_traj; i++)
 	{
@@ -142,6 +142,21 @@ int main (int argc, char * const argv[]) {
 			trajectory.PrintTrajectory(my_rank,i,myTPS.GetCurrS()); //prints the trajs (for gnuplot printing)
 			my_restart.PrintRestartFile(my_rank, comm_sz, seed, i, myTPS.GetCurrS(), runInput, trajectory); //prints the restart (for reloading into code)
 		}
+        
+        double myCurrS[1];
+        *myCurrS = (double)(myTPS.GetCurrS());
+        if (my_rank == 0 || my_rank == 1){
+            int recv_rank = abs(my_rank-1);
+            MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
+        }
+        if (my_rank == 0 || my_rank == 1){
+            double*  temps;
+            int recv_rank = abs(my_rank-1);
+            MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            myTPS.SetS(tempS);
+            cerr << "RANK " << my_rank << " recv " << tempS << endl;
+        }
+        
 	}
 	
 
