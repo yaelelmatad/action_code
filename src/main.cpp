@@ -10,6 +10,9 @@
 using namespace std;
 float pi = 3.14159265;
 
+#define MAX_COMM_SZ 1000
+
+
 #include "Trajectory.h"
 #include "Slice.h"
 #include "Config.h"
@@ -20,14 +23,33 @@ float pi = 3.14159265;
 
 int main (int argc, char * const argv[]) {
 
-	int comm_sz;
-	int my_rank;
-
+    int comm_sz;
+    int my_rank;
+    int swapArray[MAX_COMM_SZ];
+    int n_swaps;
+    
 	//sets up the MPI 
 	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
 
+    //MPI STUFF, THIS JUST SETS UP AN ARRAY
+    //LATER WE WILL DO ARBITRARY IN THE ARRAY
+    //THEN WE WILL SWAP ADJACENT VALS
+    //ie, whatever in swapArray[0] swaps with whatever in swapArray[1], etc...
+    if (my_rank==0)
+    {
+        
+        //set up the swap matrix
+        for (int i=0; i<MAX_COMM_SZ;i++)
+        {
+            swapArray[i]=i;
+            n_swaps = comm_sz*2;
+        }
+    
+    }
+    
+    
 	//prints the number of processors
     if (my_rank == 0)
 	{
@@ -142,7 +164,7 @@ int main (int argc, char * const argv[]) {
 	{
 		myTPS.TPS_move(trajectory); //actually does the TPS stuff
 		trajectory.PrintOrderParameter(myTPS.GetCurrS()); //prints the order parameter
-		seed++; //increments the seed
+		seed++;//increments the seed
 		srand(seed); //reseeds the rand num gen
 		if (i%m_n_storagefreq == 0)  //prints a checkpoint/restart file every "m_n_storagefreq" amt
 		{
@@ -151,19 +173,44 @@ int main (int argc, char * const argv[]) {
 			my_restart.PrintRestartFile(my_rank, comm_sz, seed, i, myTPS.GetCurrS(), runInput, trajectory); //prints the restart (for reloading into code)
 		}
         
+        
+        if (0==my_rank)
+        {
+            int firstSwap;
+            int secondSwap;
+            int temp;
+            
+            for (int i = 0; i<n_swaps; i++)
+            {
+                firstSwap = rand()%comm_sz;
+                secondSwap = rand()%comm_sz;
+                
+                temp = swapArray[firstSwap];
+                swapArray[firstSwap]=swapArray[secondSwap];
+                swapArray[secondSwap]=temp;
+            }
+            
+            for (int i = 0; i<comm_sz;i++)
+            {
+                cout << "swapArray[" << i << "] = " << swapArray[i] << endl;
+            }
+        }
+        
+        
+        
         double myCurrS[1];
         *myCurrS = (double)(myTPS.GetCurrS());
         cerr << "RANK " << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
         if (my_rank == 0 || my_rank == 1){
             int recv_rank = abs(my_rank-1);
-            MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
+            //MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
         }
         if (my_rank == 0 || my_rank == 1){
             double*  temps;
             int recv_rank = abs(my_rank-1);
-            MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            myTPS.SetS(tempS);
-            cerr << "RANK " << my_rank << " recv " << tempS << endl;
+            //MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //myTPS.SetS(tempS);
+            //cerr << "RANK " << my_rank << " recv " << tempS << endl;
         }
         
 	}
