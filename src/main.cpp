@@ -29,8 +29,10 @@ int main (int argc, char * const argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
 
 	//prints the number of processors
-	cout << "comm_sz " << comm_sz << endl;
-
+    if (my_rank == 0)
+	{
+        cout << "comm_sz " << comm_sz << endl;
+    }
 	
 	char* inputFile;
 	char* restartFile;
@@ -97,9 +99,12 @@ int main (int argc, char * const argv[]) {
 	}
     else 
 	{
-		cout << "Usage (with Restart): ./action InputFile RestartFile\n";
-		cout << "Using (without Restart): ./action InputFile\n"; 
-		return 1;
+        if (0==my_rank)
+        {
+            cout << "Usage (with Restart): ./action InputFile RestartFile\n";
+            cout << "Using (without Restart): ./action InputFile\n";
+		}
+        return 1;
     }
 							   
 	int m_n_traj = runInput.GetIntInput(N_TRAJS); //total number of trajectories to get
@@ -108,8 +113,11 @@ int main (int argc, char * const argv[]) {
 
 	if (!restarted)
 	{
-		cout << "Not Restarted \n";
-		for (int i = 0 ; i< m_n_traj_equil; i++) //equilibrate the seed trajectory if starting from scratch
+        if (0 == my_rank){
+            cout << "Not Restarted \n";
+		}
+        
+        for (int i = 0 ; i< m_n_traj_equil; i++) //equilibrate the seed trajectory if starting from scratch
 		{
 		//	cout << "Rank " << my_rank << " equilibration reached trajectory " << i << " of "<< m_n_traj_equil << endl;
 			myTPS.TPS_move(trajectory);
@@ -145,7 +153,7 @@ int main (int argc, char * const argv[]) {
         
         double myCurrS[1];
         *myCurrS = (double)(myTPS.GetCurrS());
-        cerr << "RANK" << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
+        cerr << "RANK " << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
         if (my_rank == 0 || my_rank == 1){
             int recv_rank = abs(my_rank-1);
             MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
