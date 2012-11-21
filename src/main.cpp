@@ -31,7 +31,7 @@ int main (int argc, char * const argv[]) {
 	//prints the number of processors
     if (my_rank == 0)
 	{
-        cout << "comm_sz " << comm_sz << endl;
+        cout << "comm_sz is " << comm_sz << endl;
     }
 	
 	char* inputFile;
