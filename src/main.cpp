@@ -217,36 +217,37 @@ int main (int argc, char * const argv[]) {
 
                 //temp stuff for stupid mpi
                 int swappers[1];
+
+                
                 *swappers = swapArray[i];
                 MPI_Send(&swappers,1, MPI_INT, swapArray[i+1], 0, MPI_COMM_WORLD);
                 
                 *swappers = swapArray[i+1];
-                cout << "Sent " << swappers << " to rank " << swapArray[i] << endl;
-                MPI_Send(&swapArray[i+1],1,MPI_INT, swapArray[i], 0, MPI_COMM_WORLD);
+                MPI_Send(&swappers,1, MPI_INT, swapArray[i], 0, MPI_COMM_WORLD);
                 
             }
         }
         
-        int mySwapper[1];
+        int mySwapper;
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-        cout << "Rank " << my_rank << " recv swapper " << (mySwapper[1]) << endl;
+        cout << "Rank " << my_rank << " recv swapper " << (mySwapper) << endl;
         
         
         double myCurrS[1];
         *myCurrS = (double)(myTPS.GetCurrS());
-        cerr << "RANK " << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
+        //cerr << "RANK " << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
         if (my_rank == 0 || my_rank == 1){
             int recv_rank = abs(my_rank-1);
-            MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
+            //MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
         }
         if (my_rank == 0 || my_rank == 1){
             double  temps2;
             int recv_rank = abs(my_rank-1);
-            MPI_Recv(&temps2,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            myTPS.SetS(temps2);
-            cerr << "RANK " << my_rank << " recv " << temps2 << endl;
+            //MPI_Recv(&temps2,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //myTPS.SetS(temps2);
+            //cerr << "RANK " << my_rank << " recv " << temps2 << endl;
         }
         
 	}
