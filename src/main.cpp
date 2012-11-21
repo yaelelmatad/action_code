@@ -272,6 +272,12 @@ int main (int argc, char * const argv[]) {
             MPI_Recv(&swapS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << my_rank << " recv from " << mySwapper << " K = " << swapK << " S = " << swapS << endl;
 
+            double deltaK = (double)trajectory.GetOrderParameter()-swapK;
+            double deltaS = myTPS.GetCurrS() - swapS;
+            cout << "deltaK " << deltaK << " delta S " << deltaS << endl;
+            
+            
+            
 
         }
             
