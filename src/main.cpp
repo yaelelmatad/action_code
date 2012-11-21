@@ -235,7 +235,10 @@ int main (int argc, char * const argv[]) {
                 
             }
         }
-                
+        
+        MPI_Barrier(MPI_COMM_WORLD);
+
+        
         int mySwapper;
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
