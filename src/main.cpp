@@ -231,7 +231,7 @@ int main (int argc, char * const argv[]) {
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-        cout << "my_rank recv swapper " << (mySwapper[1]) << endl;
+        cout << "Rank " << my_rank << " recv swapper " << (mySwapper[1]) << endl;
         
         
         double myCurrS[1];
@@ -239,14 +239,14 @@ int main (int argc, char * const argv[]) {
         cerr << "RANK " << my_rank << " S " << *myCurrS << " K " << trajectory.GetOrderParameter() << endl;
         if (my_rank == 0 || my_rank == 1){
             int recv_rank = abs(my_rank-1);
-            //MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
+            MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
         }
         if (my_rank == 0 || my_rank == 1){
             double*  temps;
             int recv_rank = abs(my_rank-1);
-            //MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            //myTPS.SetS(tempS);
-            //cerr << "RANK " << my_rank << " recv " << tempS << endl;
+            MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            myTPS.SetS(tempS);
+            cerr << "RANK " << my_rank << " recv " << tempS << endl;
         }
         
 	}
