@@ -190,10 +190,13 @@ int main (int argc, char * const argv[]) {
                 swapArray[secondSwap]=temp;
             }
             
-            for (int i = 0; i<comm_sz;i++)
+            for (int i = 0; i < comm_sz; i++)
             {
-                cout << "swapArray[" << i << "] = " << swapArray[i] << endl;
+                int remainder = i%2;
+                int swapper = i - remainder + (1-remainder);
+                cout << i << " swaps with " << swapper << endl;
             }
+            
         }
         
         
