@@ -31,8 +31,18 @@ int main (int argc, char * const argv[]) {
 	//sets up the MPI 
 	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
-	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);	
+	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
+    if (1 == comm_sz%2)
+    {
+        if (0 == my_rank)
+        {
+           cout << "Attempting to launch with odd comm_sz, comm_sz must be even" << endl;
+        }
+        MPI_Finalize();
+        return 1;
+    }
+    
     //MPI STUFF, THIS JUST SETS UP AN ARRAY
     //LATER WE WILL DO ARBITRARY IN THE ARRAY
     //THEN WE WILL SWAP ADJACENT VALS
@@ -54,6 +64,7 @@ int main (int argc, char * const argv[]) {
     if (my_rank == 0)
 	{
         cout << "comm_sz is " << comm_sz << endl;
+
     }
 	
 	char* inputFile;
@@ -77,6 +88,9 @@ int main (int argc, char * const argv[]) {
 	
 	//set up trajectory dynamics
 	TPS myTPS;
+    
+
+    
 	
 	if( argc == 3 ) {
 		restarted = true; 		//this means we are restarting
@@ -92,6 +106,8 @@ int main (int argc, char * const argv[]) {
 		{
 			cout << "Attempting to launch restart with wrong number of processors \n";
 			cout << "Launched with " << comm_sz << " should have been launched with " << my_restart.getOldCommSz() << endl;
+            cout << "Possiblly attempting to launch with odd comm_sz, comm_sz must be even" << endl;
+            MPI_Finalize();
 			return 1;
 		}
 		
@@ -126,9 +142,12 @@ int main (int argc, char * const argv[]) {
             cout << "Usage (with Restart): ./action InputFile RestartFile\n";
             cout << "Using (without Restart): ./action InputFile\n";
 		}
+        MPI_Finalize();
+
         return 1;
+
     }
-							   
+				
 	int m_n_traj = runInput.GetIntInput(N_TRAJS); //total number of trajectories to get
 	int m_n_traj_equil = runInput.GetIntInput(N_TRAJS_EQUIL); //total number of equilibration trajectories to do
 	int m_n_storagefreq = runInput.GetIntInput(N_STORAGEFREQ);	//storage frequency of restart trajs for checkpointing
@@ -189,6 +208,7 @@ int main (int argc, char * const argv[]) {
                 swapArray[firstSwap]=swapArray[secondSwap];
                 swapArray[secondSwap]=temp;
             }
+            
             
             for (int i = 0; i < comm_sz; i++)
             {
