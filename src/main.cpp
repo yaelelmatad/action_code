@@ -212,8 +212,8 @@ int main (int argc, char * const argv[]) {
             
             for (int i = 0; i < comm_sz; i=i+2)
             {
-                cout << i << " swaps with " << i+1 << endl;
-                cout << i+1 << " swaps with " << i << endl;
+                cout << swapArray[i] << " swaps with " << swapArray[i+1] << endl;
+                cout << swapArray[i+1] << " swaps with " << swapArray[i] << endl;
 
                 //temp stuff for stupid mpi
                 int swappers[1];
@@ -230,7 +230,7 @@ int main (int argc, char * const argv[]) {
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-        cout << mySwapper << endl;
+        cout << "my_rank recv swapper " << int(mySwapper) << endl;
         
         
         double myCurrS[1];
