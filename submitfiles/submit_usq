@@ -14,7 +14,7 @@ source .bashrc
 
 module load mpiexec/gnu/0.84
 
-mpiexec -n 8 ./trap.out &> output
+mpiexec -n 8 ./action inputFile &> output
 
 module unload mpiexec/gnu/0.84
 
