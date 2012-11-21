@@ -212,7 +212,7 @@ int main (int argc, char * const argv[]) {
             //determines who attempst to swap with whom.
             for (int i = 0; i < comm_sz; i=i+2)
             {
-                int child[1];
+                int * child;
                 *child = 0;
                 int parent[1];
                 *parent = 1;
