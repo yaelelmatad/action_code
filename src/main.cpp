@@ -257,10 +257,11 @@ int main (int argc, char * const argv[]) {
             double myK[1];
             *myK = (double)trajectory.GetOrderParameter();
             MPI_Send(&myK,1, MPI_DOUBLE, mySwapper, 2, MPI_COMM_WORLD);
-            
+
             double myS[1];
             *myS = (double)(myTPS.GetCurrS());
             MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD);
+            cout << my_rank << " sent to " << mySwapper << " K = " << myK[1] << " S = " << myS[1] << endl;
         }
         
         if(parent_or_child == 0) //parent
@@ -269,9 +270,9 @@ int main (int argc, char * const argv[]) {
             int swapS;
             MPI_Recv(&swapK,1, MPI_DOUBLE, mySwapper, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&swapS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            cout << my_rank << " recv from " << mySwapper << " K = " << swapK << " S = " << swapS << endl;
 
 
-            
         }
             
         
