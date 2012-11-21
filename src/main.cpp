@@ -262,6 +262,13 @@ int main (int argc, char * const argv[]) {
             *myS = (myTPS.GetCurrS());
             MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD);
             cout << my_rank << " sent to " << mySwapper << " K = " << *myK << " S = " << *myS << endl;
+            //wait for your new value of S (might be your current value!)
+            double swapS;
+            MPI_Recv(&swapS,1, MPI_DOUBLE, mySwapper, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            myTPS.SetS(swapS);
+            cout << "my_rank " << my_rank << " current S " << swapS << endl;
+
+            
         }
         
         if(parent_or_child == 0) //parent
@@ -278,6 +285,29 @@ int main (int argc, char * const argv[]) {
             
             double boltz = exp(deltaK*deltaS);
             cout << "botlz " << boltz << endl;
+            
+            cout << "my_rank " << my_rank << " original S " << myTPS.GetCurrS() << endl;
+
+
+            double randNum = ((double)rand()/(double)RAND_MAX);
+            cout << "botlz " << boltz << " rand num " << randNum << endl;
+            if (randNum < boltz) //randnum guarantteed to be less than 1
+            { //accept
+                double myS[1];
+                *myS = (myTPS.GetCurrS());
+                MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 4, MPI_COMM_WORLD);
+                myTPS.SetS(swapS); //change my S to the swap value of S
+                
+            }
+            else
+            {  //reject
+                //send back the original value of S.
+                double originalS[1];
+                *originalS = swapS;
+                MPI_Send(&originalS,1, MPI_DOUBLE, mySwapper, 4, MPI_COMM_WORLD);
+            }
+            
+            cout << "my_rank " << my_rank << " current S " << (myTPS.GetCurrS()) << endl;
             
             
 
