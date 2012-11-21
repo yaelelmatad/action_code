@@ -261,7 +261,7 @@ int main (int argc, char * const argv[]) {
             double myS[1];
             *myS = (myTPS.GetCurrS());
             MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD);
-            cout << my_rank << " sent to " << mySwapper << " K = " << &myK << " S = " << &myS << endl;
+            cout << my_rank << " sent to " << mySwapper << " K = " << *myK << " S = " << *myS << endl;
         }
         
         if(parent_or_child == 0) //parent
