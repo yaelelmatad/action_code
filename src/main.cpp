@@ -226,11 +226,11 @@ int main (int argc, char * const argv[]) {
             }
         }
         
-        int* mySwapper;
+        int mySwapper[1];
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-        cout << "my_rank recv swapper " << int(mySwapper) << endl;
+        cout << "my_rank recv swapper " << (mySwapper[1]) << endl;
         
         
         double myCurrS[1];
