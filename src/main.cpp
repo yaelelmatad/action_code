@@ -210,15 +210,27 @@ int main (int argc, char * const argv[]) {
             }
             
             
-            for (int i = 0; i < comm_sz; i++)
+            for (int i = 0; i < comm_sz; i=i+2)
             {
-                int remainder = i%2;
-                int swapper = i - remainder + (1-remainder);
-                cout << i << " swaps with " << swapper << endl;
+                cout << i << " swaps with " << i+1 << endl;
+                cout << i+1 << " swaps with " << i << endl;
+
+                //temp stuff for stupid mpi
+                int swappers[1];
+                *swappers = swapArray[i];
+                MPI_Send(&swappers,1, MPI_INT, swapArray[i+1], 0, MPI_COMM_WORLD);
+                
+                *swappers = swapArray[i+1];
+                MPI_Send(&swappers,1,MPI_INT, swapArray[i], 0, MPI_COMM_WORLD);
+                
             }
-            
         }
         
+        int* mySwapper;
+        int head_rank = 0;
+        MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
+        cout << mySwapper << endl;
         
         
         double myCurrS[1];
