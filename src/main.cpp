@@ -221,6 +221,7 @@ int main (int argc, char * const argv[]) {
                 MPI_Send(&swappers,1, MPI_INT, swapArray[i+1], 0, MPI_COMM_WORLD);
                 
                 *swappers = swapArray[i+1];
+                cout << "Sent " << &swappers << " to rank " << swapArray[i] << endl;
                 MPI_Send(&swappers,1,MPI_INT, swapArray[i], 0, MPI_COMM_WORLD);
                 
             }
