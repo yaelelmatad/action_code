@@ -212,10 +212,11 @@ int main (int argc, char * const argv[]) {
             //determines who attempst to swap with whom.
             for (int i = 0; i < comm_sz; i=i+2)
             {
-                int * child;
-                *child = 0;
+                //send child/slave information for later swapping (only parent proc will handle decision making)
+                int child[1];
+                *child = 1;
                 int parent[1];
-                *parent = 1;
+                *parent = 0;
                 
                 cout << swapArray[i] << " swaps with " << swapArray[i+1] << endl;
                 cout << swapArray[i+1] << " swaps with " << swapArray[i] << endl;
@@ -236,21 +237,44 @@ int main (int argc, char * const argv[]) {
             }
         }
         
+        //wait until all trajectories have gotten this far before waiting for information (mostly for printing purposes)
         MPI_Barrier(MPI_COMM_WORLD);
-
-        
         int mySwapper;
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         cout << "Rank " << my_rank << " recv swapper " << (mySwapper) << endl;
         
-        int parent_or_slave;
-        MPI_Recv(&parent_or_slave,1, MPI_INT, head_rank, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        
-        cout << "Rank " << my_rank << " parent_or_slave " << parent_or_slave   <<endl;
+        int parent_or_child;
+        MPI_Recv(&parent_or_child,1, MPI_INT, head_rank, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        cout << "Rank " << my_rank << " parent_or_child " << parent_or_child   <<endl;
         
         //wait until all trajectories have finished this traj before continuing and trying to do the swaps.
         MPI_Barrier(MPI_COMM_WORLD);
+        
+        
+        if (parent_or_child == 1) //child
+        {
+            double myK[1];
+            *myK = (double)trajectory.GetOrderParameter();
+            MPI_Send(&myK,1, MPI_DOUBLE, mySwapper, 2, MPI_COMM_WORLD);
+            
+            double myS[1];
+            *myS = (double)(myTPS.GetCurrS());
+            MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD);
+        }
+        
+        if(parent_or_child == 0) //parent
+        {
+            int swapK;
+            int swapS;
+            MPI_Recv(&swapK,1, MPI_DOUBLE, mySwapper, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&swapS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+
+            
+        }
+            
+        
 
         
         double myCurrS[1];
