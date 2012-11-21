@@ -242,11 +242,11 @@ int main (int argc, char * const argv[]) {
             MPI_Send(&myCurrS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD);
         }
         if (my_rank == 0 || my_rank == 1){
-            double*  temps;
+            double  temps2;
             int recv_rank = abs(my_rank-1);
-            MPI_Recv(&tempS,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            myTPS.SetS(tempS);
-            cerr << "RANK " << my_rank << " recv " << tempS << endl;
+            MPI_Recv(&temps2,1, MPI_DOUBLE, recv_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            myTPS.SetS(temps2);
+            cerr << "RANK " << my_rank << " recv " << temps2 << endl;
         }
         
 	}
