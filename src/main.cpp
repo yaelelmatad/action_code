@@ -230,7 +230,7 @@ int main (int argc, char * const argv[]) {
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-        cout << mySwapper << endl;
+        cout << &mySwapper << endl;
         
         
         double myCurrS[1];
