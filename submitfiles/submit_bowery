@@ -1,0 +1,22 @@
+#PBS -l nodes=1:ppn=8,walltime=5:00:00
+#PBS -N mpi_test
+# PBS -M yael@nyu.edu
+#PBS -m abe
+#PBS -e localhost:${PBS_O_WORKDIR}/${PBS_JOBNAME}.e${PBS_JOBID}
+#PBS -o localhost:${PBS_O_WORKDIR}/${PBS_JOBNAME}.o${PBS_JOBID}
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+export LD_LIBRARY_PATH
+
+cd $PBS_O_WORKDIR
+
+source /etc/profile.d/env-modules.sh
+source .bashrc
+
+module load mpiexec/gnu/0.84
+
+mpiexec -n 8 ./action_code/action inputFile &> output
+
+module unload mpiexec/gnu/0.84
+
+exit 0;
+
