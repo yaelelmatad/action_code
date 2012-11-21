@@ -276,6 +276,8 @@ int main (int argc, char * const argv[]) {
             double deltaS = myTPS.GetCurrS() - swapS;
             cout << "deltaK " << deltaK << " delta S " << deltaS << endl;
             
+            double boltz = exp(deltaK*deltaS);
+            cout << "botlz " << boltz << endl;
             
             
 
