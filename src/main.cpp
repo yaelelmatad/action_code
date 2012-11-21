@@ -209,31 +209,46 @@ int main (int argc, char * const argv[]) {
                 swapArray[secondSwap]=temp;
             }
             
-            
+            //determines who attempst to swap with whom.
             for (int i = 0; i < comm_sz; i=i+2)
             {
+                int child[1];
+                *child = 0;
+                int parent[1];
+                *parent = 1;
+                
                 cout << swapArray[i] << " swaps with " << swapArray[i+1] << endl;
                 cout << swapArray[i+1] << " swaps with " << swapArray[i] << endl;
 
                 //temp stuff for stupid mpi
                 int swappers[1];
 
-                
+                //send the swapping information to all the nodes
                 *swappers = swapArray[i];
                 MPI_Send(&swappers,1, MPI_INT, swapArray[i+1], 0, MPI_COMM_WORLD);
+                MPI_Send(&child,1, MPI_INT, swapArray[i+1], 1, MPI_COMM_WORLD);
                 
                 *swappers = swapArray[i+1];
                 MPI_Send(&swappers,1, MPI_INT, swapArray[i], 0, MPI_COMM_WORLD);
+                MPI_Send(&parent,1, MPI_INT, swapArray[i], 1, MPI_COMM_WORLD);
+
                 
             }
         }
-        
+                
         int mySwapper;
         int head_rank = 0;
         MPI_Recv(&mySwapper,1, MPI_INT, head_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        
         cout << "Rank " << my_rank << " recv swapper " << (mySwapper) << endl;
         
+        int parent_or_slave;
+        MPI_Recv(&parent_or_slave,1, MPI_INT, head_rank, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
+        cout << "Rank " << my_rank << " parent_or_slave " << parent_or_slave   <<endl;
+        
+        //wait until all trajectories have finished this traj before continuing and trying to do the swaps.
+        MPI_Barrier(MPI_COMM_WORLD);
+
         
         double myCurrS[1];
         *myCurrS = (double)(myTPS.GetCurrS());
