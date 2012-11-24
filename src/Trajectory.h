@@ -10,22 +10,11 @@
 
 #ifndef _TRAJECTORY_H
 #define	_TRAJECTORY_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <deque>
-#include <iterator>
-#include <string>
-#include <sstream>
 
 #define NSLICESMAX 5000
 #define MAXSIZE 10000
+
+#include <deque>
 
 #include "Slice.h"
 #include "Input.h"

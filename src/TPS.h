@@ -10,23 +10,10 @@
 
 #ifndef _TPS_H
 #define	_TPS_H
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
-#include <float.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <deque>
-#include <string>
-#include <sstream>
+
 
 #define MAXSIZE 10000
 
-#include "Slice.h"
-#include "Trajectory.h"
 #include "Input.h"
 
 
@@ -39,6 +26,9 @@ enum Dir{
 	FORW = 1,
 	BACK = -1
 };
+
+// forward declaration
+class Trajectory;
 
 
 /*enum OccState
