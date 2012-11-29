@@ -203,6 +203,13 @@ int main (int argc, char * const argv[]) {
             int secondSwap;
             int temp;
             
+            //set up the swap matrix  (redo each time to avoid having to save state of swap array in restart files)
+            for (int i=0; i<MAX_COMM_SZ;i++)
+            {
+                swapArray[i]=i;
+                n_swaps = comm_sz*2;
+            }
+                
             //arbitrarily swap lots of times so you shuffle the array
             for (int i = 0; i<n_swaps; i++)
             {
