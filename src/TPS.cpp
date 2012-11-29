@@ -8,7 +8,7 @@
  */
 
 #include "TPS.h"
-
+#include <stdlib.h>
 #include <math.h>
 #include "Trajectory.h"
 
