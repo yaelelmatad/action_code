@@ -9,6 +9,9 @@
 
 #include "Trajectory.h"
 
+#include <fstream>
+#include <sstream>
+
 Trajectory::Trajectory(){
 }
 

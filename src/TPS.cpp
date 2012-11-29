@@ -9,6 +9,9 @@
 
 #include "TPS.h"
 
+#include <math.h>
+#include "Trajectory.h"
+
 TPS::TPS()
 {
 	return;
