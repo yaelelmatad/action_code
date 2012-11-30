@@ -26,7 +26,6 @@ int main (int argc, char * const argv[]) {
     int comm_sz;
     int my_rank;
     int swapArray[MAX_COMM_SZ];
-    int n_swaps;
     
 	//sets up the MPI 
 	MPI_Init(NULL, NULL);
@@ -47,17 +46,7 @@ int main (int argc, char * const argv[]) {
     //LATER WE WILL DO ARBITRARY IN THE ARRAY
     //THEN WE WILL SWAP ADJACENT VALS
     //ie, whatever in swapArray[0] swaps with whatever in swapArray[1], etc...
-    /*if (my_rank==0)
-    {
-        
-        //set up the swap matrix
-        for (int i=0; i<MAX_COMM_SZ;i++)
-        {
-            swapArray[i]=i;
-            n_swaps = comm_sz*2;
-        }
-    
-    }*/
+
     
     
 	//prints the number of processors
@@ -151,7 +140,9 @@ int main (int argc, char * const argv[]) {
 	int m_n_traj = runInput.GetIntInput(N_TRAJS); //total number of trajectories to get
 	int m_n_traj_equil = runInput.GetIntInput(N_TRAJS_EQUIL); //total number of equilibration trajectories to do
 	int m_n_storagefreq = runInput.GetIntInput(N_STORAGEFREQ);	//storage frequency of restart trajs for checkpointing
-
+    int n_swap_freq = runInput.GetIntInput(N_SWAPFREQ);
+    int n_swap_array_swaps_per_cycle = comm_sz*runInput.GetIntInput(N_NUMSWAPS_DIV_BY_COMM_SZ);
+    
 	if (!restarted)
 	{
         if (0 == my_rank){
@@ -201,11 +192,10 @@ int main (int argc, char * const argv[]) {
             for (int i=0; i<MAX_COMM_SZ;i++)
             {
                 swapArray[i]=i;
-                n_swaps = comm_sz*2;
             }
             
             //arbitrarily swap lots of times so you shuffle the array
-            for (int i = 0; i<n_swaps; i++)
+            for (int i = 0; i<n_swap_array_swaps_per_cycle; i++)
             {
                 firstSwap = rand()%comm_sz;
                 secondSwap = rand()%comm_sz;
@@ -278,7 +268,7 @@ int main (int argc, char * const argv[]) {
             double myS[1];
             *myS = (myTPS.GetCurrS());
             MPI_Send(&myS,1, MPI_DOUBLE, mySwapper, 3, MPI_COMM_WORLD);
-            cout << my_rank << " sent to " << mySwapper << " K = " << *myK << " S = " << *myS << endl;
+            //cout << my_rank << " sent to " << mySwapper << " K = " << *myK << " S = " << *myS << endl;
             
             
             //wait for your new value of S (might be your current value!)

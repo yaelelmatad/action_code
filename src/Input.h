@@ -24,7 +24,9 @@ enum IntParameters
 	N_SLICES_SHIFT,
 	N_STORAGEFREQ,
 	N_DIMENSION,
-	N_HARD
+	N_HARD,
+    N_SWAPFREQ, //how often to swap trajectories (1 = every, 2 =every other)
+    N_NUMSWAPS_DIV_BY_COMM_SZ //how many swaps to make within the swap array. will do this number*comm_sz swaps (so scales correctly with comm sz)
 };
 
 enum DoubleParameters
