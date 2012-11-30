@@ -10,7 +10,7 @@ export LD_LIBRARY_PATH
 cd $PBS_O_WORKDIR
 
 source /etc/profile.d/env-modules.sh
-source .bashrc
+source ~/.bashrc
 
 module load mpiexec/gnu/0.84
 
