@@ -47,7 +47,7 @@ int main (int argc, char * const argv[]) {
     //LATER WE WILL DO ARBITRARY IN THE ARRAY
     //THEN WE WILL SWAP ADJACENT VALS
     //ie, whatever in swapArray[0] swaps with whatever in swapArray[1], etc...
-    if (my_rank==0)
+    /*if (my_rank==0)
     {
         
         //set up the swap matrix
@@ -57,7 +57,7 @@ int main (int argc, char * const argv[]) {
             n_swaps = comm_sz*2;
         }
     
-    }
+    }*/
     
     
 	//prints the number of processors
@@ -172,8 +172,10 @@ int main (int argc, char * const argv[]) {
 	}	
 	else 
 	{ //restarted
-		cout << "Restarted \n";
-		srand(seed);
+		if (0 == my_rank){
+            cout << "Restarted \n";
+		}
+        srand(seed);
 	} 
 
 	trajectory.PrintOrderParameter(myTPS.GetCurrS()); //print the 0th order paramter
@@ -194,7 +196,7 @@ int main (int argc, char * const argv[]) {
         
         
         //here is the mpi bits
-        
+        /*
         if (0==my_rank)
         {
             //shuffle the swapArray
@@ -291,7 +293,7 @@ int main (int argc, char * const argv[]) {
             double swapS;
             MPI_Recv(&swapS,1, MPI_DOUBLE, mySwapper, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             myTPS.SetS(swapS);
-            cout << "my_rank " << my_rank << " current S " << swapS << endl;
+            //cout << "my_rank " << my_rank << " current S " << swapS << endl;
 
             
         }
@@ -335,7 +337,7 @@ int main (int argc, char * const argv[]) {
             //cout << "my_rank " << my_rank << " current S " << (myTPS.GetCurrS()) << endl;
 
         }
-            
+        */
         
 
         
