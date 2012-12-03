@@ -181,8 +181,10 @@ int main (int argc, char * const argv[]) {
 
         if (0==i%n_swap_freq)
         {
+            
             if (0==my_rank)
             {
+                cout << "swap attempt on traj " << i << endl;
                 //shuffle the swapArray
                 //NOTE: YOU MUST MAKE SURE YOU SAVE AND RELOAD THIS INFORMATION FOR NEXT TIME YOU RUN THE SIMULATION
                 int firstSwap;
